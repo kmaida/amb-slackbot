@@ -1,0 +1,34 @@
+{
+  "name": "slackbot-template",
+  "version": "0.2.0",
+  "description": "Slackbot app template in TypeScript using Bolt framework",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "tsc && node dist/index.js"
+  },
+  "dependencies": {
+    "@slack/bolt": "^2.1.1",
+    "airtable": "^0.8.1",
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.9.19",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5",
+    "@types/airtable": "^0.8.0",
+    "@types/mongoose": "^5.7.27"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "author": "Kim Maida",
+  "repository": {
+    "url": "https://github.com/kmaida/slackbot-template"
+  },
+  "license": "GPL-3.0-or-later",
+  "keywords": [
+    "slackapi",
+    "slackapp",
+    "airtable",
+    "mongodb",
+    "typescript"
+  ]
+}
