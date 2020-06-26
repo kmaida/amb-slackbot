@@ -16,7 +16,7 @@ const errors_1 = require("../utils/errors");
 const action_select_channel_1 = __importDefault(require("./admin/action-select-channel"));
 const action_select_admins_1 = __importDefault(require("./admin/action-select-admins"));
 const blocks_home_1 = __importDefault(require("./blocks-home"));
-const data_admin_1 = require("./admin/data-admin");
+const api_admin_1 = require("./admin/api-admin");
 /*------------------
   APP HOME OPENED
 ------------------*/
@@ -48,7 +48,7 @@ const appHomeOpened = (app) => {
                 }
             });
             // Set this user's home view ID in database
-            const saveView = yield data_admin_1.saveHomeView(userID, showHomeView.view.id);
+            const saveView = yield api_admin_1.saveHomeView(userID, showHomeView.view.id);
         }
         catch (err) {
             errors_1.slackErr(app, userID, err);

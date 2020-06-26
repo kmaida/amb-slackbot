@@ -1,6 +1,6 @@
 import { slackErr } from '../utils/errors';
 import { IObjectAny } from '../types';
-import blocksModal from './blocks-modal';
+import blocksModalActivity from './blocks-modal-activity';
 
 /*------------------
  MODAL DIALOG FORM
@@ -9,7 +9,7 @@ import blocksModal from './blocks-modal';
     Button
 ------------------*/
 
-const modal = (app: IObjectAny): void => {
+const modalActivity = (app: IObjectAny): void => {
   const openDialog = async ({ ack, body, context }) => {
     await ack();
     /**
@@ -29,13 +29,13 @@ const modal = (app: IObjectAny): void => {
         trigger_id: body.trigger_id,
         view: {
           type: 'modal',
-          callback_id: 'add_airtable_data',
+          callback_id: 'add_activity',
           private_metadata: btnMetadata,
           title: {
             type: 'plain_text',
-            text: 'Add Airtable Data'
+            text: 'Add Activity'
           },
-          blocks: blocksModal(),
+          blocks: blocksModalActivity(),
           submit: {
             type: 'plain_text',
             text: 'Save'
@@ -54,9 +54,9 @@ const modal = (app: IObjectAny): void => {
   // Slash command: /add-data
   app.command('/add-data', openDialog);
   // Global shortcut to add Airtable data
-  app.shortcut('add_airtable_data', openDialog);
+  app.shortcut('add_activity', openDialog);
   // Button from App Home
-  app.action('btn_open_modal', openDialog);
+  app.action('btn_open_modal_activity', openDialog);
 };
 
-export default modal;
+export default modalActivity;

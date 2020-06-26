@@ -9,28 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const api_admin_1 = require("./api-admin");
-const update_view_home_1 = require("../update-view-home");
 const errors_1 = require("../../utils/errors");
 /*------------------
- ACTION: SELECT ADMINS
- Admins can select
- admin users
+  DM CONFIRM SAVE
 ------------------*/
-const actionSelectAdmins = (app, metadata) => {
-    app.action('a_select_admins', ({ action, ack, body }) => __awaiter(void 0, void 0, void 0, function* () {
-        yield ack();
-        // Set the new admins
-        const newAdmins = action.selected_users;
-        const settings = yield api_admin_1.setAdmins(newAdmins);
-        // Update the admins home view for all users
-        try {
-            const updateViews = yield update_view_home_1.updateAllHomes(app, metadata);
-        }
-        catch (err) {
-            errors_1.slackErr(app, body.user.id, err);
-        }
-    }));
-};
-exports.default = actionSelectAdmins;
-//# sourceMappingURL=action-select-admins.js.map
+const dmConfirmSave = (app, atData) => __awaiter(void 0, void 0, void 0, function* () {
+    const userID = atData.slackID;
+    try {
+        const sendMsg = yield app.client.chat.postMessage({
+            token: process.env.SLACK_BOT_TOKEN,
+            channel: userID,
+            text: `:tada: Your data has been saved successfully:\n*Name:* ${atData.name}\n*URL:* ${atData.url}\n*Notes:* ${atData.notes}\n<${atData.link}|View in Airtable>`,
+            unfurl_links: false
+        });
+    }
+    catch (err) {
+        errors_1.slackErr(app, userID, err);
+    }
+});
+exports.default = dmConfirmSave;
+//# sourceMappingURL=dm-confirm-save-activity.js.map

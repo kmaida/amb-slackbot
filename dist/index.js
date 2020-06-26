@@ -35,11 +35,11 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const bolt_1 = require("@slack/bolt");
 // MongoDB
-const data_mongodb_1 = require("./data/data-mongodb");
-const data_admin_1 = require("./app-home/admin/data-admin");
+const setup_mongodb_1 = require("./data/setup-mongodb");
+const api_admin_1 = require("./app-home/admin/api-admin");
 // App functionality
-const modal_1 = __importDefault(require("./modal/modal"));
-const modal_view_submit_1 = __importDefault(require("./modal/modal-view-submit"));
+const modal_activity_1 = __importDefault(require("./activity/modal-activity"));
+const modal_view_submit_activity_1 = __importDefault(require("./activity/modal-view-submit-activity"));
 const event_app_home_opened_1 = __importDefault(require("./app-home/event-app-home-opened"));
 const event_app_mention_1 = __importDefault(require("./app-mention/event-app-mention"));
 const event_message_im_1 = __importDefault(require("./message-im/event-message-im"));
@@ -55,14 +55,14 @@ const port = process.env.PORT || 3000;
     ON APP INIT
 ------------------*/
 // Set up MongoDB store
-data_mongodb_1.mdbSetup();
+setup_mongodb_1.mdbSetup();
 // Set up admin settings from environment variables
-data_admin_1.initAdminSettings();
+api_admin_1.initAdminSettings();
 /*------------------
   SET UP MODAL IX
 ------------------*/
-modal_1.default(app);
-modal_view_submit_1.default(app);
+modal_activity_1.default(app);
+modal_view_submit_activity_1.default(app);
 /*------------------
   APP HOME OPENED
 ------------------*/
@@ -80,6 +80,6 @@ event_message_im_1.default(app);
 ------------------*/
 (() => __awaiter(void 0, void 0, void 0, function* () {
     yield app.start(port);
-    console.log(`⚡️ TemplateSlackbot is running on ${port}!`);
+    console.log(`⚡️ Gatsbam slackbot is running on ${port}!`);
 }))();
 //# sourceMappingURL=index.js.map

@@ -4,8 +4,8 @@ const tableID = process.env.AIRTABLE_TABLE_ID;
 const viewID = process.env.AIRTABLE_TABLE_VIEW_ID;
 import { IObjectAny, IATData } from '../../types';
 import { storeErr } from '../../utils/errors';
-import dmConfirmSave from './dm-confirm-save';
-import channelPublishSave from './channel-publish-save';
+import dmConfirmSave from './dm-confirm-save-activity';
+import channelPublishSave from './channel-publish-save-activity';
 
 /*------------------
   AIRTABLE: TABLE
@@ -42,7 +42,7 @@ const saveData = async (app: IObjectAny, data: IATData): Promise<IATData> => {
       slackID: savedRecord.fields["Slack ID"],
       link: `https://airtable.com/${tableID}/${viewID}/${savedID}`
     };
-    console.log('AIRTABLE: Saved new record', savedObj);
+    console.log('AIRTABLE: Saved new activity', savedObj);
     // Send Slack DM to submitter confirming successful save
     dmConfirmSave(app, savedObj);
     // Send Slack channel message

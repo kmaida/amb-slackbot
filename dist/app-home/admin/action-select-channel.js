@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const errors_1 = require("../../utils/errors");
-const data_admin_1 = require("./data-admin");
+const api_admin_1 = require("./api-admin");
 const update_view_home_1 = require("../update-view-home");
 /*------------------
  ACTION: SELECT CHANNEL
@@ -22,7 +22,7 @@ const actionSelectChannel = (app, metadata) => {
         yield ack();
         // Set the new channel
         const newChannel = action.selected_channel;
-        const settings = yield data_admin_1.setChannel(newChannel);
+        const settings = yield api_admin_1.setChannel(newChannel);
         // Update the reporting channel in the home view for all users
         try {
             const updateViews = yield update_view_home_1.updateAllHomes(app, metadata);

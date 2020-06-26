@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateAllHomes = exports.updateHomeView = void 0;
 const blocks_home_1 = __importDefault(require("./blocks-home"));
-const data_admin_1 = require("./admin/data-admin");
+const api_admin_1 = require("./admin/api-admin");
 const errors_1 = require("./../utils/errors");
 /*------------------
 BLOCKS: UPDATE HOME VIEW
@@ -54,7 +54,7 @@ exports.updateHomeView = updateHomeView;
 const updateAllHomes = (app, metadata) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Get all saved App Home views
-        const allAppHomes = yield data_admin_1.getHomeViews();
+        const allAppHomes = yield api_admin_1.getHomeViews();
         // Iterate over each user home in array and update home view
         allAppHomes.forEach((userHome) => __awaiter(void 0, void 0, void 0, function* () {
             try {

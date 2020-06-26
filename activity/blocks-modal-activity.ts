@@ -2,7 +2,7 @@
  BLOCKS: MODAL FORM
 ------------------*/
 
-const blocksModal = () => {
+const blocksModalActivity = () => {
   return [
     {
       "type": "input",
@@ -57,4 +57,4 @@ const blocksModal = () => {
   ];
 }
 
-export default blocksModal;
+export default blocksModalActivity;

@@ -2,11 +2,11 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import { App } from '@slack/bolt';
 // MongoDB
-import { mdbSetup } from './data/data-mongodb';
-import { initAdminSettings } from './app-home/admin/data-admin';
+import { mdbSetup } from './data/setup-mongodb';
+import { initAdminSettings } from './app-home/admin/api-admin';
 // App functionality
-import modal from './modal/modal';
-import submitModal from './modal/modal-view-submit';
+import modal from './activity/modal-activity';
+import submitModal from './activity/modal-view-submit-activity';
 import appHomeOpened from './app-home/event-app-home-opened';
 import appMention from './app-mention/event-app-mention';
 import botDM from './message-im/event-message-im';
@@ -54,5 +54,5 @@ botDM(app);
 ------------------*/
 (async () => {
   await app.start(port);
-  console.log(`⚡️ TemplateSlackbot is running on ${port}!`);
+  console.log(`⚡️ Gatsbam slackbot is running on ${port}!`);
 })();

@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const btn_open_modal_1 = __importDefault(require("../modal/btn-open-modal"));
+const btn_open_modal_activity_1 = __importDefault(require("../activity/btn-open-modal-activity"));
 const blocks_home_admin_1 = __importDefault(require("./admin/blocks-home-admin"));
-const data_admin_1 = require("./admin/data-admin");
+const api_admin_1 = require("./admin/api-admin");
 /*------------------
  BLOCKS: HOME VIEW
 ------------------*/
@@ -25,7 +25,7 @@ const data_admin_1 = require("./admin/data-admin");
  * @returns {Promise<IObjectAny[]>} promise of array of block kit objects
  */
 const blocksHome = (userID, metadata) => __awaiter(void 0, void 0, void 0, function* () {
-    const adminSettings = yield data_admin_1.getAdminSettings();
+    const adminSettings = yield api_admin_1.getAdminSettings();
     const reportingChannel = adminSettings.channel;
     const admins = adminSettings.admins;
     const allUserBlocks = [
@@ -46,7 +46,7 @@ const blocksHome = (userID, metadata) => __awaiter(void 0, void 0, void 0, funct
         {
             "type": "actions",
             "elements": [
-                btn_open_modal_1.default(metadata)
+                btn_open_modal_activity_1.default(metadata)
             ]
         }
     ];

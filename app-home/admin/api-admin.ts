@@ -3,6 +3,7 @@ import { AdminSettingsModel, AppHomeModel } from './AdminSchema';
 
 /*------------------
 ADMINS SETTINGS API
+    (MongoDB)
 ------------------*/
 
 /**
