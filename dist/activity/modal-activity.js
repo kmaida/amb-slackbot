@@ -62,7 +62,7 @@ const modalActivity = (app) => {
      * Interactions that trigger the modal
      */
     // Slash command: /add-data
-    app.command('/add-data', openDialog);
+    app.command('/add-activity', openDialog);
     // Global shortcut to add Airtable data
     app.shortcut('add_activity', openDialog);
     // Button from App Home
