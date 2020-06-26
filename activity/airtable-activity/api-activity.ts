@@ -1,30 +1,33 @@
-const base = require('airtable').base('appEKCgBRM6kj1eaD');
-const table = process.env.AIRTABLE_TABLE;
+const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
+const table = process.env.AT_TABLE_ACTIVITY;
 const tableID = process.env.AIRTABLE_TABLE_ID;
 const viewID = process.env.AIRTABLE_TABLE_VIEW_ID;
-import { IObjectAny, IATData } from '../../types';
+import { IObjectAny, IActivity } from '../../types';
 import { storeErr } from '../../utils/errors';
 import dmConfirmSave from './dm-confirm-save-activity';
-import channelPublishSave from './channel-publish-save-activity';
+import adminChannelPublishSave from './admin-channel-publish-save-activity';
 
 /*------------------
   AIRTABLE: TABLE
 ------------------*/
 
-
 /**
  * Save a new Airtable data record
  * @param {IObjectAny} App Slack app
- * @param {IATData} data to save to Airtable
+ * @param {IActivity} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
  */
-const saveData = async (app: IObjectAny, data: IATData): Promise<IATData> => {
+const saveData = async (app: IObjectAny, data: IActivity): Promise<IActivity> => {
   return base(table).create([
     {
       "fields": {
         "Name": data.name,
+        "Email": data.email,
+        "Activity Type": data.type,
+        "Title": data.title,
+        "Date": data.date,
         "URL": data.url,
-        "Notes": data.notes || '',
+        "Topic": data.topic,
         "Slack ID": data.slackID
       }
     }
@@ -34,19 +37,23 @@ const saveData = async (app: IObjectAny, data: IATData): Promise<IATData> => {
     }
     const savedRecord: IObjectAny = records[0];
     const savedID: string = savedRecord.getId();
-    const savedObj: IATData = {
+      const savedObj: IActivity = {
       id: savedID,
       name: savedRecord.fields["Name"],
+      email: savedRecord.fields["Email"],
+      type: savedRecord.fields["Activity Type"],
       url: savedRecord.fields["URL"],
-      notes: savedRecord.fields["Notes"] || '',
+      date: savedRecord.fields["Date"],
+      title: savedRecord.fields["Title"],
+      topic: savedRecord.fields["Topic"],
       slackID: savedRecord.fields["Slack ID"],
-      link: `https://airtable.com/${tableID}/${viewID}/${savedID}`
+      atLink: `https://airtable.com/${tableID}/${viewID}/${savedID}`
     };
     console.log('AIRTABLE: Saved new activity', savedObj);
     // Send Slack DM to submitter confirming successful save
     dmConfirmSave(app, savedObj);
-    // Send Slack channel message
-    channelPublishSave(app, savedObj);
+    // Send Slack channel message to private admin-only channel
+    adminChannelPublishSave(app, savedObj);
     // @NOTE: If you want to update home view: need to have passed user's app home view ID
     return savedObj;
   });

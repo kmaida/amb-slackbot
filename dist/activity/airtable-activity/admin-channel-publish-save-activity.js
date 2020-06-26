@@ -10,22 +10,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const errors_1 = require("../../utils/errors");
+const api_admin_1 = require("../../app-home/admin/api-admin");
 /*------------------
-  DM CONFIRM SAVE
+ADMIN CHANNEL PUBLISH SAVE
 ------------------*/
-const dmConfirmSave = (app, atData) => __awaiter(void 0, void 0, void 0, function* () {
-    const userID = atData.slackID;
+const adminChannelPublishSave = (app, atData) => __awaiter(void 0, void 0, void 0, function* () {
+    const settings = yield api_admin_1.getAdminSettings();
+    const channel = settings.channel;
     try {
         const sendMsg = yield app.client.chat.postMessage({
             token: process.env.SLACK_BOT_TOKEN,
-            channel: userID,
-            text: `:tada: Your data has been saved successfully:\n*Activity Type:* ${atData.type}\n*Title:* ${atData.title}\n*URL:* ${atData.url}\n*Date:* ${atData.date}\n*Topic:* ${atData.topic}`,
+            channel: channel,
+            text: `:new: *New Activity* submitted by \`<@${atData.slackID}>\`:\n*Name:* ${atData.name}\n*Email:* ${atData.email}\n*Activity Type:* ${atData.type}\n*Title:* ${atData.title}\n*URL:* ${atData.url}\n*Date:* ${atData.date}\n*Topic:* ${atData.topic}\n<${atData.atLink}|View in Airtable>`,
             unfurl_links: false
         });
     }
     catch (err) {
-        errors_1.slackErr(app, userID, err);
+        errors_1.slackErr(app, channel, err);
     }
 });
-exports.default = dmConfirmSave;
-//# sourceMappingURL=dm-confirm-save-activity.js.map
+exports.default = adminChannelPublishSave;
+//# sourceMappingURL=admin-channel-publish-save-activity.js.map

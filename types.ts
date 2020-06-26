@@ -1,5 +1,9 @@
 import mongoose from 'mongoose';
 
+/*------------------
+  TYPE INTERFACES
+------------------*/
+
 /**
  * @interface IObjectAny An object with any properties
  */
@@ -8,15 +12,19 @@ interface IObjectAny {
 }
 
 /**
- * @interface IATData Airtable data object
+ * @interface IActivity Airtable activity data object
  */
-interface IATData {
+interface IActivity {
   id?: string;
   name: string;
+  email: string;
+  type: string;
+  date: string;
+  title: string;
   url: string;
-  notes: string;
+  topic: string;
   slackID: string;
-  link?: string;
+  atLink?: string;
 };
 
 /**
@@ -40,4 +48,4 @@ interface IAppHomeDocument extends IAppHomeData, mongoose.Document {}
 /**
  * Exports
  */
-export { IObjectAny, IATData, IAdminData, IAdminDocument, IAppHomeData, IAppHomeDocument };
+export { IObjectAny, IActivity, IAdminData, IAdminDocument, IAppHomeData, IAppHomeDocument };

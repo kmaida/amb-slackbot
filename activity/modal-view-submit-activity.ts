@@ -1,4 +1,4 @@
-import { IObjectAny, IATData } from '../types';
+import { IObjectAny, IActivity } from '../types';
 import { validUrl, objNotEmpty } from '../utils/utils';
 import { saveData } from './airtable-activity/api-activity';
 import { slackErr } from '../utils/errors';
@@ -16,10 +16,14 @@ const submitModal = (app: IObjectAny): void => {
     const payload: IObjectAny = view.state.values;
     // Capture data from modal interactions
     // Modal blocks data format: payload.[block_id].[action_id].value
-    const data: IATData = {
+    const data: IActivity = {
       name: payload.b_name.a_name.value,
+      email: payload.b_email.a_email.value,
+      type: payload.b_type.a_type.selected_option,
+      title: payload.b_title.a_title.value,
+      date: payload.b_date.a_date.value,
       url: payload.b_url.a_url.value,
-      notes: payload.b_notes.a_notes.value || '',
+      topic: payload.b_topic.a_topic.value,
       slackID: userID
     };
     // Validate form fields and handle errors
@@ -38,7 +42,7 @@ const submitModal = (app: IObjectAny): void => {
     await ack();
     // Save data to Airtable
     try {
-      const saveToAirtable = await saveData(app, data);
+      const saveActivityToAirtable = await saveData(app, data);
     }
     catch (err) {
       slackErr(app, userID, err);

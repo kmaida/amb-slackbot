@@ -26,8 +26,12 @@ const submitModal = (app) => {
         // Modal blocks data format: payload.[block_id].[action_id].value
         const data = {
             name: payload.b_name.a_name.value,
+            email: payload.b_email.a_email.value,
+            type: payload.b_type.a_type.selected_option,
+            title: payload.b_title.a_title.value,
+            date: payload.b_date.a_date.value,
             url: payload.b_url.a_url.value,
-            notes: payload.b_notes.a_notes.value || '',
+            topic: payload.b_topic.a_topic.value,
             slackID: userID
         };
         // Validate form fields and handle errors
@@ -46,7 +50,7 @@ const submitModal = (app) => {
         yield ack();
         // Save data to Airtable
         try {
-            const saveToAirtable = yield api_activity_1.saveData(app, data);
+            const saveActivityToAirtable = yield api_activity_1.saveData(app, data);
         }
         catch (err) {
             errors_1.slackErr(app, userID, err);

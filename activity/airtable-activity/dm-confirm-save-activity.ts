@@ -1,17 +1,17 @@
 import { slackErr } from '../../utils/errors';
-import { IObjectAny, IATData } from '../../types';
+import { IObjectAny, IActivity } from '../../types';
 
 /*------------------
   DM CONFIRM SAVE
 ------------------*/
 
-const dmConfirmSave = async (app: IObjectAny, atData: IATData): Promise<any> => {
+const dmConfirmSave = async (app: IObjectAny, atData: IActivity): Promise<any> => {
   const userID: string = atData.slackID;
   try {
     const sendMsg = await app.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
       channel: userID,
-      text: `:tada: Your data has been saved successfully:\n*Name:* ${atData.name}\n*URL:* ${atData.url}\n*Notes:* ${atData.notes}\n<${atData.link}|View in Airtable>`,
+      text: `:tada: Your data has been saved successfully:\n*Activity Type:* ${atData.type}\n*Title:* ${atData.title}\n*URL:* ${atData.url}\n*Date:* ${atData.date}\n*Topic:* ${atData.topic}`,
       unfurl_links: false
     });
   }
