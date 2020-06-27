@@ -13,6 +13,7 @@
     "@types/wpapi": "^1.1.0",
     "airtable": "^0.8.1",
     "dotenv": "^8.2.0",
+    "graphql": "^15.1.0",
     "mongoose": "^5.9.19",
     "tslint": "^6.1.2",
     "typescript": "^3.9.5",

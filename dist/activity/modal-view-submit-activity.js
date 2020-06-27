@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("../utils/utils");
-const api_activity_1 = require("./airtable-activity/api-activity");
+const api_activity_1 = require("./data-activity/api-activity");
 const errors_1 = require("../utils/errors");
 /*------------------
   MODAL VIEW SUBMIT

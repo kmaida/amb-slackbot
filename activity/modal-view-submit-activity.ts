@@ -1,6 +1,6 @@
 import { IObjectAny, IActivity } from '../types';
 import { validUrl, objNotEmpty } from '../utils/utils';
-import { saveData } from './airtable-activity/api-activity';
+import { saveData } from './data-activity/api-activity';
 import { slackErr } from '../utils/errors';
 
 /*------------------
