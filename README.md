@@ -11,3 +11,7 @@ Slackbot for Gatsby community ambassadors to manage their activities, reimbursem
 * GraphQL
 * TypeScript
 * Bolt Slack JS framework (Node)
+
+## Changelog Notes
+
+* Modified `MAMP/htdocs/wp-gatsby-amb/wp-includes/functions.php` to add lines `10`-`34` registering REST field for ACF
