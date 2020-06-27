@@ -1,3 +1,13 @@
-# template-slackbot
+# gatsbam-slackbot
 
-This is a template repo for Slack app development using [TypeScript](https://www.typescriptlang.org/) and the [Bolt](https://github.com/slackapi/bolt-js) JavaScript Slack app framework.
+Slackbot for Gatsby community ambassadors to manage their activities, reimbursement, swag requests, etc.
+
+## Technology
+
+* Airtable (metrics tracking, travel requests, etc.)
+* WordPress (Advanced Custom Fields, Custom Post Type UI)
+* WPAPI (public activities, profiles, etc.)
+* MongoDB (Slackbot administration)
+* GraphQL
+* TypeScript
+* Bolt Slack JS framework (Node)
