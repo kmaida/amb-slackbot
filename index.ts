@@ -4,6 +4,8 @@ import { App } from '@slack/bolt';
 // MongoDB
 import { mdbSetup } from './data/setup-mongodb';
 import { initAdminSettings } from './app-home/admin/api-admin';
+// WordPress API
+import { wpApiSetup, wpGetActivities } from './data/setup-wpapi';
 // App functionality
 import modal from './activity/modal-activity';
 import submitModal from './activity/modal-view-submit-activity';
@@ -27,6 +29,10 @@ const port = process.env.PORT || 3000;
 mdbSetup();
 // Set up admin settings from environment variables
 initAdminSettings();
+// Set up WordPress API
+wpApiSetup();
+// Get Activities that have been saved to WordPress
+wpGetActivities();
 
 /*------------------
   SET UP MODAL IX

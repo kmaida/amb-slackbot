@@ -29,6 +29,17 @@ interface IActivity {
 };
 
 /**
+ * @interface IWPActivity WordPress activity data object from ACF
+ */
+interface IWPActivity {
+  name: string;
+  type: string;
+  date: string;
+  url: string;
+  topic: string;
+}
+
+/**
  * @interface IAdminData Simple admin data object
  */
 interface IAdminData {
@@ -49,4 +60,4 @@ interface IAppHomeDocument extends IAppHomeData, mongoose.Document {}
 /**
  * Exports
  */
-export { IObjectAny, IActivity, IAdminData, IAdminDocument, IAppHomeData, IAppHomeDocument };
+export { IObjectAny, IActivity, IWPActivity, IAdminData, IAdminDocument, IAppHomeData, IAppHomeDocument };

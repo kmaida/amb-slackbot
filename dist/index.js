@@ -37,6 +37,8 @@ const bolt_1 = require("@slack/bolt");
 // MongoDB
 const setup_mongodb_1 = require("./data/setup-mongodb");
 const api_admin_1 = require("./app-home/admin/api-admin");
+// WordPress API
+const setup_wpapi_1 = require("./data/setup-wpapi");
 // App functionality
 const modal_activity_1 = __importDefault(require("./activity/modal-activity"));
 const modal_view_submit_activity_1 = __importDefault(require("./activity/modal-view-submit-activity"));
@@ -58,6 +60,9 @@ const port = process.env.PORT || 3000;
 setup_mongodb_1.mdbSetup();
 // Set up admin settings from environment variables
 api_admin_1.initAdminSettings();
+// Set up WordPress API
+setup_wpapi_1.wpApiSetup();
+setup_wpapi_1.wpGetActivities();
 /*------------------
   SET UP MODAL IX
 ------------------*/
