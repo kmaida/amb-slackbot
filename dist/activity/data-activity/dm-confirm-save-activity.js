@@ -19,7 +19,7 @@ const dmConfirmSave = (app, atData) => __awaiter(void 0, void 0, void 0, functio
         const sendMsg = yield app.client.chat.postMessage({
             token: process.env.SLACK_BOT_TOKEN,
             channel: userID,
-            text: `:tada: Your data has been saved successfully:\n*Activity Type:* ${atData.type}\n*Title:* ${atData.title}\n*URL:* ${atData.url}\n*Date:* ${atData.date}\n*Topic:* ${atData.topic}`,
+            text: `:tada: Your data has been saved successfully:\n*Activity Type:* ${atData.type}\n*Title:* ${atData.title}\n*URL:* ${atData.url}\n*Date:* ${atData.date}\n*Topic:* ${atData.topic}\n*Reach:* ${atData.reach}`,
             unfurl_links: false
         });
     }

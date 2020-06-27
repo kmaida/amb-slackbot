@@ -21,7 +21,7 @@ const adminChannelPublishSave = (app, atData) => __awaiter(void 0, void 0, void 
         const sendMsg = yield app.client.chat.postMessage({
             token: process.env.SLACK_BOT_TOKEN,
             channel: channel,
-            text: `:new: *New Activity* submitted by \`<@${atData.slackID}>\`:\n*Name:* ${atData.name}\n*Email:* ${atData.email}\n*Activity Type:* ${atData.type}\n*Title:* ${atData.title}\n*URL:* ${atData.url}\n*Date:* ${atData.date}\n*Topic:* ${atData.topic}\n<${atData.atLink}|View in Airtable>`,
+            text: `:new: *New Activity* submitted by \`<@${atData.slackID}>\`:\n*Name:* ${atData.name}\n*Email:* ${atData.email}\n*Activity Type:* ${atData.type}\n*Title:* ${atData.title}\n*URL:* ${atData.url}\n*Date:* ${atData.date}\n*Topic:* ${atData.topic}\n*Reach:* ${atData.reach}\n<${atData.atLink}|View in Airtable>`,
             unfurl_links: false
         });
     }

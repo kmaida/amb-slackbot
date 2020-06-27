@@ -32,6 +32,7 @@ const submitModal = (app) => {
             date: payload.b_date.a_date.value,
             url: payload.b_url.a_url.value,
             topic: payload.b_topic.a_topic.value,
+            reach: payload.b_reach.a_reach.value,
             slackID: userID
         };
         // Validate form fields and handle errors

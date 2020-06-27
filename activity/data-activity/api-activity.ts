@@ -28,6 +28,7 @@ const saveData = async (app: IObjectAny, data: IActivity): Promise<IActivity> =>
         "Date": data.date,
         "URL": data.url,
         "Topic": data.topic,
+        "Reach": data.reach,
         "Slack ID": data.slackID
       }
     }
@@ -46,6 +47,7 @@ const saveData = async (app: IObjectAny, data: IActivity): Promise<IActivity> =>
       date: savedRecord.fields["Date"],
       title: savedRecord.fields["Title"],
       topic: savedRecord.fields["Topic"],
+      reach: savedRecord.fields["Reach"],
       slackID: savedRecord.fields["Slack ID"],
       atLink: `https://airtable.com/${tableID}/${viewID}/${savedID}`
     };

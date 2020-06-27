@@ -23,6 +23,7 @@ interface IActivity {
   title: string;
   url: string;
   topic: string;
+  reach: number;
   slackID: string;
   atLink?: string;
 };
