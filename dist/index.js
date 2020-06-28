@@ -39,6 +39,7 @@ const setup_mongodb_1 = require("./data/setup-mongodb");
 const api_admin_1 = require("./app-home/admin/api-admin");
 // WordPress API
 const setup_wpapi_1 = require("./data/setup-wpapi");
+const api_activity_1 = require("./activity/data-activity/api-activity"); // @TODO: remove after testing
 // App functionality
 const modal_activity_1 = __importDefault(require("./activity/modal-activity"));
 const modal_view_submit_activity_1 = __importDefault(require("./activity/modal-view-submit-activity"));
@@ -66,7 +67,7 @@ setup_wpapi_1.wpApiSetup();
  * REMOVE ALL BELOW AFTER TESTING
  */
 // Get Activities that have been saved to WordPress
-setup_wpapi_1.wpGetActivities();
+api_activity_1.wpGetActivities();
 // Test creation of activity from API
 // wpAddActivity({
 //   activity_name: 'Test REST API',

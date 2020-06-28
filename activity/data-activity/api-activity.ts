@@ -1,14 +1,19 @@
+import { IObjectAny, IActivity, IWPActivity, IACFActivities } from '../../types';
+import { storeErr } from '../../utils/errors';
+import dmConfirmSave from './dm-confirm-save-activity';
+import adminChannelPublishSave from './admin-channel-publish-save-activity';
+// Airtable
 const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_ACTIVITY;
 const tableID = process.env.AIRTABLE_TABLE_ID;
 const viewID = process.env.AIRTABLE_TABLE_VIEW_ID;
-import { IObjectAny, IActivity } from '../../types';
-import { storeErr } from '../../utils/errors';
-import dmConfirmSave from './dm-confirm-save-activity';
-import adminChannelPublishSave from './admin-channel-publish-save-activity';
+// WordPress API
+import axios from 'axios';
+axios.defaults;
+import { wpApi, acfApiUrl } from './../../data/setup-wpapi';
 
 /*------------------
-  AIRTABLE: TABLE
+    AIRTABLE API
 ------------------*/
 
 /**
@@ -61,4 +66,46 @@ const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivit
   });
 }
 
-export { atAddActivity };
+/*------------------
+   WORDPRESS API
+------------------*/
+
+/**
+ * Get Activities from ACF API (custom post type consisting of only ACF fields)
+ * @returns {IACFActivities[]} array of activity objects from WP
+ */
+const wpGetActivities = async (): Promise<IACFActivities[]> => {
+  try {
+    const getActivities = await axios.get(`${acfApiUrl}/activities`);
+    const acfActivities: IACFActivities[] = getActivities.data;
+    console.log('WPAPI: Get activities', acfActivities);
+    return acfActivities;
+  }
+  catch (err) {
+    console.error(err);
+  }
+};
+
+/**
+ * Add Activity from WordPress API
+ * @param {IWPActivity} data activity data to add
+ * @returns {Promise<IWPActivity>}
+ */
+const wpAddActivity = async (data: IWPActivity): Promise<IWPActivity> => {
+  try {
+    const addWpActivity = await wpApi.activities().create({
+      title: data.activity_title,
+      content: '',
+      fields: data,
+      status: 'publish'
+    });
+    const acfActivity = addWpActivity.acf;
+    // console.log('WPAPI: Save activity', acfActivity);
+    return acfActivity;
+  }
+  catch (err) {
+    console.error(err);
+  }
+};
+
+export { atAddActivity, wpGetActivities, wpAddActivity };

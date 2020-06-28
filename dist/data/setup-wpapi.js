@@ -12,17 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.wpAddActivity = exports.wpGetActivities = exports.wpApiSetup = exports.wpApi = void 0;
+exports.wpApiSetup = exports.acfApiUrl = exports.wpApiUrl = exports.wpApi = void 0;
 const wpapi_1 = __importDefault(require("wpapi"));
 const axios_1 = __importDefault(require("axios"));
 axios_1.default.defaults;
 /*------------------
    WORDPRESS API
 ------------------*/
-const _wpApiUrl = `${process.env.WP_URL}/index.php/wp-json`;
-const _acfApiUrl = `${_wpApiUrl}/acf/v3`;
+const wpApiUrl = `${process.env.WP_URL}/index.php/wp-json`;
+exports.wpApiUrl = wpApiUrl;
+const acfApiUrl = `${wpApiUrl}/acf/v3`;
+exports.acfApiUrl = acfApiUrl;
 const wpApi = new wpapi_1.default({
-    endpoint: _wpApiUrl,
+    endpoint: wpApiUrl,
     username: process.env.WP_USER,
     password: process.env.WP_PASSWORD
 });
@@ -56,42 +58,4 @@ const wpApiSetup = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.wpApiSetup = wpApiSetup;
-/**
- * Get Activities from ACF API (custom post type consisting of only ACF fields)
- * @returns {IACFActivities[]} array of activity objects from WP
- */
-const wpGetActivities = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const getActivities = yield axios_1.default.get(`${_acfApiUrl}/activities`);
-        const acfActivities = getActivities.data;
-        // console.log(acfActivities);
-        return acfActivities;
-    }
-    catch (err) {
-        console.error(err);
-    }
-});
-exports.wpGetActivities = wpGetActivities;
-/**
- * Add Activity from WordPress API
- * @param {IWPActivity} data activity data to add
- * @returns {Promise<IWPActivity>}
- */
-const wpAddActivity = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const addWpActivity = yield wpApi.activities().create({
-            title: data.activity_title,
-            content: '',
-            fields: data,
-            status: 'publish'
-        });
-        const acfActivity = addWpActivity.acf;
-        // console.log(acfActivity);
-        return acfActivity;
-    }
-    catch (err) {
-        console.error(err);
-    }
-});
-exports.wpAddActivity = wpAddActivity;
 //# sourceMappingURL=setup-wpapi.js.map

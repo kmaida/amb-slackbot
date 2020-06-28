@@ -5,7 +5,8 @@ import { App } from '@slack/bolt';
 import { mdbSetup } from './data/setup-mongodb';
 import { initAdminSettings } from './app-home/admin/api-admin';
 // WordPress API
-import { wpApiSetup, wpGetActivities } from './data/setup-wpapi';
+import { wpApiSetup } from './data/setup-wpapi';
+import { wpGetActivities } from './activity/data-activity/api-activity';  // @TODO: remove after testing
 // App functionality
 import modal from './activity/modal-activity';
 import submitModal from './activity/modal-view-submit-activity';

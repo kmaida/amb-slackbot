@@ -7,11 +7,11 @@ axios.defaults;
    WORDPRESS API
 ------------------*/
 
-const _wpApiUrl = `${process.env.WP_URL}/index.php/wp-json`;
-const _acfApiUrl = `${_wpApiUrl}/acf/v3`;
+const wpApiUrl = `${process.env.WP_URL}/index.php/wp-json`;
+const acfApiUrl = `${wpApiUrl}/acf/v3`;
 
 const wpApi = new WPAPI({
-  endpoint: _wpApiUrl,
+  endpoint: wpApiUrl,
   username: process.env.WP_USER,
   password: process.env.WP_PASSWORD
 });
@@ -45,42 +45,4 @@ const wpApiSetup = async (): Promise<void> => {
   }
 };
 
-/**
- * Get Activities from ACF API (custom post type consisting of only ACF fields)
- * @returns {IACFActivities[]} array of activity objects from WP
- */
-const wpGetActivities = async (): Promise<IACFActivities[]> => {
-  try {
-    const getActivities = await axios.get(`${_acfApiUrl}/activities`);
-    const acfActivities: IACFActivities[] = getActivities.data;
-    // console.log(acfActivities);
-    return acfActivities;
-  }
-  catch (err) {
-    console.error(err);
-  }
-};
-
-/**
- * Add Activity from WordPress API
- * @param {IWPActivity} data activity data to add
- * @returns {Promise<IWPActivity>}
- */
-const wpAddActivity = async (data: IWPActivity): Promise<IWPActivity> => {
-  try {
-    const addWpActivity = await wpApi.activities().create({
-      title: data.activity_title,
-      content: '',
-      fields: data,
-      status: 'publish'
-    });
-    const acfActivity = addWpActivity.acf;
-    // console.log(acfActivity);
-    return acfActivity;
-  }
-  catch (err) {
-    console.error(err);
-  }
-};
-
-export { wpApi, wpApiSetup, wpGetActivities, wpAddActivity };
+export { wpApi, wpApiUrl, acfApiUrl, wpApiSetup };
