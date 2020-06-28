@@ -50,8 +50,10 @@ const submitModal = (app) => {
         }
         yield ack();
         // Save data to Airtable
+        // @TODO: save activity in api-activity (create new endpoint)
+        // @TODO: save to WordPress
         try {
-            const saveActivityToAirtable = yield api_activity_1.saveData(app, data);
+            const saveActivityToAirtable = yield api_activity_1.atAddActivity(app, data);
         }
         catch (err) {
             errors_1.slackErr(app, userID, err);

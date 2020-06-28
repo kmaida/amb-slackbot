@@ -1,6 +1,6 @@
 import { IObjectAny, IActivity } from '../types';
 import { validUrl, objNotEmpty } from '../utils/utils';
-import { saveData } from './data-activity/api-activity';
+import { atAddActivity } from './data-activity/api-activity';
 import { slackErr } from '../utils/errors';
 
 /*------------------
@@ -42,8 +42,10 @@ const submitModal = (app: IObjectAny): void => {
     }
     await ack();
     // Save data to Airtable
+    // @TODO: save activity in api-activity (create new endpoint)
+    // @TODO: save to WordPress
     try {
-      const saveActivityToAirtable = await saveData(app, data);
+      const saveActivityToAirtable = await atAddActivity(app, data);
     }
     catch (err) {
       slackErr(app, userID, err);

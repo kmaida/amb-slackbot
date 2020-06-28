@@ -17,7 +17,7 @@ import adminChannelPublishSave from './admin-channel-publish-save-activity';
  * @param {IActivity} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
  */
-const saveData = async (app: IObjectAny, data: IActivity): Promise<IActivity> => {
+const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivity> => {
   return base(table).create([
     {
       "fields": {
@@ -61,4 +61,4 @@ const saveData = async (app: IObjectAny, data: IActivity): Promise<IActivity> =>
   });
 }
 
-export { saveData };
+export { atAddActivity };

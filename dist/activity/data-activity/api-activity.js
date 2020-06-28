@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveData = void 0;
+exports.atAddActivity = void 0;
 const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_ACTIVITY;
 const tableID = process.env.AIRTABLE_TABLE_ID;
@@ -29,7 +29,7 @@ const admin_channel_publish_save_activity_1 = __importDefault(require("./admin-c
  * @param {IActivity} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
  */
-const saveData = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
+const atAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
     return base(table).create([
         {
             "fields": {
@@ -72,5 +72,5 @@ const saveData = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
         return savedObj;
     });
 });
-exports.saveData = saveData;
+exports.atAddActivity = atAddActivity;
 //# sourceMappingURL=api-activity.js.map
