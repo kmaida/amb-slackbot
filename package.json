@@ -4,7 +4,7 @@
   "description": "Slackbot app for managing Gatsby Ambassadors, activity, reimbursement, etc.",
   "main": "dist/index.js",
   "scripts": {
-    "start": "tsc && node dist/index.js"
+    "start": "rm -rf dist/* && tsc && node dist/index.js"
   },
   "dependencies": {
     "@slack/bolt": "^2.1.1",
