@@ -62,7 +62,17 @@ setup_mongodb_1.mdbSetup();
 api_admin_1.initAdminSettings();
 // Set up WordPress API
 setup_wpapi_1.wpApiSetup();
+// Get Activities that have been saved to WordPress
 setup_wpapi_1.wpGetActivities();
+// Test creation of activity from API
+setup_wpapi_1.wpAddActivity({
+    activity_name: 'Test REST API',
+    activity_type: 'Speaking',
+    activity_title: 'Development',
+    activity_link: 'http://wp-api.org/node-wpapi/using-the-client/#creating-posts',
+    activity_date: '2020-06-27',
+    activity_topic: 'Creating an activity from REST API'
+});
 /*------------------
   SET UP MODAL IX
 ------------------*/

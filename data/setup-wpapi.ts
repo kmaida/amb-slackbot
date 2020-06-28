@@ -1,12 +1,17 @@
 import WPAPI from 'wpapi';
-import { IObjectAny, IWPActivity } from '../types';
+import { IObjectAny, IWPActivity, IACFActivities } from '../types';
+import axios from 'axios';
+axios.defaults;
 
 /*------------------
    WORDPRESS API
 ------------------*/
 
+const _wpApiUrl = `${process.env.WP_URL}/index.php/wp-json`;
+const _acfApiUrl = `${_wpApiUrl}//acf/v3`;
+
 const _wp = new WPAPI({
-  endpoint: `${process.env.WPAPI_URL}/wp-json`,
+  endpoint: _wpApiUrl,
   username: process.env.WP_USER,
   password: process.env.WP_PASSWORD
 });
@@ -14,43 +19,56 @@ const _wp = new WPAPI({
 /**
  * WordPress API setup
  * Connect to wpapi
+ * Register activities route
+ * Auto-discovery
  */
-const wpApiSetup = (): void => {
+const wpApiSetup = async (): Promise<void> => {
   const registerRoute = (slug: string) => {
     const namespace = 'wp/v2';
     const route = `/${slug}/(?P<id>)`;
-    _wp.activities = _wp.registerRoute(namespace, route);
+    _wp[slug] = _wp.registerRoute(namespace, route);
   }
   registerRoute('activities');
+  const discovery = await WPAPI.discover(process.env.WP_URL);
+  // console.log(discovery);
 };
 
 /**
- * Get Activities from WordPress API
- * @returns {IWPActivity[]} array of activity objects from WP
+ * Get Activities from REST API (ACF API)
+ * @returns {IACFActivities[]} array of activity objects from WP
  */
-const wpGetActivities = async (): Promise<IWPActivity[]> => {
+const wpGetActivities = async (): Promise<IACFActivities[]> => {
   try {
-    const getWpActivities = await _wp.activities();
-    const wpActivities: IWPActivity[] = [];
-    // Iterate over WP API results and create objects from ACF fields
-    getWpActivities.forEach((activity: IObjectAny) => {
-      const acf = activity.ACF;
-      const activityObj = {
-        name: acf.activity_name,
-        type: acf.activity_type,
-        title: acf.activity_title,
-        url: acf.activity_link,
-        date: acf.activity_date,
-        topic: acf.activity_topic
-      };
-      wpActivities.push(activityObj);
-    });
-    console.log(wpActivities);
-    return wpActivities;
+    const getActivities = await axios.get(`${_acfApiUrl}/activities`);
+    const acfActivities: IACFActivities[] = getActivities.data;
+    // console.log(acfActivities);
+    return acfActivities;
   }
   catch (err) {
     console.error(err);
   }
 };
 
-export { wpApiSetup, wpGetActivities };
+/**
+ * Add Activity from WordPress API
+ * @param {IWPActivity} data activity data to add
+ * @returns {Promise<IWPActivity>}
+ */
+const wpAddActivity = async (data: IWPActivity): Promise<IWPActivity> => {
+  try {
+    const addWpActivity = await _wp.activities().create({
+      title: data.activity_title,
+      content: '',
+      fields: data,
+      status: 'publish'
+    });
+    const acfActivity = addWpActivity.acf;
+    // console.log(acfActivity);
+    return acfActivity;
+  }
+  catch (err) {
+    console.error(err);
+  }
+};
+
+export { wpApiSetup, wpGetActivities, wpAddActivity };

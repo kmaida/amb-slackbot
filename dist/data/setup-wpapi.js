@@ -12,56 +12,73 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.wpGetActivities = exports.wpApiSetup = void 0;
+exports.wpAddActivity = exports.wpGetActivities = exports.wpApiSetup = void 0;
 const wpapi_1 = __importDefault(require("wpapi"));
+const axios_1 = __importDefault(require("axios"));
+axios_1.default.defaults;
 /*------------------
    WORDPRESS API
 ------------------*/
+const _wpApiUrl = `${process.env.WP_URL}/index.php/wp-json`;
+const _acfApiUrl = `${_wpApiUrl}//acf/v3`;
 const _wp = new wpapi_1.default({
-    endpoint: `${process.env.WPAPI_URL}/wp-json`,
+    endpoint: _wpApiUrl,
     username: process.env.WP_USER,
     password: process.env.WP_PASSWORD
 });
 /**
  * WordPress API setup
  * Connect to wpapi
+ * Register activities route
+ * Auto-discovery
  */
-const wpApiSetup = () => {
+const wpApiSetup = () => __awaiter(void 0, void 0, void 0, function* () {
     const registerRoute = (slug) => {
         const namespace = 'wp/v2';
         const route = `/${slug}/(?P<id>)`;
-        _wp.activities = _wp.registerRoute(namespace, route);
+        _wp[slug] = _wp.registerRoute(namespace, route);
     };
     registerRoute('activities');
-};
+    const discovery = yield wpapi_1.default.discover(process.env.WP_URL);
+    // console.log(discovery);
+});
 exports.wpApiSetup = wpApiSetup;
 /**
- * Get Activities from WordPress API
- * @returns {IWPActivity[]} array of activity objects from WP
+ * Get Activities from REST API (ACF API)
+ * @returns {IACFActivities[]} array of activity objects from WP
  */
 const wpGetActivities = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const getWpActivities = yield _wp.activities();
-        const wpActivities = [];
-        // Iterate over WP API results and create objects from ACF fields
-        getWpActivities.forEach((activity) => {
-            const acf = activity.ACF;
-            const activityObj = {
-                name: acf.activity_name,
-                type: acf.activity_type,
-                title: acf.activity_title,
-                url: acf.activity_link,
-                date: acf.activity_date,
-                topic: acf.activity_topic
-            };
-            wpActivities.push(activityObj);
-        });
-        console.log(wpActivities);
-        return wpActivities;
+        const getActivities = yield axios_1.default.get(`${_acfApiUrl}/activities`);
+        const acfActivities = getActivities.data;
+        // console.log(acfActivities);
+        return acfActivities;
     }
     catch (err) {
         console.error(err);
     }
 });
 exports.wpGetActivities = wpGetActivities;
+/**
+ * Add Activity from WordPress API
+ * @param {IWPActivity} data activity data to add
+ * @returns {Promise<IWPActivity>}
+ */
+const wpAddActivity = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const addWpActivity = yield _wp.activities().create({
+            title: data.activity_title,
+            content: '',
+            fields: data,
+            status: 'publish'
+        });
+        const acfActivity = addWpActivity.acf;
+        // console.log(acfActivity);
+        return acfActivity;
+    }
+    catch (err) {
+        console.error(err);
+    }
+});
+exports.wpAddActivity = wpAddActivity;
 //# sourceMappingURL=setup-wpapi.js.map

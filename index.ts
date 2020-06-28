@@ -5,7 +5,7 @@ import { App } from '@slack/bolt';
 import { mdbSetup } from './data/setup-mongodb';
 import { initAdminSettings } from './app-home/admin/api-admin';
 // WordPress API
-import { wpApiSetup, wpGetActivities } from './data/setup-wpapi';
+import { wpApiSetup, wpGetActivities, wpAddActivity } from './data/setup-wpapi';
 // App functionality
 import modal from './activity/modal-activity';
 import submitModal from './activity/modal-view-submit-activity';
@@ -33,6 +33,15 @@ initAdminSettings();
 wpApiSetup();
 // Get Activities that have been saved to WordPress
 wpGetActivities();
+// Test creation of activity from API
+wpAddActivity({
+  activity_name: 'Test REST API',
+  activity_type: 'Speaking',
+  activity_title: 'Development',
+  activity_link: 'http://wp-api.org/node-wpapi/using-the-client/#creating-posts',
+  activity_date: '2020-06-27',
+  activity_topic: 'Creating an activity from REST API'
+});
 
 /*------------------
   SET UP MODAL IX

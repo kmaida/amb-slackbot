@@ -32,12 +32,21 @@ interface IActivity {
  * @interface IWPActivity WordPress activity data object from ACF
  */
 interface IWPActivity {
-  name: string;
-  type: string;
-  date: string;
-  url: string;
-  topic: string;
-}
+  activity_name: string;
+  activity_type: string;
+  activity_title: string;
+  activity_date: string;
+  activity_link: string;
+  activity_topic: string;
+};
+
+/**
+ * @interface IACFActivities ACF array returned from ACF to REST API
+ */
+interface IACFActivities {
+  id: number,
+  acf: IWPActivity
+};
 
 /**
  * @interface IAdminData Simple admin data object
@@ -60,4 +69,4 @@ interface IAppHomeDocument extends IAppHomeData, mongoose.Document {}
 /**
  * Exports
  */
-export { IObjectAny, IActivity, IWPActivity, IAdminData, IAdminDocument, IAppHomeData, IAppHomeDocument };
+export { IObjectAny, IActivity, IWPActivity, IACFActivities, IAdminData, IAdminDocument, IAppHomeData, IAppHomeDocument };
