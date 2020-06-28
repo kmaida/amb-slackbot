@@ -42,9 +42,9 @@ interface IWPActivity {
 };
 
 /**
- * @interface IACFActivities ACF array returned from ACF to REST API
+ * @interface IACFActivity ACF array returned from ACF to REST API
  */
-interface IACFActivities {
+interface IACFActivity {
   id: number,
   acf: IWPActivity
 };
@@ -70,4 +70,4 @@ interface IAppHomeDocument extends IAppHomeData, mongoose.Document {}
 /**
  * Exports
  */
-export { IObjectAny, IActivity, IWPActivity, IACFActivities, IAdminData, IAdminDocument, IAppHomeData, IAppHomeDocument };
+export { IObjectAny, IActivity, IWPActivity, IACFActivity, IAdminData, IAdminDocument, IAppHomeData, IAppHomeDocument };

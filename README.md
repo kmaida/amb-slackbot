@@ -4,18 +4,20 @@ Slackbot for Gatsby community ambassadors to manage their activities, reimbursem
 
 ## Technology
 
-* Airtable (metrics tracking, travel requests, etc.)
-* [WordPress](#wordpress)
-* WPAPI (public activities, profiles, etc.)
-* MongoDB (Slackbot administration)
-* GraphQL
-* TypeScript
-* Bolt Slack JS framework (Node)
+* [Airtable](https://airtable.com/) (metrics tracking, travel requests, etc.)
+* [WordPress](#wordpress) (public activities, profiles, etc.)
+* [WPAPI](https://www.npmjs.com/package/wpapi) (WordPress REST API)
+* [MongoDB Atlas](https://account.mongodb.com/account) (Slackbot administration settings)
+* [GraphQL](https://graphql.org/graphql-js/)
+* [TypeScript](https://www.typescriptlang.org/)
+* [Bolt Slack JS framework](https://github.com/slackapi/bolt-js) (Node)
+* [ngrok](https://ngrok.com/)
 
 ### WordPress
 
+* [MAMP Pro](https://www.mamp.info/) (for local development)
 * [Advanced Custom Fields](https://www.advancedcustomfields.com/)
-* [ACF to REST API](http://github.com/airesvsg/acf-to-rest-api)
+* [ACF to REST API](http://github.com/airesvsg/acf-to-rest-api) (support )
 * [Custom Post Type UI](https://wordpress.org/plugins/custom-post-type-ui/) (to create custom post types, not custom fields; use ACF for custom fields)
 * [JSON Basic Authentication](https://github.com/WP-API/Basic-Auth) (need to install manually)
 

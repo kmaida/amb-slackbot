@@ -1,15 +1,16 @@
 import WPAPI from 'wpapi';
-import { IWPActivity, IACFActivities } from '../types';
-import axios from 'axios';
-axios.defaults;
 
 /*------------------
    WORDPRESS API
 ------------------*/
 
 const wpApiUrl = `${process.env.WP_URL}/index.php/wp-json`;
-const acfApiUrl = `${wpApiUrl}/acf/v3`;
+// const acfApiUrl = `${wpApiUrl}/acf/v3`;
 
+/**
+ * WPAPI constructor with auth
+ * @note auth: true doesn't work (no type)
+ */
 const wpApi = new WPAPI({
   endpoint: wpApiUrl,
   username: process.env.WP_USER,
@@ -38,11 +39,11 @@ const wpApiSetup = async (): Promise<void> => {
   // Auto-discovery
   try {
     const discovery = await WPAPI.discover(process.env.WP_URL);
-  // console.log('WP API DISCOVERY:', discovery);
+    // console.log('WP API DISCOVERY:', discovery);
   }
   catch (err) {
     console.error(err);
   }
 };
 
-export { wpApi, wpApiUrl, acfApiUrl, wpApiSetup };
+export { wpApi, wpApiUrl, wpApiSetup };

@@ -12,17 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.wpApiSetup = exports.acfApiUrl = exports.wpApiUrl = exports.wpApi = void 0;
+exports.wpApiSetup = exports.wpApiUrl = exports.wpApi = void 0;
 const wpapi_1 = __importDefault(require("wpapi"));
-const axios_1 = __importDefault(require("axios"));
-axios_1.default.defaults;
 /*------------------
    WORDPRESS API
 ------------------*/
 const wpApiUrl = `${process.env.WP_URL}/index.php/wp-json`;
 exports.wpApiUrl = wpApiUrl;
-const acfApiUrl = `${wpApiUrl}/acf/v3`;
-exports.acfApiUrl = acfApiUrl;
+// const acfApiUrl = `${wpApiUrl}/acf/v3`;
+/**
+ * WPAPI constructor with auth
+ * @note auth: true doesn't work (no type)
+ */
 const wpApi = new wpapi_1.default({
     endpoint: wpApiUrl,
     username: process.env.WP_USER,

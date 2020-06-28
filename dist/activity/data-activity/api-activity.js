@@ -22,8 +22,6 @@ const table = process.env.AT_TABLE_ACTIVITY;
 const tableID = process.env.AIRTABLE_TABLE_ID;
 const viewID = process.env.AIRTABLE_TABLE_VIEW_ID;
 // WordPress API
-const axios_1 = __importDefault(require("axios"));
-axios_1.default.defaults;
 const setup_wpapi_1 = require("./../../data/setup-wpapi");
 /*------------------
     AIRTABLE API
@@ -83,14 +81,22 @@ exports.atAddActivity = atAddActivity;
 ------------------*/
 /**
  * Get Activities from ACF API (custom post type consisting of only ACF fields)
- * @returns {IACFActivities[]} array of activity objects from WP
+ * @returns {IACFActivity[]} array of activity objects from WP
  */
 const wpGetActivities = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const getActivities = yield axios_1.default.get(`${setup_wpapi_1.acfApiUrl}/activities`);
-        const acfActivities = getActivities.data;
-        console.log('WPAPI: Get activities', acfActivities);
-        return acfActivities;
+        const getActivities = yield setup_wpapi_1.wpApi.activities();
+        const activities = [];
+        getActivities.forEach((activity) => {
+            const acf = activity.acf;
+            const obj = {
+                id: activity.id,
+                acf: acf
+            };
+            activities.push(obj);
+        });
+        console.log('WPAPI: Activities', activities);
+        return activities;
     }
     catch (err) {
         console.error(err);
@@ -99,8 +105,9 @@ const wpGetActivities = () => __awaiter(void 0, void 0, void 0, function* () {
 exports.wpGetActivities = wpGetActivities;
 /**
  * Add Activity from WordPress API
+ * Relies on ACF to REST API plugin to work
  * @param {IWPActivity} data activity data to add
- * @returns {Promise<IWPActivity>}
+ * @returns {Promise<IACFActivity>}
  */
 const wpAddActivity = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -110,8 +117,11 @@ const wpAddActivity = (data) => __awaiter(void 0, void 0, void 0, function* () {
             fields: data,
             status: 'publish'
         });
-        const acfActivity = addWpActivity.acf;
-        // console.log('WPAPI: Save activity', acfActivity);
+        const acfActivity = {
+            id: addWpActivity.id,
+            acf: addWpActivity.acf
+        };
+        console.log('WPAPI: Successfully saved activity', acfActivity);
         return acfActivity;
     }
     catch (err) {

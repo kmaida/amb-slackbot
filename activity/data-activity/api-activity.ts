@@ -1,4 +1,4 @@
-import { IObjectAny, IActivity, IWPActivity, IACFActivities } from '../../types';
+import { IObjectAny, IActivity, IWPActivity, IACFActivity } from '../../types';
 import { storeErr } from '../../utils/errors';
 import dmConfirmSave from './dm-confirm-save-activity';
 import adminChannelPublishSave from './admin-channel-publish-save-activity';
@@ -8,9 +8,7 @@ const table = process.env.AT_TABLE_ACTIVITY;
 const tableID = process.env.AIRTABLE_TABLE_ID;
 const viewID = process.env.AIRTABLE_TABLE_VIEW_ID;
 // WordPress API
-import axios from 'axios';
-axios.defaults;
-import { wpApi, acfApiUrl } from './../../data/setup-wpapi';
+import { wpApi } from './../../data/setup-wpapi';
 
 /*------------------
     AIRTABLE API
@@ -72,14 +70,22 @@ const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivit
 
 /**
  * Get Activities from ACF API (custom post type consisting of only ACF fields)
- * @returns {IACFActivities[]} array of activity objects from WP
+ * @returns {IACFActivity[]} array of activity objects from WP
  */
-const wpGetActivities = async (): Promise<IACFActivities[]> => {
+const wpGetActivities = async (): Promise<IACFActivity[]> => {
   try {
-    const getActivities = await axios.get(`${acfApiUrl}/activities`);
-    const acfActivities: IACFActivities[] = getActivities.data;
-    console.log('WPAPI: Get activities', acfActivities);
-    return acfActivities;
+    const getActivities: IObjectAny[] = await wpApi.activities();
+    const activities: IACFActivity[] = [];
+    getActivities.forEach((activity: IObjectAny) => {
+      const acf: IWPActivity = activity.acf;
+      const obj: IACFActivity = {
+        id: activity.id,
+        acf: acf
+      }
+      activities.push(obj);
+    });
+    console.log('WPAPI: Activities', activities);
+    return activities;
   }
   catch (err) {
     console.error(err);
@@ -88,10 +94,11 @@ const wpGetActivities = async (): Promise<IACFActivities[]> => {
 
 /**
  * Add Activity from WordPress API
+ * Relies on ACF to REST API plugin to work
  * @param {IWPActivity} data activity data to add
- * @returns {Promise<IWPActivity>}
+ * @returns {Promise<IACFActivity>}
  */
-const wpAddActivity = async (data: IWPActivity): Promise<IWPActivity> => {
+const wpAddActivity = async (data: IWPActivity): Promise<IACFActivity> => {
   try {
     const addWpActivity = await wpApi.activities().create({
       title: data.activity_title,
@@ -99,8 +106,11 @@ const wpAddActivity = async (data: IWPActivity): Promise<IWPActivity> => {
       fields: data,
       status: 'publish'
     });
-    const acfActivity = addWpActivity.acf;
-    // console.log('WPAPI: Save activity', acfActivity);
+    const acfActivity: IACFActivity = {
+      id: addWpActivity.id,
+      acf: addWpActivity.acf
+    };
+    console.log('WPAPI: Successfully saved activity', acfActivity);
     return acfActivity;
   }
   catch (err) {

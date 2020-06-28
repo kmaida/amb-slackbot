@@ -70,11 +70,11 @@ setup_wpapi_1.wpApiSetup();
 api_activity_1.wpGetActivities();
 // Test creation of activity from API
 // wpAddActivity({
-//   activity_name: 'Test REST API',
+//   activity_name: 'Test 2',
 //   activity_type: 'Speaking',
-//   activity_title: 'Development',
+//   activity_title: 'Test API',
 //   activity_link: 'http://wp-api.org/node-wpapi/using-the-client/#creating-posts',
-//   activity_date: '2020-06-27',
+//   activity_date: '2020-06-28',
 //   activity_topic: 'Creating an activity from REST API',
 //   slack_id: 'U01238R77J6'
 // });
