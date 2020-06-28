@@ -1,5 +1,5 @@
 import WPAPI from 'wpapi';
-import { IObjectAny, IWPActivity, IACFActivities } from '../types';
+import { IWPActivity, IACFActivities } from '../types';
 import axios from 'axios';
 axios.defaults;
 
@@ -8,9 +8,9 @@ axios.defaults;
 ------------------*/
 
 const _wpApiUrl = `${process.env.WP_URL}/index.php/wp-json`;
-const _acfApiUrl = `${_wpApiUrl}//acf/v3`;
+const _acfApiUrl = `${_wpApiUrl}/acf/v3`;
 
-const _wp = new WPAPI({
+const wpApi = new WPAPI({
   endpoint: _wpApiUrl,
   username: process.env.WP_USER,
   password: process.env.WP_PASSWORD
@@ -21,20 +21,32 @@ const _wp = new WPAPI({
  * Connect to wpapi
  * Register activities route
  * Auto-discovery
+ * @returns {Promise<void>}
  */
 const wpApiSetup = async (): Promise<void> => {
+  /**
+   * Register custom routes in REST API
+   * @param {string} slug custom post type / desired endpoint in API
+   */
   const registerRoute = (slug: string) => {
     const namespace = 'wp/v2';
     const route = `/${slug}/(?P<id>)`;
-    _wp[slug] = _wp.registerRoute(namespace, route);
+    wpApi[slug] = wpApi.registerRoute(namespace, route);
   }
+  // Register custom post type "activities"
   registerRoute('activities');
-  const discovery = await WPAPI.discover(process.env.WP_URL);
-  // console.log(discovery);
+  // Auto-discovery
+  try {
+    const discovery = await WPAPI.discover(process.env.WP_URL);
+  // console.log('WP API DISCOVERY:', discovery);
+  }
+  catch (err) {
+    console.error(err);
+  }
 };
 
 /**
- * Get Activities from REST API (ACF API)
+ * Get Activities from ACF API (custom post type consisting of only ACF fields)
  * @returns {IACFActivities[]} array of activity objects from WP
  */
 const wpGetActivities = async (): Promise<IACFActivities[]> => {
@@ -56,7 +68,7 @@ const wpGetActivities = async (): Promise<IACFActivities[]> => {
  */
 const wpAddActivity = async (data: IWPActivity): Promise<IWPActivity> => {
   try {
-    const addWpActivity = await _wp.activities().create({
+    const addWpActivity = await wpApi.activities().create({
       title: data.activity_title,
       content: '',
       fields: data,
@@ -71,4 +83,4 @@ const wpAddActivity = async (data: IWPActivity): Promise<IWPActivity> => {
   }
 };
 
-export { wpApiSetup, wpGetActivities, wpAddActivity };
+export { wpApi, wpApiSetup, wpGetActivities, wpAddActivity };
