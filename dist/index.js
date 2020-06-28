@@ -75,7 +75,8 @@ api_activity_1.wpGetActivities();
 //   activity_title: 'Development',
 //   activity_link: 'http://wp-api.org/node-wpapi/using-the-client/#creating-posts',
 //   activity_date: '2020-06-27',
-//   activity_topic: 'Creating an activity from REST API'
+//   activity_topic: 'Creating an activity from REST API',
+//   slack_id: 'U01238R77J6'
 // });
 /*------------------
   SET UP MODAL IX

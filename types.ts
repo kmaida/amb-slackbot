@@ -38,6 +38,7 @@ interface IWPActivity {
   activity_date: string;
   activity_link: string;
   activity_topic: string;
+  slack_id: string;
 };
 
 /**

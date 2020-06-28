@@ -6,7 +6,7 @@ import { mdbSetup } from './data/setup-mongodb';
 import { initAdminSettings } from './app-home/admin/api-admin';
 // WordPress API
 import { wpApiSetup } from './data/setup-wpapi';
-import { wpGetActivities } from './activity/data-activity/api-activity';  // @TODO: remove after testing
+import { wpGetActivities, wpAddActivity } from './activity/data-activity/api-activity';  // @TODO: remove after testing
 // App functionality
 import modal from './activity/modal-activity';
 import submitModal from './activity/modal-view-submit-activity';
@@ -45,7 +45,8 @@ wpGetActivities();
 //   activity_title: 'Development',
 //   activity_link: 'http://wp-api.org/node-wpapi/using-the-client/#creating-posts',
 //   activity_date: '2020-06-27',
-//   activity_topic: 'Creating an activity from REST API'
+//   activity_topic: 'Creating an activity from REST API',
+//   slack_id: 'U01238R77J6'
 // });
 
 /*------------------

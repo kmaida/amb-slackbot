@@ -43,7 +43,7 @@ const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivit
     }
     const savedRecord: IObjectAny = records[0];
     const savedID: string = savedRecord.getId();
-      const savedObj: IActivity = {
+    const savedObj: IActivity = {
       id: savedID,
       name: savedRecord.fields["Name"],
       email: savedRecord.fields["Email"],
