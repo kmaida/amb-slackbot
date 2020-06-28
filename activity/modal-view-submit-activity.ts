@@ -7,7 +7,7 @@ import { slackErr } from '../utils/errors';
   MODAL VIEW SUBMIT
 ------------------*/
 
-const submitModal = (app: IObjectAny): void => {
+const submitModalActivity = (app: IObjectAny): void => {
   // Modal view submitted
   app.view('add_airtable_data', async ({ ack, body, view }) => {
     const userID: string = body.user.id;
@@ -53,4 +53,4 @@ const submitModal = (app: IObjectAny): void => {
   });
 };
 
-export default submitModal;
+export default submitModalActivity;

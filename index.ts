@@ -1,15 +1,15 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import { App } from '@slack/bolt';
-// MongoDB
+// MongoDB (app admin settings)
 import { mdbSetup } from './data/setup-mongodb';
 import { initAdminSettings } from './app-home/admin/api-admin';
-// WordPress API
+// WordPress REST API
 import { wpApiSetup } from './data/setup-wpapi';
 import { wpGetActivities, wpAddActivity } from './activity/data-activity/api-activity';  // @TODO: remove after testing
 // App functionality
-import modal from './activity/modal-activity';
-import submitModal from './activity/modal-view-submit-activity';
+import modalActivity from './activity/modal-activity';
+import submitModalActivity from './activity/modal-view-submit-activity';
 import appHomeOpened from './app-home/event-app-home-opened';
 import appMention from './app-mention/event-app-mention';
 import botDM from './message-im/event-message-im';
@@ -52,8 +52,8 @@ wpGetActivities();
 /*------------------
   SET UP MODAL IX
 ------------------*/
-modal(app);
-submitModal(app);
+modalActivity(app);
+submitModalActivity(app);
 
 /*------------------
   APP HOME OPENED
