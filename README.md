@@ -16,12 +16,12 @@ Slackbot for Gatsby community ambassadors to manage their activities, reimbursem
 ### WordPress
 
 * [MAMP Pro](https://www.mamp.info/) (for local development)
-* [Advanced Custom Fields](https://www.advancedcustomfields.com/)
+* [Advanced Custom Fields (Pro)](https://www.advancedcustomfields.com/)
 * [ACF to REST API](http://github.com/airesvsg/acf-to-rest-api) (support ACF post / put in REST API)
-* [Custom Post Type UI](https://wordpress.org/plugins/custom-post-type-ui/) (to create custom post types, not custom fields; use ACF for custom fields)
-* [JSON Basic Authentication](https://github.com/WP-API/Basic-Auth) (need to install manually)
+* [JSON Basic Authentication](https://github.com/WP-API/Basic-Auth) (need to install manually; supports WPAPI for REST API)
 
 ## Changelog / Notes
 
+* 2020-06-30: Deleted custom post type plugin and replaced with https://gist.github.com/kmaida/ed218a2c54f3d4f5012d8962a4275f9c
 * 2020-06-27: Added https://github.com/WP-API/Basic-Auth for `node-wpapi` auth
 * 2020-06-27: Modified `MAMP/htdocs/wp-gatsby-amb/wp-includes/functions.php` to add lines `10`-`34` registering REST field for ACF

@@ -36,7 +36,7 @@ interface IWPActivity {
   activity_type: string;
   activity_title: string;
   activity_date: string;
-  activity_link: string;
+  activity_url: string;
   activity_topic: string;
   slack_id: string;
 };

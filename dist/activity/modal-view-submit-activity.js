@@ -15,7 +15,7 @@ const errors_1 = require("../utils/errors");
 /*------------------
   MODAL VIEW SUBMIT
 ------------------*/
-const submitModal = (app) => {
+const submitModalActivity = (app) => {
     // Modal view submitted
     app.view('add_airtable_data', ({ ack, body, view }) => __awaiter(void 0, void 0, void 0, function* () {
         const userID = body.user.id;
@@ -60,5 +60,5 @@ const submitModal = (app) => {
         }
     }));
 };
-exports.default = submitModal;
+exports.default = submitModalActivity;
 //# sourceMappingURL=modal-view-submit-activity.js.map

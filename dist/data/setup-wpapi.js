@@ -19,7 +19,6 @@ const wpapi_1 = __importDefault(require("wpapi"));
 ------------------*/
 const wpApiUrl = `${process.env.WP_URL}/index.php/wp-json`;
 exports.wpApiUrl = wpApiUrl;
-// const acfApiUrl = `${wpApiUrl}/acf/v3`;
 /**
  * WPAPI constructor with auth
  * @note auth: true doesn't work (no type)

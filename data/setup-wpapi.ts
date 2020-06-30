@@ -5,7 +5,6 @@ import WPAPI from 'wpapi';
 ------------------*/
 
 const wpApiUrl = `${process.env.WP_URL}/index.php/wp-json`;
-// const acfApiUrl = `${wpApiUrl}/acf/v3`;
 
 /**
  * WPAPI constructor with auth

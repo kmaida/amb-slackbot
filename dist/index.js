@@ -34,10 +34,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const bolt_1 = require("@slack/bolt");
-// MongoDB
+// MongoDB (app admin settings)
 const setup_mongodb_1 = require("./data/setup-mongodb");
 const api_admin_1 = require("./app-home/admin/api-admin");
-// WordPress API
+// WordPress REST API
 const setup_wpapi_1 = require("./data/setup-wpapi");
 const api_activity_1 = require("./activity/data-activity/api-activity"); // @TODO: remove after testing
 // App functionality
@@ -69,15 +69,15 @@ setup_wpapi_1.wpApiSetup();
 // Get Activities that have been saved to WordPress
 api_activity_1.wpGetActivities();
 // Test creation of activity from API
-// wpAddActivity({
-//   activity_name: 'Test 2',
-//   activity_type: 'Speaking',
-//   activity_title: 'Test API',
-//   activity_link: 'http://wp-api.org/node-wpapi/using-the-client/#creating-posts',
-//   activity_date: '2020-06-28',
-//   activity_topic: 'Creating an activity from REST API',
-//   slack_id: 'U01238R77J6'
-// });
+api_activity_1.wpAddActivity({
+    activity_name: 'Test 2',
+    activity_type: 'Speaking',
+    activity_title: 'Test API',
+    activity_url: 'http://wp-api.org/node-wpapi/using-the-client/#creating-posts',
+    activity_date: '2020-06-28',
+    activity_topic: 'Creating an activity from REST API',
+    slack_id: 'U01238R77J6'
+});
 /*------------------
   SET UP MODAL IX
 ------------------*/
