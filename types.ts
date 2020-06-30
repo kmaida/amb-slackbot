@@ -24,6 +24,7 @@ interface IActivity {
   url: string;
   topic: string;
   reach: number;
+  quarter?: string;
   slackID: string;
   atLink?: string;
 };

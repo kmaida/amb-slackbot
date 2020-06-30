@@ -69,14 +69,26 @@ setup_wpapi_1.wpApiSetup();
 // Get Activities that have been saved to WordPress
 api_activity_1.wpGetActivities();
 // Test creation of activity from API
-api_activity_1.wpAddActivity({
-    activity_name: 'Test 2',
-    activity_type: 'Speaking',
-    activity_title: 'Test API',
-    activity_url: 'http://wp-api.org/node-wpapi/using-the-client/#creating-posts',
-    activity_date: '2020-06-28',
-    activity_topic: 'Creating an activity from REST API',
-    slack_id: 'U01238R77J6'
+// wpAddActivity({
+//   activity_name: 'Test 2',
+//   activity_type: 'Speaking',
+//   activity_title: 'Test API',
+//   activity_url: 'http://wp-api.org/node-wpapi/using-the-client/#creating-posts',
+//   activity_date: '2020-06-28',
+//   activity_topic: 'Creating an activity from REST API',
+//   slack_id: 'U01238R77J6'
+// });
+// Test creation of activity in Airtable
+api_activity_1.atAddActivity(app, {
+    name: 'Kim Maida',
+    email: 'kim@gatsbyjs.com',
+    type: 'Podcast',
+    title: 'The Pod People',
+    date: '2020-06-30',
+    url: 'https://google.com',
+    topic: 'Testing AT insertion',
+    reach: 500,
+    slackID: 'U01238R77J6'
 });
 /*------------------
   SET UP MODAL IX

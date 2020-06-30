@@ -19,8 +19,9 @@ const admin_channel_publish_save_activity_1 = __importDefault(require("./admin-c
 // Airtable
 const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_ACTIVITY;
-const tableID = process.env.AIRTABLE_TABLE_ID;
-const viewID = process.env.AIRTABLE_TABLE_VIEW_ID;
+const tableID = process.env.AT_TABLE_ID_ACTIVITY;
+const viewID = process.env.AT_TABLE_VIEW_ID_ACTIVITY;
+const utils_1 = require("./../../utils/utils");
 // WordPress API
 const setup_wpapi_1 = require("./../../data/setup-wpapi");
 /*------------------
@@ -44,6 +45,7 @@ const atAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function*
                 "URL": data.url,
                 "Topic": data.topic,
                 "Reach": data.reach,
+                "Quarter": utils_1.getQ(data.date),
                 "Slack ID": data.slackID
             }
         }
@@ -63,6 +65,7 @@ const atAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function*
             title: savedRecord.fields["Title"],
             topic: savedRecord.fields["Topic"],
             reach: savedRecord.fields["Reach"],
+            quarter: savedRecord.fields["Quarter"],
             slackID: savedRecord.fields["Slack ID"],
             atLink: `https://airtable.com/${tableID}/${viewID}/${savedID}`
         };

@@ -6,7 +6,7 @@ import { mdbSetup } from './data/setup-mongodb';
 import { initAdminSettings } from './app-home/admin/api-admin';
 // WordPress REST API
 import { wpApiSetup } from './data/setup-wpapi';
-import { wpGetActivities, wpAddActivity } from './activity/data-activity/api-activity';  // @TODO: remove after testing
+import { wpGetActivities, wpAddActivity, atAddActivity } from './activity/data-activity/api-activity';  // @TODO: remove after testing
 // App functionality
 import modalActivity from './activity/modal-activity';
 import submitModalActivity from './activity/modal-view-submit-activity';
@@ -48,6 +48,19 @@ wpGetActivities();
 //   activity_topic: 'Creating an activity from REST API',
 //   slack_id: 'U01238R77J6'
 // });
+
+// Test creation of activity in Airtable
+atAddActivity(app, {
+  name: 'Kim Maida',
+  email: 'kim@gatsbyjs.com',
+  type: 'Podcast',
+  title: 'The Pod People',
+  date: '2020-06-30',
+  url: 'https://google.com',
+  topic: 'Testing AT insertion',
+  reach: 500,
+  slackID: 'U01238R77J6'
+});
 
 /*------------------
   SET UP MODAL IX

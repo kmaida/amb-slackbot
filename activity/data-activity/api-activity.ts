@@ -5,8 +5,9 @@ import adminChannelPublishSave from './admin-channel-publish-save-activity';
 // Airtable
 const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_ACTIVITY;
-const tableID = process.env.AIRTABLE_TABLE_ID;
-const viewID = process.env.AIRTABLE_TABLE_VIEW_ID;
+const tableID = process.env.AT_TABLE_ID_ACTIVITY;
+const viewID = process.env.AT_TABLE_VIEW_ID_ACTIVITY;
+import { getQ } from './../../utils/utils';
 // WordPress API
 import { wpApi } from './../../data/setup-wpapi';
 
@@ -32,6 +33,7 @@ const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivit
         "URL": data.url,
         "Topic": data.topic,
         "Reach": data.reach,
+        "Quarter": getQ(data.date),
         "Slack ID": data.slackID
       }
     }
@@ -51,6 +53,7 @@ const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivit
       title: savedRecord.fields["Title"],
       topic: savedRecord.fields["Topic"],
       reach: savedRecord.fields["Reach"],
+      quarter: savedRecord.fields["Quarter"],
       slackID: savedRecord.fields["Slack ID"],
       atLink: `https://airtable.com/${tableID}/${viewID}/${savedID}`
     };

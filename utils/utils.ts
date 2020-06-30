@@ -53,4 +53,16 @@ const ignoreMention = async ({ event, next }: IObjectAny): Promise<void> => {
   }
 }
 
-export { validUrl, objNotEmpty, clearNewline, ignoreMention };
+/**
+ * Get quarter from ISO date
+ * @param {string} isoDate YYYY-MM-DD
+ * @return {string} Q1, Q2, Q3, Q4
+ */
+const getQ = (isoDate: string): string => {
+  // Some very JavaScripty type coercion going on here :P
+  const month0BI: number = <any>isoDate.split('-')[1] * 1 - 1;
+  const qMap: string[] = ['Q1', 'Q1', 'Q1', 'Q2', 'Q2', 'Q2', 'Q3', 'Q3', 'Q3', 'Q4', 'Q4', 'Q4'];
+  return qMap[month0BI];
+}
+
+export { validUrl, objNotEmpty, clearNewline, ignoreMention, getQ };

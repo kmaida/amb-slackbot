@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = exports.validUrl = void 0;
+exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = exports.validUrl = void 0;
 /*------------------
        UTILS
 ------------------*/
@@ -63,4 +63,16 @@ const ignoreMention = ({ event, next }) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.ignoreMention = ignoreMention;
+/**
+ * Get quarter from ISO date
+ * @param {string} isoDate YYYY-MM-DD
+ * @return {string} Q1, Q2, Q3, Q4
+ */
+const getQ = (isoDate) => {
+    // Some very JavaScripty type coercion going on here :P
+    const month0BI = isoDate.split('-')[1] * 1 - 1;
+    const qMap = ['Q1', 'Q1', 'Q1', 'Q2', 'Q2', 'Q2', 'Q3', 'Q3', 'Q3', 'Q4', 'Q4', 'Q4'];
+    return qMap[month0BI];
+};
+exports.getQ = getQ;
 //# sourceMappingURL=utils.js.map
