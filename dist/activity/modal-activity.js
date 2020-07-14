@@ -8,13 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.modalActivity = void 0;
 const errors_1 = require("../utils/errors");
-const blocks_modal_activity_1 = __importDefault(require("./blocks-modal-activity"));
+const blocks_modal_activity_1 = require("./blocks-modal-activity");
 /*------------------
  MODAL DIALOG FORM
     Command
@@ -47,7 +44,7 @@ const modalActivity = (app) => {
                         type: 'plain_text',
                         text: 'Add Activity'
                     },
-                    blocks: blocks_modal_activity_1.default(),
+                    blocks: blocks_modal_activity_1.blocksModalActivity(),
                     submit: {
                         type: 'plain_text',
                         text: 'Save'

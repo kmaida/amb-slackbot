@@ -1,8 +1,8 @@
 import { IObjectAny } from '../../utils/types';
 import { IActivity, IWPActivity, IACFActivity } from './../activity.interface';
 import { storeErr } from '../../utils/errors';
-import dmConfirmSave from './dm-confirm-save-activity';
-import adminChannelPublishSave from './admin-channel-publish-save-activity';
+import { dmConfirmSave } from './dm-confirm-save-activity';
+import { adminChannelPublishSave } from './admin-channel-publish-save-activity';
 // Airtable
 const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_ACTIVITY;

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.adminChannelPublishSave = void 0;
 const errors_1 = require("../../utils/errors");
 const api_admin_1 = require("../../app-home/admin/api-admin");
 /*------------------
@@ -29,5 +30,5 @@ const adminChannelPublishSave = (app, atData) => __awaiter(void 0, void 0, void 
         errors_1.slackErr(app, channel, err);
     }
 });
-exports.default = adminChannelPublishSave;
+exports.adminChannelPublishSave = adminChannelPublishSave;
 //# sourceMappingURL=admin-channel-publish-save-activity.js.map

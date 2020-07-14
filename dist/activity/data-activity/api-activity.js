@@ -8,14 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.wpAddActivity = exports.wpGetActivities = exports.atAddActivity = void 0;
 const errors_1 = require("../../utils/errors");
-const dm_confirm_save_activity_1 = __importDefault(require("./dm-confirm-save-activity"));
-const admin_channel_publish_save_activity_1 = __importDefault(require("./admin-channel-publish-save-activity"));
+const dm_confirm_save_activity_1 = require("./dm-confirm-save-activity");
+const admin_channel_publish_save_activity_1 = require("./admin-channel-publish-save-activity");
 // Airtable
 const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_ACTIVITY;
@@ -71,9 +68,9 @@ const atAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function*
         };
         console.log('AIRTABLE: Saved new activity', savedObj);
         // Send Slack DM to submitter confirming successful save
-        dm_confirm_save_activity_1.default(app, savedObj);
+        dm_confirm_save_activity_1.dmConfirmSave(app, savedObj);
         // Send Slack channel message to private admin-only channel
-        admin_channel_publish_save_activity_1.default(app, savedObj);
+        admin_channel_publish_save_activity_1.adminChannelPublishSave(app, savedObj);
         // @NOTE: If you want to update home view: need to have passed user's app home view ID
         return savedObj;
     });

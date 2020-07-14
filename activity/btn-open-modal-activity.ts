@@ -20,4 +20,4 @@ const btnOpenModalActivity = (metadata?: any): IObjectAny => {
   };
 }
 
-export default btnOpenModalActivity;
+export { btnOpenModalActivity };

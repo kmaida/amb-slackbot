@@ -21,4 +21,4 @@ const dmConfirmSave = async (app: IObjectAny, atData: IActivity): Promise<any> =
   }
 };
 
-export default dmConfirmSave;
+export { dmConfirmSave };

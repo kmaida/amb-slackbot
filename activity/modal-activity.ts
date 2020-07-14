@@ -1,6 +1,6 @@
 import { slackErr } from '../utils/errors';
 import { IObjectAny } from '../utils/types';
-import blocksModalActivity from './blocks-modal-activity';
+import { blocksModalActivity } from './blocks-modal-activity';
 
 /*------------------
  MODAL DIALOG FORM

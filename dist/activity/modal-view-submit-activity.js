@@ -59,6 +59,15 @@ const submitModalActivity = (app) => {
         catch (err) {
             errors_1.slackErr(app, userID, err);
         }
+        api_activity_1.wpAddActivity({
+            activity_name: data.name,
+            activity_type: data.type,
+            activity_title: data.title,
+            activity_date: data.date,
+            activity_url: data.url,
+            activity_topic: data.topic,
+            slack_id: data.slackID
+        });
     }));
 };
 exports.submitModalActivity = submitModalActivity;

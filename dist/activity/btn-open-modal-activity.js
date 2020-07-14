@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.btnOpenModalActivity = void 0;
 /*------------------
  BUTTON: OPEN MODAL
      ACTIVITY
@@ -18,5 +19,5 @@ const btnOpenModalActivity = (metadata) => {
         "style": "primary"
     };
 };
-exports.default = btnOpenModalActivity;
+exports.btnOpenModalActivity = btnOpenModalActivity;
 //# sourceMappingURL=btn-open-modal-activity.js.map

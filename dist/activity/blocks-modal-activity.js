@@ -3,6 +3,7 @@
  BLOCKS: MODAL FORM
 ------------------*/
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.blocksModalActivity = void 0;
 const blocksModalActivity = () => {
     return [
         {
@@ -57,5 +58,5 @@ const blocksModalActivity = () => {
         }
     ];
 };
-exports.default = blocksModalActivity;
+exports.blocksModalActivity = blocksModalActivity;
 //# sourceMappingURL=blocks-modal-activity.js.map

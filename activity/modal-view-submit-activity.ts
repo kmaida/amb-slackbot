@@ -1,6 +1,6 @@
 import { IObjectAny } from '../utils/types';
 import { validUrl, objNotEmpty } from '../utils/utils';
-import { atAddActivity } from './data-activity/api-activity';
+import { atAddActivity, wpAddActivity } from './data-activity/api-activity';
 import { slackErr } from '../utils/errors';
 import { IActivity } from './activity.interface';
 
@@ -51,6 +51,15 @@ const submitModalActivity = (app: IObjectAny): void => {
     catch (err) {
       slackErr(app, userID, err);
     }
+    wpAddActivity({
+      activity_name: data.name,
+      activity_type: data.type,
+      activity_title: data.title,
+      activity_date: data.date,
+      activity_url: data.url,
+      activity_topic: data.topic,
+      slack_id: data.slackID
+    });
   });
 };
 

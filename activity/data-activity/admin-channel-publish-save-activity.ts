@@ -24,4 +24,4 @@ const adminChannelPublishSave = async (app: IObjectAny, atData: IActivity): Prom
   }
 };
 
-export default adminChannelPublishSave;
+export { adminChannelPublishSave };

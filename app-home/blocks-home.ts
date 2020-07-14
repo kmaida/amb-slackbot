@@ -1,6 +1,6 @@
-import btnOpenModal from '../activity/btn-open-modal-activity';
+import { btnOpenModalActivity } from '../activity/btn-open-modal-activity';
 import { IObjectAny } from '../utils/types';
-import blocksHomeAdmin from './admin/blocks-home-admin';
+import { blocksHomeAdmin } from './admin/blocks-home-admin';
 import { getAdminSettings } from './admin/api-admin';
 import { IAdminDocument } from './app-home.interface';
 
@@ -36,7 +36,7 @@ const blocksHome = async (userID: string, metadata: any): Promise<IObjectAny[]> 
     {
       "type": "actions",
       "elements": [
-        btnOpenModal(metadata)
+        btnOpenModalActivity(metadata)
       ]
     }
   ];
@@ -59,4 +59,4 @@ const blocksHome = async (userID: string, metadata: any): Promise<IObjectAny[]> 
   return composeHomeBlocks();
 }
 
-export default blocksHome;
+export { blocksHome };

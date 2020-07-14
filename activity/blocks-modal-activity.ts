@@ -57,4 +57,4 @@ const blocksModalActivity = () => {
   ];
 }
 
-export default blocksModalActivity;
+export { blocksModalActivity };
