@@ -1,4 +1,4 @@
-import { IObjectAny, IActivity, IWPActivity, IACFActivity } from '../../types';
+import { IObjectAny, IActivity, IWPActivity, IACFActivity } from '../../utils/types';
 import { storeErr } from '../../utils/errors';
 import dmConfirmSave from './dm-confirm-save-activity';
 import adminChannelPublishSave from './admin-channel-publish-save-activity';

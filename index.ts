@@ -50,17 +50,17 @@ wpGetActivities();
 // });
 
 // Test creation of activity in Airtable
-atAddActivity(app, {
-  name: 'Kim Maida',
-  email: 'kim@gatsbyjs.com',
-  type: 'Podcast',
-  title: 'The Pod People',
-  date: '2020-06-30',
-  url: 'https://google.com',
-  topic: 'Testing AT insertion',
-  reach: 500,
-  slackID: 'U01238R77J6'
-});
+// atAddActivity(app, {
+//   name: 'Kim Maida',
+//   email: 'kim@gatsbyjs.com',
+//   type: 'Podcast',
+//   title: 'The Pod People',
+//   date: '2020-06-30',
+//   url: 'https://google.com',
+//   topic: 'Testing AT insertion',
+//   reach: 500,
+//   slackID: 'U01238R77J6'
+// });
 
 /*------------------
   SET UP MODAL IX

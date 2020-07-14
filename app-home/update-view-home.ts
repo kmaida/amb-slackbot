@@ -1,4 +1,4 @@
-import { IObjectAny } from '../types';
+import { IObjectAny } from '../utils/types';
 import blocksHome from './blocks-home';
 import { getHomeViews } from './admin/api-admin';
 import { slackErr } from './../utils/errors';

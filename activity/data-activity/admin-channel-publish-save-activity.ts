@@ -1,5 +1,5 @@
 import { slackErr } from '../../utils/errors';
-import { IObjectAny, IActivity, IAdminDocument } from '../../types';
+import { IObjectAny, IActivity, IAdminDocument } from '../../utils/types';
 import { getAdminSettings } from '../../app-home/admin/api-admin';
 
 /*------------------

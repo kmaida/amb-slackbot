@@ -1,6 +1,6 @@
 import { slackErr } from '../../utils/errors';
 import { setChannel } from './api-admin';
-import { IAdminDocument, IObjectAny } from '../../types';
+import { IAdminDocument, IObjectAny } from '../../utils/types';
 import { updateAllHomes } from '../update-view-home';
 
 /*------------------

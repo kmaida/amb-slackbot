@@ -1,5 +1,5 @@
 import { slackErr } from '../../utils/errors';
-import { IObjectAny, IActivity } from '../../types';
+import { IObjectAny, IActivity } from '../../utils/types';
 
 /*------------------
   DM CONFIRM SAVE

@@ -1,4 +1,4 @@
-import { IObjectAny, IActivity } from '../types';
+import { IObjectAny, IActivity } from '../utils/types';
 import { validUrl, objNotEmpty } from '../utils/utils';
 import { atAddActivity } from './data-activity/api-activity';
 import { slackErr } from '../utils/errors';

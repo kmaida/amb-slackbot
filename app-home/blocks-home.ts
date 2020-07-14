@@ -1,5 +1,5 @@
 import btnOpenModal from '../activity/btn-open-modal-activity';
-import { IObjectAny, IAdminDocument } from '../types';
+import { IObjectAny, IAdminDocument } from '../utils/types';
 import blocksHomeAdmin from './admin/blocks-home-admin';
 import { getAdminSettings } from './admin/api-admin';
 
