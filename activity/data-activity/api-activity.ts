@@ -18,25 +18,26 @@ import { wpApi } from './../../data/setup-wpapi';
 
 /**
  * Save a new Airtable data record
- * @param {IObjectAny} App Slack app
+ * @param {IObjectAny} app Slack app
  * @param {IActivity} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
  */
 const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivity> => {
+  const atFields = {
+    "Name": data.name,
+    "Email": data.email,
+    "Activity Type": data.type,
+    "Title": data.title,
+    "Date": data.date,
+    "URL": data.url,
+    "Topic": data.topic,
+    "Reach": data.reach,
+    "Quarter": getQ(data.date),
+    "Slack ID": data.slackID
+  };
   return base(table).create([
     {
-      "fields": {
-        "Name": data.name,
-        "Email": data.email,
-        "Activity Type": data.type,
-        "Title": data.title,
-        "Date": data.date,
-        "URL": data.url,
-        "Topic": data.topic,
-        "Reach": data.reach,
-        "Quarter": getQ(data.date),
-        "Slack ID": data.slackID
-      }
+      "fields": atFields
     }
   ], (err: string, records: IObjectAny) => {
     if (err) {
@@ -99,15 +100,25 @@ const wpGetActivities = async (): Promise<IACFActivity[]> => {
 /**
  * Add Activity from WordPress API
  * Relies on ACF to REST API plugin to work
- * @param {IWPActivity} data activity data to add
+ * @param {IObjectAny} app Slack app
+ * @param {IActivity} data activity data to add
  * @returns {Promise<IACFActivity>}
  */
-const wpAddActivity = async (data: IWPActivity): Promise<IACFActivity> => {
+const wpAddActivity = async (app: IObjectAny, data: IActivity): Promise<IACFActivity> => {
   try {
+    const wpFields: IWPActivity = {
+      activity_name: data.name,
+      activity_type: data.type,
+      activity_title: data.title,
+      activity_date: data.date,
+      activity_url: data.url,
+      activity_topic: data.topic,
+      slack_id: data.slackID
+    };
     const addWpActivity = await wpApi.activities().create({
-      title: data.activity_title,
+      title: data.title,
       content: '',
-      fields: data,
+      fields: wpFields,
       status: 'publish'
     });
     const acfActivity: IACFActivity = {
@@ -115,6 +126,7 @@ const wpAddActivity = async (data: IWPActivity): Promise<IACFActivity> => {
       acf: addWpActivity.acf
     };
     console.log('WPAPI: Successfully saved activity', acfActivity);
+    // @TODO: output activity to public channel
     return acfActivity;
   }
   catch (err) {

@@ -26,25 +26,26 @@ const setup_wpapi_1 = require("./../../data/setup-wpapi");
 ------------------*/
 /**
  * Save a new Airtable data record
- * @param {IObjectAny} App Slack app
+ * @param {IObjectAny} app Slack app
  * @param {IActivity} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
  */
 const atAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const atFields = {
+        "Name": data.name,
+        "Email": data.email,
+        "Activity Type": data.type,
+        "Title": data.title,
+        "Date": data.date,
+        "URL": data.url,
+        "Topic": data.topic,
+        "Reach": data.reach,
+        "Quarter": utils_1.getQ(data.date),
+        "Slack ID": data.slackID
+    };
     return base(table).create([
         {
-            "fields": {
-                "Name": data.name,
-                "Email": data.email,
-                "Activity Type": data.type,
-                "Title": data.title,
-                "Date": data.date,
-                "URL": data.url,
-                "Topic": data.topic,
-                "Reach": data.reach,
-                "Quarter": utils_1.getQ(data.date),
-                "Slack ID": data.slackID
-            }
+            "fields": atFields
         }
     ], (err, records) => {
         if (err) {
@@ -106,15 +107,25 @@ exports.wpGetActivities = wpGetActivities;
 /**
  * Add Activity from WordPress API
  * Relies on ACF to REST API plugin to work
- * @param {IWPActivity} data activity data to add
+ * @param {IObjectAny} app Slack app
+ * @param {IActivity} data activity data to add
  * @returns {Promise<IACFActivity>}
  */
-const wpAddActivity = (data) => __awaiter(void 0, void 0, void 0, function* () {
+const wpAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const wpFields = {
+            activity_name: data.name,
+            activity_type: data.type,
+            activity_title: data.title,
+            activity_date: data.date,
+            activity_url: data.url,
+            activity_topic: data.topic,
+            slack_id: data.slackID
+        };
         const addWpActivity = yield setup_wpapi_1.wpApi.activities().create({
-            title: data.activity_title,
+            title: data.title,
             content: '',
-            fields: data,
+            fields: wpFields,
             status: 'publish'
         });
         const acfActivity = {
@@ -122,6 +133,7 @@ const wpAddActivity = (data) => __awaiter(void 0, void 0, void 0, function* () {
             acf: addWpActivity.acf
         };
         console.log('WPAPI: Successfully saved activity', acfActivity);
+        // @TODO: output activity to public channel
         return acfActivity;
     }
     catch (err) {

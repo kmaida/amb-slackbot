@@ -58,16 +58,12 @@ const submitModalActivity = (app) => {
             errors_1.slackErr(app, userID, err);
         }
         // Save activity to WordPress
-        const wpActivity = {
-            activity_name: data.name,
-            activity_type: data.type,
-            activity_title: data.title,
-            activity_date: data.date,
-            activity_url: data.url,
-            activity_topic: data.topic,
-            slack_id: data.slackID
-        };
-        api_activity_1.wpAddActivity(wpActivity);
+        try {
+            const saveActivityToWordPress = yield api_activity_1.wpAddActivity(app, data);
+        }
+        catch (err) {
+            errors_1.slackErr(app, userID, err);
+        }
     }));
 };
 exports.submitModalActivity = submitModalActivity;
