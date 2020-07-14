@@ -1,6 +1,7 @@
 import { slackErr } from '../../utils/errors';
-import { IObjectAny, IActivity, IAdminDocument } from '../../utils/types';
+import { IObjectAny, IActivity } from '../../utils/types';
 import { getAdminSettings } from '../../app-home/admin/api-admin';
+import { IAdminDocument } from '../../app-home/app-home.interface';
 
 /*------------------
 ADMIN CHANNEL PUBLISH SAVE

@@ -1,7 +1,8 @@
 import { setAdmins } from './api-admin';
-import { IAdminDocument, IObjectAny } from '../../utils/types';
+import { IObjectAny } from '../../utils/types';
 import { updateAllHomes } from '../update-view-home';
 import { slackErr } from '../../utils/errors';
+import { IAdminDocument } from '../app-home.interface';
 
 /*------------------
  ACTION: SELECT ADMINS

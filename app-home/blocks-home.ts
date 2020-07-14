@@ -1,7 +1,8 @@
 import btnOpenModal from '../activity/btn-open-modal-activity';
-import { IObjectAny, IAdminDocument } from '../utils/types';
+import { IObjectAny } from '../utils/types';
 import blocksHomeAdmin from './admin/blocks-home-admin';
 import { getAdminSettings } from './admin/api-admin';
+import { IAdminDocument } from './app-home.interface';
 
 /*------------------
  BLOCKS: HOME VIEW
