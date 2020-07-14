@@ -2,7 +2,7 @@ import { IObjectAny } from '../utils/types';
 import { validUrl, objNotEmpty } from '../utils/utils';
 import { atAddActivity, wpAddActivity } from './data-activity/api-activity';
 import { slackErr } from '../utils/errors';
-import { IActivity } from './activity.interface';
+import { IActivity, IWPActivity } from './activity.interface';
 
 /*------------------
   MODAL VIEW SUBMIT
@@ -42,16 +42,15 @@ const submitModalActivity = (app: IObjectAny): void => {
       return;
     }
     await ack();
-    // Save data to Airtable
-    // @TODO: save activity in api-activity (create new endpoint)
-    // @TODO: save to WordPress
+    // Save activity to Airtable
     try {
       const saveActivityToAirtable = await atAddActivity(app, data);
     }
     catch (err) {
       slackErr(app, userID, err);
     }
-    wpAddActivity({
+    // Save activity to WordPress
+    const wpActivity: IWPActivity = {
       activity_name: data.name,
       activity_type: data.type,
       activity_title: data.title,
@@ -59,7 +58,8 @@ const submitModalActivity = (app: IObjectAny): void => {
       activity_url: data.url,
       activity_topic: data.topic,
       slack_id: data.slackID
-    });
+    };
+    wpAddActivity(wpActivity);
   });
 };
 

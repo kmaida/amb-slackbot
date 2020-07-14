@@ -50,16 +50,15 @@ const submitModalActivity = (app) => {
             return;
         }
         yield ack();
-        // Save data to Airtable
-        // @TODO: save activity in api-activity (create new endpoint)
-        // @TODO: save to WordPress
+        // Save activity to Airtable
         try {
             const saveActivityToAirtable = yield api_activity_1.atAddActivity(app, data);
         }
         catch (err) {
             errors_1.slackErr(app, userID, err);
         }
-        api_activity_1.wpAddActivity({
+        // Save activity to WordPress
+        const wpActivity = {
             activity_name: data.name,
             activity_type: data.type,
             activity_title: data.title,
@@ -67,7 +66,8 @@ const submitModalActivity = (app) => {
             activity_url: data.url,
             activity_topic: data.topic,
             slack_id: data.slackID
-        });
+        };
+        api_activity_1.wpAddActivity(wpActivity);
     }));
 };
 exports.submitModalActivity = submitModalActivity;
