@@ -1,6 +1,9 @@
 "use strict";
 /*------------------
-  TYPE INTERFACES
+ACTIVITY INTERFACES
 ------------------*/
 Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=types.js.map
+;
+;
+;
+//# sourceMappingURL=activity.interface.js.map
