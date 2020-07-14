@@ -1,5 +1,6 @@
 import { ISlackUserInfo } from './data-slack.interface';
 import { IObjectAny } from '../utils/types';
+import { logErr } from '../utils/errors';
 
 /*------------------
      SLACK API
@@ -27,7 +28,7 @@ const getUserInfo = async (userID: string, app: IObjectAny): Promise<ISlackUserI
     return userData;
   }
   catch (err) {
-    console.error(err);
+    logErr(err);
   }
 };
 

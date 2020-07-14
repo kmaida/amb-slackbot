@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserInfo = void 0;
+const errors_1 = require("../utils/errors");
 /*------------------
      SLACK API
 ------------------*/
@@ -35,7 +36,7 @@ const getUserInfo = (userID, app) => __awaiter(void 0, void 0, void 0, function*
         return userData;
     }
     catch (err) {
-        console.error(err);
+        errors_1.logErr(err);
     }
 });
 exports.getUserInfo = getUserInfo;

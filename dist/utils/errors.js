@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.slackErr = exports.storeErr = void 0;
+exports.slackErr = exports.logErr = exports.storeErr = void 0;
 /*------------------
       ERRORS
 ------------------*/
 /**
- * Simple log and return error
+ * Simple log and return error from store
  * @param {IObjectAny|string} err object or error message
  * @return {IObjectAny} error object
  */
@@ -24,6 +24,15 @@ const storeErr = (err) => {
     return new Error(msg);
 };
 exports.storeErr = storeErr;
+/**
+ * Simple log of error
+ * @param {IObjectAny|string} err object or error message
+ */
+const logErr = (err) => {
+    const msg = err.msg || err;
+    console.error('ERROR:', msg);
+};
+exports.logErr = logErr;
 /**
  * Send error to Slack in specified channel
  * @param {IObjectAny} app Slack app

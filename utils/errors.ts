@@ -5,7 +5,7 @@ import { IObjectAny } from './types';
 ------------------*/
 
 /**
- * Simple log and return error
+ * Simple log and return error from store
  * @param {IObjectAny|string} err object or error message
  * @return {IObjectAny} error object
  */
@@ -13,6 +13,15 @@ const storeErr = (err: any): IObjectAny => {
   const msg: string = err.msg || err;
   console.error('STORE ERROR:', msg);
   return new Error(msg);
+}
+
+/**
+ * Simple log of error
+ * @param {IObjectAny|string} err object or error message
+ */
+const logErr = (err: any): void => {
+  const msg: string = err.msg || err;
+  console.error('ERROR:', msg);
 }
 
 /**
@@ -36,4 +45,4 @@ const slackErr = async (app: IObjectAny, channel: string, err: any): Promise<voi
   }
 };
 
-export { storeErr, slackErr };
+export { storeErr, logErr, slackErr };
