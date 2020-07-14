@@ -53,4 +53,4 @@ const appHomeOpened = (app: IObjectAny): void => {
   actionSelectAdmins(app, metadata);
 }
 
-export default appHomeOpened;
+export { appHomeOpened };

@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.appHomeOpened = void 0;
 const errors_1 = require("../utils/errors");
 const action_select_channel_1 = __importDefault(require("./admin/action-select-channel"));
 const action_select_admins_1 = __importDefault(require("./admin/action-select-admins"));
@@ -60,5 +61,5 @@ const appHomeOpened = (app) => {
     action_select_channel_1.default(app, metadata);
     action_select_admins_1.default(app, metadata);
 };
-exports.default = appHomeOpened;
+exports.appHomeOpened = appHomeOpened;
 //# sourceMappingURL=event-app-home-opened.js.map

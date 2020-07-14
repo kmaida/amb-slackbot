@@ -27,9 +27,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
@@ -41,11 +38,11 @@ const api_admin_1 = require("./app-home/admin/api-admin");
 const setup_wpapi_1 = require("./data/setup-wpapi");
 const api_activity_1 = require("./activity/data-activity/api-activity"); // @TODO: remove after testing
 // App functionality
-const modal_activity_1 = __importDefault(require("./activity/modal-activity"));
-const modal_view_submit_activity_1 = __importDefault(require("./activity/modal-view-submit-activity"));
-const event_app_home_opened_1 = __importDefault(require("./app-home/event-app-home-opened"));
-const event_app_mention_1 = __importDefault(require("./app-mention/event-app-mention"));
-const event_message_im_1 = __importDefault(require("./message-im/event-message-im"));
+const modal_activity_1 = require("./activity/modal-activity");
+const modal_view_submit_activity_1 = require("./activity/modal-view-submit-activity");
+const event_app_home_opened_1 = require("./app-home/event-app-home-opened");
+const event_app_mention_1 = require("./app-mention/event-app-mention");
+const event_message_im_1 = require("./message-im/event-message-im");
 /*------------------
   CREATE BOLT APP
 ------------------*/
@@ -93,20 +90,20 @@ api_activity_1.wpGetActivities();
 /*------------------
   SET UP MODAL IX
 ------------------*/
-modal_activity_1.default(app);
-modal_view_submit_activity_1.default(app);
+modal_activity_1.modalActivity(app);
+modal_view_submit_activity_1.submitModalActivity(app);
 /*------------------
   APP HOME OPENED
 ------------------*/
-event_app_home_opened_1.default(app);
+event_app_home_opened_1.appHomeOpened(app);
 /*------------------
     APP MENTION
 ------------------*/
-event_app_mention_1.default(app);
+event_app_mention_1.appMention(app);
 /*------------------
        BOT DM
 ------------------*/
-event_message_im_1.default(app);
+event_message_im_1.botDM(app);
 /*------------------
      START APP
 ------------------*/

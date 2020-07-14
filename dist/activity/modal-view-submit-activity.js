@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.submitModalActivity = void 0;
 const utils_1 = require("../utils/utils");
 const api_activity_1 = require("./data-activity/api-activity");
 const errors_1 = require("../utils/errors");
@@ -60,5 +61,5 @@ const submitModalActivity = (app) => {
         }
     }));
 };
-exports.default = submitModalActivity;
+exports.submitModalActivity = submitModalActivity;
 //# sourceMappingURL=modal-view-submit-activity.js.map

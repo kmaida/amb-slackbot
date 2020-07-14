@@ -54,4 +54,4 @@ const submitModalActivity = (app: IObjectAny): void => {
   });
 };
 
-export default submitModalActivity;
+export { submitModalActivity };

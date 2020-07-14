@@ -59,4 +59,4 @@ const modalActivity = (app: IObjectAny): void => {
   app.action('btn_open_modal_activity', openDialog);
 };
 
-export default modalActivity;
+export { modalActivity };

@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.modalActivity = void 0;
 const errors_1 = require("../utils/errors");
 const blocks_modal_activity_1 = __importDefault(require("./blocks-modal-activity"));
 /*------------------
@@ -68,5 +69,5 @@ const modalActivity = (app) => {
     // Button from App Home
     app.action('btn_open_modal_activity', openDialog);
 };
-exports.default = modalActivity;
+exports.modalActivity = modalActivity;
 //# sourceMappingURL=modal-activity.js.map
