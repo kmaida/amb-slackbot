@@ -132,7 +132,7 @@ const wpAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function*
             id: addWpActivity.id,
             acf: addWpActivity.acf
         };
-        console.log('WPAPI: Successfully saved activity', acfActivity);
+        console.log('WPAPI: Saved new activity', acfActivity);
         // @TODO: output activity to public channel
         return acfActivity;
     }

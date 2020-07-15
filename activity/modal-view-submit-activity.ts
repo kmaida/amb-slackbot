@@ -1,5 +1,6 @@
 import { IObjectAny } from '../utils/types';
-import { validUrl, objNotEmpty } from '../utils/utils';
+import { objNotEmpty } from '../utils/utils';
+import { validUrl, validNumber } from '../utils/form-validation';
 import { atAddActivity, wpAddActivity } from './data-activity/api-activity';
 import { slackErr } from '../utils/errors';
 import { IActivity } from './activity.interface';
@@ -25,7 +26,7 @@ const submitModalActivity = (app: IObjectAny): void => {
       date: payload.b_date.a_date.value,
       url: payload.b_url.a_url.value,
       topic: payload.b_topic.a_topic.value,
-      reach: payload.b_reach.a_reach.value,
+      reach: payload.b_reach.a_reach.value * 1,
       slackID: userID
     };
     // Validate form fields and handle errors
@@ -37,6 +38,12 @@ const submitModalActivity = (app: IObjectAny): void => {
     if (!validUrl(data.url)) {
       ackParams.errors.b_url = 'Please provide a valid URL.';
     }
+    if (!validNumber(data.reach)) {
+      ackParams.errors.b_reach = 'Reach must be an integer.'
+    }
+    // @TODO: validate email (email-ish)
+    // @TODO: validate date (today or in the past)
+    // @TODO: validate reach (must be a number)
     if (objNotEmpty(ackParams.errors)) {
       await ack(ackParams);
       return;

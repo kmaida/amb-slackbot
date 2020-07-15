@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.submitModalActivity = void 0;
 const utils_1 = require("../utils/utils");
+const form_validation_1 = require("../utils/form-validation");
 const api_activity_1 = require("./data-activity/api-activity");
 const errors_1 = require("../utils/errors");
 /*------------------
@@ -33,7 +34,7 @@ const submitModalActivity = (app) => {
             date: payload.b_date.a_date.value,
             url: payload.b_url.a_url.value,
             topic: payload.b_topic.a_topic.value,
-            reach: payload.b_reach.a_reach.value,
+            reach: payload.b_reach.a_reach.value * 1,
             slackID: userID
         };
         // Validate form fields and handle errors
@@ -42,9 +43,15 @@ const submitModalActivity = (app) => {
             response_action: 'errors',
             errors: {}
         };
-        if (!utils_1.validUrl(data.url)) {
+        if (!form_validation_1.validUrl(data.url)) {
             ackParams.errors.b_url = 'Please provide a valid URL.';
         }
+        if (!form_validation_1.validNumber(data.reach)) {
+            ackParams.errors.b_reach = 'Reach must be an integer.';
+        }
+        // @TODO: validate email (email-ish)
+        // @TODO: validate date (today or in the past)
+        // @TODO: validate reach (must be a number)
         if (utils_1.objNotEmpty(ackParams.errors)) {
             yield ack(ackParams);
             return;

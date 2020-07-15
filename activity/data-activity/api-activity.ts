@@ -125,7 +125,7 @@ const wpAddActivity = async (app: IObjectAny, data: IActivity): Promise<IACFActi
       id: addWpActivity.id,
       acf: addWpActivity.acf
     };
-    console.log('WPAPI: Successfully saved activity', acfActivity);
+    console.log('WPAPI: Saved new activity', acfActivity);
     // @TODO: output activity to public channel
     return acfActivity;
   }
