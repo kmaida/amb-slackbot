@@ -43,15 +43,19 @@ const submitModalActivity = (app) => {
             response_action: 'errors',
             errors: {}
         };
+        if (!form_validation_1.emailIsh(data.email)) {
+            ackParams.errors.b_email = 'Please provide a valid email.';
+        }
         if (!form_validation_1.validUrl(data.url)) {
             ackParams.errors.b_url = 'Please provide a valid URL.';
+        }
+        if (!form_validation_1.dateCompare(data.date)) {
+            ackParams.errors.b_date = 'The provided date is in the future. Please complete an activity before submitting it.';
         }
         if (!form_validation_1.validNumber(data.reach)) {
             ackParams.errors.b_reach = 'Reach must be an integer.';
         }
-        // @TODO: validate email (email-ish)
         // @TODO: validate date (today or in the past)
-        // @TODO: validate reach (must be a number)
         if (utils_1.objNotEmpty(ackParams.errors)) {
             yield ack(ackParams);
             return;

@@ -11,7 +11,7 @@ import { IObjectAny } from './types';
  */
 const objNotEmpty = (obj: IObjectAny): boolean => {
   return obj && Object.keys(obj).length && obj.constructor === Object;
-}
+};
 
 /**
  * Clear newlines or set newline values to undefined instead
@@ -24,7 +24,7 @@ const clearNewline = (input: string): string => {
   } else {
     return input;
   }
-}
+};
 
 /**
  * Message middleware: ignore some kinds of messages
@@ -39,7 +39,7 @@ const ignoreMention = async ({ event, next }: IObjectAny): Promise<void> => {
   if (!ignoreSubtype && !messageChanged) {
     await next();
   }
-}
+};
 
 /**
  * Get quarter from ISO date
@@ -51,6 +51,17 @@ const getQ = (isoDate: string): string => {
   const month0BI: number = <any>isoDate.split('-')[1] * 1 - 1;
   const qMap: string[] = ['Q1', 'Q1', 'Q1', 'Q2', 'Q2', 'Q2', 'Q3', 'Q3', 'Q3', 'Q4', 'Q4', 'Q4'];
   return qMap[month0BI];
-}
+};
 
-export { objNotEmpty, clearNewline, ignoreMention, getQ };
+/**
+ * Takes an undefined or null value and outputs an empty string
+ * Useful for prefilling initial form values that don't exist
+ * (Avoids printing "undefined" as a value in fields)
+ * @param {string} input A string or falsey value
+ * @return {string}
+ */
+const falseyToEmptyStr = (input: string): string => {
+  return (!!input === false) ? '' : input;
+};
+
+export { objNotEmpty, clearNewline, ignoreMention, getQ, falseyToEmptyStr };

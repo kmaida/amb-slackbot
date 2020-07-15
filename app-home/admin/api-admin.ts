@@ -120,7 +120,7 @@ const setAdmins = async (admins: string[]): Promise<IAdminDocument> => {
  * Save user's home view data the first time they open their home view
  * @param {string} userID user's ID 
  * @param {string} viewID user's app home view ID
- * @returns {Promise<IAppHomeDocument>} saved view data document
+ * @return {Promise<IAppHomeDocument>} saved view data document
  */
 const saveHomeView = async (userID: string, viewID: string): Promise<IAppHomeDocument> => {
   return AppHomeModel.findOne({userID}, (err: IObjectAny, appHome: IAppHomeData) => {
@@ -141,7 +141,7 @@ const saveHomeView = async (userID: string, viewID: string): Promise<IAppHomeDoc
 
 /**
  * Get all App Home views for users who have previously opened App Home
- * @returns {Promise<IAppHomeDocument[]} array of app home objects
+ * @return {Promise<IAppHomeDocument[]} array of app home objects
  */
 const getHomeViews = async (): Promise<IAppHomeDocument[]> => {
   return AppHomeModel.find({}, (err, appHomes) => {

@@ -34,7 +34,7 @@ exports.wpApi = wpApi;
  * Connect to wpapi
  * Register activities route
  * Auto-discovery
- * @returns {Promise<void>}
+ * @return {Promise<void>}
  */
 const wpApiSetup = () => __awaiter(void 0, void 0, void 0, function* () {
     /**

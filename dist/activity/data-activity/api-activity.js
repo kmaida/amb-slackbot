@@ -82,7 +82,7 @@ exports.atAddActivity = atAddActivity;
 ------------------*/
 /**
  * Get Activities from ACF API (custom post type consisting of only ACF fields)
- * @returns {IACFActivity[]} array of activity objects from WP
+ * @return {IACFActivity[]} array of activity objects from WP
  */
 const wpGetActivities = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -109,7 +109,7 @@ exports.wpGetActivities = wpGetActivities;
  * Relies on ACF to REST API plugin to work
  * @param {IObjectAny} app Slack app
  * @param {IActivity} data activity data to add
- * @returns {Promise<IACFActivity>}
+ * @return {Promise<IACFActivity>}
  */
 const wpAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
     try {

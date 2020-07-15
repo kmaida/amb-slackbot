@@ -12,7 +12,7 @@ import { IAdminDocument } from './app-home.interface';
  * Get composed blocks for user App Home view
  * @param {string} userID ID of user who opened home
  * @param {any} metadata any data from home view that should be propagated
- * @returns {Promise<IObjectAny[]>} promise of array of block kit objects
+ * @return {Promise<IObjectAny[]>} promise of array of block kit objects
  */
 const blocksHome = async (userID: string, metadata: any): Promise<IObjectAny[]> => {
   const adminSettings: IAdminDocument = await getAdminSettings();
@@ -43,7 +43,7 @@ const blocksHome = async (userID: string, metadata: any): Promise<IObjectAny[]> 
   /**
    * Determine if user is admin
    * If admin, add admin blocks to view
-   * @returns {IObjectAny[]} array of home block objects
+   * @return {IObjectAny[]} array of home block objects
    */
   const composeHomeBlocks = (): IObjectAny[] => {
     if (admins.indexOf(userID) > -1) {
@@ -54,7 +54,7 @@ const blocksHome = async (userID: string, metadata: any): Promise<IObjectAny[]> 
     }
   };
   /**
-   * @returns composed blocks for appropriate home view for this user (admin or non-admin)
+   * @return composed blocks for appropriate home view for this user (admin or non-admin)
    */
   return composeHomeBlocks();
 }

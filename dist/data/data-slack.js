@@ -18,7 +18,7 @@ const errors_1 = require("../utils/errors");
  * Get user profile data from Slack API
  * @param {string} userID Slack user ID
  * @param {IObjectAny} app Slack App
- * @returns {Promise<ISlackUserInfo>}
+ * @return {Promise<ISlackUserInfo>}
  */
 const getUserInfo = (userID, app) => __awaiter(void 0, void 0, void 0, function* () {
     try {

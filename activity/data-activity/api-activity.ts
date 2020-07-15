@@ -67,7 +67,7 @@ const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivit
     // @NOTE: If you want to update home view: need to have passed user's app home view ID
     return savedObj;
   });
-}
+};
 
 /*------------------
    WORDPRESS API
@@ -75,7 +75,7 @@ const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivit
 
 /**
  * Get Activities from ACF API (custom post type consisting of only ACF fields)
- * @returns {IACFActivity[]} array of activity objects from WP
+ * @return {IACFActivity[]} array of activity objects from WP
  */
 const wpGetActivities = async (): Promise<IACFActivity[]> => {
   try {
@@ -102,7 +102,7 @@ const wpGetActivities = async (): Promise<IACFActivity[]> => {
  * Relies on ACF to REST API plugin to work
  * @param {IObjectAny} app Slack app
  * @param {IActivity} data activity data to add
- * @returns {Promise<IACFActivity>}
+ * @return {Promise<IACFActivity>}
  */
 const wpAddActivity = async (app: IObjectAny, data: IActivity): Promise<IACFActivity> => {
   try {

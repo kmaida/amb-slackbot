@@ -10,7 +10,7 @@ import { logErr } from '../utils/errors';
  * Get user profile data from Slack API
  * @param {string} userID Slack user ID
  * @param {IObjectAny} app Slack App
- * @returns {Promise<ISlackUserInfo>}
+ * @return {Promise<ISlackUserInfo>}
  */
 const getUserInfo = async (userID: string, app: IObjectAny): Promise<ISlackUserInfo> => {
   try {

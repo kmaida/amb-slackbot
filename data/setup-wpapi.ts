@@ -21,7 +21,7 @@ const wpApi = new WPAPI({
  * Connect to wpapi
  * Register activities route
  * Auto-discovery
- * @returns {Promise<void>}
+ * @return {Promise<void>}
  */
 const wpApiSetup = async (): Promise<void> => {
   /**

@@ -13,7 +13,7 @@ BLOCKS: UPDATE HOME VIEW
  * @param {string} userID Slack ID of user whose home view is being updated
  * @param {string} viewID view ID of user whose home view is being updated
  * @param {any} metadata metadata passing from home view to modal button
- * @returns {Promise<void>}
+ * @return {Promise<void>}
  */
 const updateHomeView = async (app: IObjectAny, userID: string, viewID: string, metadata: any): Promise<void> => {
   try {
@@ -37,7 +37,7 @@ const updateHomeView = async (app: IObjectAny, userID: string, viewID: string, m
  * Fetch all saved user App Homes from database and update each one
  * @param {IObjectAny} app Slack App 
  * @param {any} metadata some kind of metadata to pass to home view
- * @returns {Promise<void>}
+ * @return {Promise<void>}
  */
 const updateAllHomes = async (app: IObjectAny, metadata: any): Promise<void> => {
   try {

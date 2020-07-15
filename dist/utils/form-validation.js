@@ -1,13 +1,13 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.validNumber = exports.validUrl = void 0;
 /*------------------
   FORM VALIDATION
 ------------------*/
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.dateCompare = exports.emailIsh = exports.validNumber = exports.validUrl = void 0;
 /**
  * Ensure input is string and has no trailing whitespace
  * @param {any} input form input (could be any type, but most likely already a string)
- * @returns {string}
+ * @return {string}
  */
 const _cleanStr = (input) => {
     return input.toString().trim();
@@ -20,18 +20,59 @@ const _cleanStr = (input) => {
 const validUrl = (input) => {
     const regexStr = /((?:[A-Za-z]{3,9})(?::\/\/|@)(?:(?:[A-Za-z0-9\-.]+[.:])|(?:www\.|[-;:&=+$,\w]+@))(?:[A-Za-z0-9.-]+)(?:[/\-+=&;%@.\w_~()]*)(?:[.!/\\\w-?%#~&=+()]*))/g;
     const regex = new RegExp(regexStr);
-    return !!_cleanStr(input).match(regex);
+    const cleanStr = _cleanStr(input);
+    return !!cleanStr.match(regex);
 };
 exports.validUrl = validUrl;
 /**
  * Is the string input a valid integer?
  * @param {number} input form input
- * @returns {boolean}
+ * @return {boolean}
  */
 const validNumber = (input) => {
     const regexStr = /^[0-9]*$/g;
     const regex = new RegExp(regexStr);
-    return !!_cleanStr(input).match(regex);
+    const cleanStr = _cleanStr(input);
+    return !!cleanStr.match(regex);
 };
 exports.validNumber = validNumber;
+/**
+ * Is the string formatted sort of like an email address?
+ * @param {string} input https://stackoverflow.com/a/38137215
+ * @return {boolean}
+ */
+const emailIsh = (input) => {
+    const regexStr = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+[^<>()\.,;:\s@\"]{2,})$/g;
+    const regex = new RegExp(regexStr);
+    const cleanStr = _cleanStr(input);
+    return !!cleanStr.match(regex);
+};
+exports.emailIsh = emailIsh;
+/**
+ * Compare input date with today's date
+ * @param {string} dateInput ISO string date
+ * @param {boolean} testFuture Are we testing for a future date? (false = test for past)
+ * @param {boolean} futureStartTomorrow Count today as the future?
+ * @return {boolean}
+ */
+const dateCompare = (dateInput, testFuture = false, futureStartTomorrow = false) => {
+    // Get today's date in ISO at 11:59:59
+    const now = new Date().toISOString().split('T')[0];
+    const todayISO = now + 'T23:59:59Z';
+    const today = new Date(todayISO);
+    // Get event date in ISO at 11:59:59
+    const eventDate = new Date(dateInput + 'T23:59:59Z');
+    // Compare timestamps for UTC event date and UTC today to determine past/future
+    // (Today is valid for past and valid for future if !futureStartTomorrow)
+    const isFuture = !futureStartTomorrow ? eventDate.getTime() >= today.getTime() : eventDate.getTime() > today.getTime();
+    const isPast = eventDate.getTime() <= today.getTime();
+    // Are we checking for a future date or a past date?
+    if (testFuture) {
+        return isFuture;
+    }
+    else {
+        return isPast;
+    }
+};
+exports.dateCompare = dateCompare;
 //# sourceMappingURL=form-validation.js.map

@@ -139,7 +139,7 @@ exports.setAdmins = setAdmins;
  * Save user's home view data the first time they open their home view
  * @param {string} userID user's ID
  * @param {string} viewID user's app home view ID
- * @returns {Promise<IAppHomeDocument>} saved view data document
+ * @return {Promise<IAppHomeDocument>} saved view data document
  */
 const saveHomeView = (userID, viewID) => __awaiter(void 0, void 0, void 0, function* () {
     return AdminSchema_1.AppHomeModel.findOne({ userID }, (err, appHome) => {
@@ -164,7 +164,7 @@ const saveHomeView = (userID, viewID) => __awaiter(void 0, void 0, void 0, funct
 exports.saveHomeView = saveHomeView;
 /**
  * Get all App Home views for users who have previously opened App Home
- * @returns {Promise<IAppHomeDocument[]} array of app home objects
+ * @return {Promise<IAppHomeDocument[]} array of app home objects
  */
 const getHomeViews = () => __awaiter(void 0, void 0, void 0, function* () {
     return AdminSchema_1.AppHomeModel.find({}, (err, appHomes) => {

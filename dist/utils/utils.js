@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = void 0;
+exports.falseyToEmptyStr = exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = void 0;
 /*------------------
        UTILS
 ------------------*/
@@ -63,4 +63,15 @@ const getQ = (isoDate) => {
     return qMap[month0BI];
 };
 exports.getQ = getQ;
+/**
+ * Takes an undefined or null value and outputs an empty string
+ * Useful for prefilling initial form values that don't exist
+ * (Avoids printing "undefined" as a value in fields)
+ * @param {string} input A string or falsey value
+ * @return {string}
+ */
+const falseyToEmptyStr = (input) => {
+    return (!!input === false) ? '' : input;
+};
+exports.falseyToEmptyStr = falseyToEmptyStr;
 //# sourceMappingURL=utils.js.map

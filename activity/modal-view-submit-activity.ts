@@ -1,6 +1,6 @@
 import { IObjectAny } from '../utils/types';
 import { objNotEmpty } from '../utils/utils';
-import { validUrl, validNumber } from '../utils/form-validation';
+import { validUrl, validNumber, emailIsh, dateCompare } from '../utils/form-validation';
 import { atAddActivity, wpAddActivity } from './data-activity/api-activity';
 import { slackErr } from '../utils/errors';
 import { IActivity } from './activity.interface';
@@ -35,15 +35,19 @@ const submitModalActivity = (app: IObjectAny): void => {
       response_action: 'errors',
       errors: {}
     };
+    if (!emailIsh(data.email)) {
+      ackParams.errors.b_email = 'Please provide a valid email.';
+    }
     if (!validUrl(data.url)) {
       ackParams.errors.b_url = 'Please provide a valid URL.';
+    }
+    if (!dateCompare(data.date)) {
+      ackParams.errors.b_date = 'The provided date is in the future. Please complete an activity before submitting it.';
     }
     if (!validNumber(data.reach)) {
       ackParams.errors.b_reach = 'Reach must be an integer.'
     }
-    // @TODO: validate email (email-ish)
     // @TODO: validate date (today or in the past)
-    // @TODO: validate reach (must be a number)
     if (objNotEmpty(ackParams.errors)) {
       await ack(ackParams);
       return;

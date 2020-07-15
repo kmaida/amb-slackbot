@@ -20,7 +20,7 @@ const api_admin_1 = require("./admin/api-admin");
  * Get composed blocks for user App Home view
  * @param {string} userID ID of user who opened home
  * @param {any} metadata any data from home view that should be propagated
- * @returns {Promise<IObjectAny[]>} promise of array of block kit objects
+ * @return {Promise<IObjectAny[]>} promise of array of block kit objects
  */
 const blocksHome = (userID, metadata) => __awaiter(void 0, void 0, void 0, function* () {
     const adminSettings = yield api_admin_1.getAdminSettings();
@@ -51,7 +51,7 @@ const blocksHome = (userID, metadata) => __awaiter(void 0, void 0, void 0, funct
     /**
      * Determine if user is admin
      * If admin, add admin blocks to view
-     * @returns {IObjectAny[]} array of home block objects
+     * @return {IObjectAny[]} array of home block objects
      */
     const composeHomeBlocks = () => {
         if (admins.indexOf(userID) > -1) {
@@ -63,7 +63,7 @@ const blocksHome = (userID, metadata) => __awaiter(void 0, void 0, void 0, funct
         }
     };
     /**
-     * @returns composed blocks for appropriate home view for this user (admin or non-admin)
+     * @return composed blocks for appropriate home view for this user (admin or non-admin)
      */
     return composeHomeBlocks();
 });
