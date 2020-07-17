@@ -58,12 +58,12 @@ const updateAllHomes = (app, metadata) => __awaiter(void 0, void 0, void 0, func
                 const update = yield updateHomeView(app, userHome.userID, userHome.viewID, metadata);
             }
             catch (err) {
-                errors_1.slackErr(app, userHome.userID, err);
+                errors_1.logErr(err);
             }
         }));
     }
     catch (err) {
-        console.error(err);
+        errors_1.logErr(err);
     }
 });
 exports.updateAllHomes = updateAllHomes;

@@ -29,6 +29,7 @@ const submitModalActivity = (app: IObjectAny): void => {
       reach: payload.ba_reach.aa_reach.value * 1,
       slackID: userID
     };
+    const isPublic: boolean = !!payload.ba_public.aa_public.selected_options;
     // Validate form fields and handle errors
     // https://api.slack.com/surfaces/modals/using#displaying_errors#displaying_errors
     const ackParams: any = {
@@ -60,13 +61,15 @@ const submitModalActivity = (app: IObjectAny): void => {
     catch (err) {
       slackErr(app, userID, err);
     }
-
-    // Save activity to WordPress
-    try {
-      const saveActivityToWordPress = await wpAddActivity(app, data);
-    }
-    catch (err) {
-      slackErr(app, userID, err);
+    // If activity is public
+    if (isPublic) {
+      // Save activity to WordPress
+      try {
+        const saveActivityToWordPress = await wpAddActivity(app, data);
+      }
+      catch (err) {
+        slackErr(app, userID, err);
+      }
     }
   });
 };

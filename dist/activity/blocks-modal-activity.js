@@ -223,7 +223,7 @@ const blocksModalActivity = (prefill = {}) => {
             },
             "hint": {
                 "type": "plain_text",
-                "text": "Please describe this activity and its topic as well as how it relates to Gatsby and/or the Gatsby community."
+                "text": "Please describe the topic of this contribution."
             }
         },
         {
@@ -246,6 +246,32 @@ const blocksModalActivity = (prefill = {}) => {
                 "type": "plain_text",
                 "text": "Roughly how many people have you reached so far via this activity? (We understand this number may change over time.)"
             }
+        },
+        {
+            "type": "input",
+            "block_id": "ba_public",
+            "element": {
+                "type": "checkboxes",
+                "action_id": "aa_public",
+                "options": [
+                    {
+                        "value": "public",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Yes"
+                        }
+                    }
+                ]
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Display activity publicly:"
+            },
+            "hint": {
+                "type": "plain_text",
+                "text": "If public, your activity will be shared with other ambassadors in Slack as well as listed on the Gatsby Ambassadors website."
+            },
+            "optional": true
         }
     ];
 };

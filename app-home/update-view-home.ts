@@ -1,7 +1,7 @@
 import { IObjectAny } from '../utils/types';
 import { blocksHome } from './blocks-home';
 import { getHomeViews } from './admin/api-admin';
-import { slackErr } from './../utils/errors';
+import { slackErr, logErr } from './../utils/errors';
 
 /*------------------
 BLOCKS: UPDATE HOME VIEW
@@ -49,12 +49,12 @@ const updateAllHomes = async (app: IObjectAny, metadata: any): Promise<void> => 
         const update = await updateHomeView(app, userHome.userID, userHome.viewID, metadata);
       }
       catch (err) {
-        slackErr(app, userHome.userID, err);
+        logErr(err);
       }
     });
   }
   catch (err) {
-    console.error(err);
+    logErr(err);
   }
 }
 

@@ -11,6 +11,7 @@ const viewID = process.env.AT_TABLE_VIEW_ID_ACTIVITY;
 import { getQ } from './../../utils/utils';
 // WordPress API
 import { wpApi } from './../../data/setup-wpapi';
+import { channelPublishSave } from './channel-publish-save';
 
 /*------------------
     AIRTABLE API
@@ -100,6 +101,7 @@ const wpGetActivities = async (): Promise<IACFActivity[]> => {
 /**
  * Add Activity from WordPress API
  * Relies on ACF to REST API plugin to work
+ * This will only happen if user opts into public publishing
  * @param {IObjectAny} app Slack app
  * @param {IActivity} data activity data to add
  * @return {Promise<IACFActivity>}
@@ -126,7 +128,8 @@ const wpAddActivity = async (app: IObjectAny, data: IActivity): Promise<IACFActi
       acf: addWpActivity.acf
     };
     console.log('WPAPI: Saved new activity', acfActivity);
-    // @TODO: output activity to public channel
+    // Publish activity to public Slack channel
+    channelPublishSave(app, acfActivity.acf);
     return acfActivity;
   }
   catch (err) {
