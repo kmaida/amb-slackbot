@@ -13,6 +13,7 @@ import { submitModalActivity } from './activity/modal-view-submit-activity';
 import { appHomeOpened } from './app-home/event-app-home-opened';
 import { appMention } from './app-mention/event-app-mention';
 import { botDM } from './message-im/event-message-im';
+import { scheduleATSyncs } from "./utils/jobs";
 
 /*------------------
   CREATE BOLT APP
@@ -32,6 +33,8 @@ mdbSetup();
 initAdminSettings();
 // Set up WordPress API
 wpApiSetup();
+// Schedule Airtable sync job
+scheduleATSyncs(app);
 
 /**
  * REMOVE ALL BELOW AFTER TESTING

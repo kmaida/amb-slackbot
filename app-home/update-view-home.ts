@@ -36,10 +36,10 @@ const updateHomeView = async (app: IObjectAny, userID: string, viewID: string, m
 /**
  * Fetch all saved user App Homes from database and update each one
  * @param {IObjectAny} app Slack App 
- * @param {any} metadata some kind of metadata to pass to home view
+ * @param {any} metadata (optional) some kind of metadata to pass to home view
  * @return {Promise<void>}
  */
-const updateAllHomes = async (app: IObjectAny, metadata: any): Promise<void> => {
+const updateAllHomes = async (app: IObjectAny, metadata?: any): Promise<void> => {
   try {
     // Get all saved App Home views
     const allAppHomes = await getHomeViews();

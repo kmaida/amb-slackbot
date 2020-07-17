@@ -45,7 +45,7 @@ exports.updateHomeView = updateHomeView;
 /**
  * Fetch all saved user App Homes from database and update each one
  * @param {IObjectAny} app Slack App
- * @param {any} metadata some kind of metadata to pass to home view
+ * @param {any} metadata (optional) some kind of metadata to pass to home view
  * @return {Promise<void>}
  */
 const updateAllHomes = (app, metadata) => __awaiter(void 0, void 0, void 0, function* () {

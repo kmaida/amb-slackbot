@@ -43,6 +43,7 @@ const modal_view_submit_activity_1 = require("./activity/modal-view-submit-activ
 const event_app_home_opened_1 = require("./app-home/event-app-home-opened");
 const event_app_mention_1 = require("./app-mention/event-app-mention");
 const event_message_im_1 = require("./message-im/event-message-im");
+const jobs_1 = require("./utils/jobs");
 /*------------------
   CREATE BOLT APP
 ------------------*/
@@ -60,6 +61,8 @@ setup_mongodb_1.mdbSetup();
 api_admin_1.initAdminSettings();
 // Set up WordPress API
 setup_wpapi_1.wpApiSetup();
+// Schedule Airtable sync job
+jobs_1.scheduleATSyncs(app);
 /**
  * REMOVE ALL BELOW AFTER TESTING
  */
