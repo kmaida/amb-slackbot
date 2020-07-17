@@ -18,7 +18,7 @@ import { channelPublishSave } from './channel-publish-save';
 ------------------*/
 
 /**
- * Save a new Airtable data record
+ * Save a new Airtable activity data record
  * @param {IObjectAny} app Slack app
  * @param {IActivity} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object

@@ -1,7 +1,7 @@
 import { IActivityPrefill, ISelectOption } from './activity.interface';
 
 /*------------------
- BLOCKS: MODAL FORM
+ BLOCKS: MODAL ACTIVITY
 ------------------*/
 
 const blocksModalActivity = (prefill: IActivityPrefill = {}) => {

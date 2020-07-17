@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blocksModalActivity = void 0;
 /*------------------
- BLOCKS: MODAL FORM
+ BLOCKS: MODAL ACTIVITY
 ------------------*/
 const blocksModalActivity = (prefill = {}) => {
     const initialType = prefill.type ? {
