@@ -61,7 +61,7 @@ const getQ = (isoDate: string): string => {
  * @return {string}
  */
 const falseyToEmptyStr = (input: string): string => {
-  return (!!input === false) ? '' : input;
+  return (!!input === false || input == 'undefined') ? '' : input;
 };
 
 /**

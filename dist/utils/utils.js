@@ -71,7 +71,7 @@ exports.getQ = getQ;
  * @return {string}
  */
 const falseyToEmptyStr = (input) => {
-    return (!!input === false) ? '' : input;
+    return (!!input === false || input == 'undefined') ? '' : input;
 };
 exports.falseyToEmptyStr = falseyToEmptyStr;
 /**
