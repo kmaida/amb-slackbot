@@ -11,13 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adminChannelPublishSave = void 0;
 const errors_1 = require("../../utils/errors");
-const api_admin_1 = require("../../app-home/admin/api-admin");
 /*------------------
 ADMIN CHANNEL PUBLISH SAVE
 ------------------*/
 const adminChannelPublishSave = (app, atData) => __awaiter(void 0, void 0, void 0, function* () {
-    const settings = yield api_admin_1.getAdminSettings();
-    const channel = settings.channel;
+    const channel = process.env.SLACK_ADMIN_CHANNEL_ID;
     try {
         const sendMsg = yield app.client.chat.postMessage({
             token: process.env.SLACK_BOT_TOKEN,
