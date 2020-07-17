@@ -1,6 +1,9 @@
-import { slackErr } from '../utils/errors';
+import { slackErr, logErr } from '../utils/errors';
 import { IObjectAny } from '../utils/types';
 import { blocksModalActivity } from './blocks-modal-activity';
+import { getUserInfo } from '../data/data-slack';
+import { ISlackUserInfo } from '../data/data-slack.interface';
+import { IActivityPrefill } from './activity.interface';
 
 /*------------------
  MODAL DIALOG FORM
@@ -12,6 +15,9 @@ import { blocksModalActivity } from './blocks-modal-activity';
 const modalActivity = (app: IObjectAny): void => {
   const openDialog = async ({ ack, body, context }) => {
     await ack();
+    let userData: ISlackUserInfo;
+    const prefill: IActivityPrefill = {};
+    const slackID = body.user.id;
     /**
      * PASSING DATA FROM INTERACTION TO VIEW SUBMISSION:
      * Hidden metadata can be sent in the modal view as private_metadata to modal-view-submit.ts.
@@ -21,10 +27,24 @@ const modalActivity = (app: IObjectAny): void => {
      * below to examine this payload further.
      */
     // console.log(body.actions);
-    // If button value metadata is available, set it as metadata (e.g., useful for getting home view data)
+    // If button value metadata is available, set it as metadata (e.g., useful for getting home view data or prefill data passed in as a button value from an "Edit" button, etc.)
     const btnMetadata = JSON.stringify(body.actions ? body.actions[0].value : {});
+    // @TODO: get activity prefill from btnMetadata here and set, if available
+
+    // Get user data from Slack
     try {
-      const result = await app.client.views.open({
+      userData = await getUserInfo(slackID, app);
+      if (!prefill.name && !prefill.email) {
+        prefill.name = userData.name;
+        prefill.email = userData.email;
+      }
+    }
+    catch (err) {
+      logErr(err);
+    }
+    // Set up activity modal view
+    try {
+      const activityView = await app.client.views.open({
         token: context.botToken,
         trigger_id: body.trigger_id,
         view: {
@@ -35,7 +55,7 @@ const modalActivity = (app: IObjectAny): void => {
             type: 'plain_text',
             text: 'Add Activity'
           },
-          blocks: blocksModalActivity(),
+          blocks: blocksModalActivity(prefill),
           submit: {
             type: 'plain_text',
             text: 'Save'
@@ -44,16 +64,16 @@ const modalActivity = (app: IObjectAny): void => {
       });
     }
     catch (err) {
-      slackErr(app, body.user.id, err);
+      slackErr(app, slackID, err);
     }
   };
 
   /**
-   * Interactions that trigger the modal
+   * Interactions that trigger the activity modal
    */
-  // Slash command: /add-data
+  // Slash command: /add-activity
   app.command('/add-activity', openDialog);
-  // Global shortcut to add Airtable data
+  // Global shortcut
   app.shortcut('add_activity', openDialog);
   // Button from App Home
   app.action('btn_open_modal_activity', openDialog);

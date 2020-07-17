@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.modalActivity = void 0;
 const errors_1 = require("../utils/errors");
 const blocks_modal_activity_1 = require("./blocks-modal-activity");
+const data_slack_1 = require("../data/data-slack");
 /*------------------
  MODAL DIALOG FORM
     Command
@@ -21,6 +22,9 @@ const blocks_modal_activity_1 = require("./blocks-modal-activity");
 const modalActivity = (app) => {
     const openDialog = ({ ack, body, context }) => __awaiter(void 0, void 0, void 0, function* () {
         yield ack();
+        let userData;
+        const prefill = {};
+        const slackID = body.user.id;
         /**
          * PASSING DATA FROM INTERACTION TO VIEW SUBMISSION:
          * Hidden metadata can be sent in the modal view as private_metadata to modal-view-submit.ts.
@@ -30,10 +34,23 @@ const modalActivity = (app) => {
          * below to examine this payload further.
          */
         // console.log(body.actions);
-        // If button value metadata is available, set it as metadata (e.g., useful for getting home view data)
+        // If button value metadata is available, set it as metadata (e.g., useful for getting home view data or prefill data passed in as a button value from an "Edit" button, etc.)
         const btnMetadata = JSON.stringify(body.actions ? body.actions[0].value : {});
+        // @TODO: get activity prefill from btnMetadata here and set, if available
+        // Get user data from Slack
         try {
-            const result = yield app.client.views.open({
+            userData = yield data_slack_1.getUserInfo(slackID, app);
+            if (!prefill.name && !prefill.email) {
+                prefill.name = userData.name;
+                prefill.email = userData.email;
+            }
+        }
+        catch (err) {
+            errors_1.logErr(err);
+        }
+        // Set up activity modal view
+        try {
+            const activityView = yield app.client.views.open({
                 token: context.botToken,
                 trigger_id: body.trigger_id,
                 view: {
@@ -44,7 +61,7 @@ const modalActivity = (app) => {
                         type: 'plain_text',
                         text: 'Add Activity'
                     },
-                    blocks: blocks_modal_activity_1.blocksModalActivity(),
+                    blocks: blocks_modal_activity_1.blocksModalActivity(prefill),
                     submit: {
                         type: 'plain_text',
                         text: 'Save'
@@ -53,15 +70,15 @@ const modalActivity = (app) => {
             });
         }
         catch (err) {
-            errors_1.slackErr(app, body.user.id, err);
+            errors_1.slackErr(app, slackID, err);
         }
     });
     /**
-     * Interactions that trigger the modal
+     * Interactions that trigger the activity modal
      */
-    // Slash command: /add-data
+    // Slash command: /add-activity
     app.command('/add-activity', openDialog);
-    // Global shortcut to add Airtable data
+    // Global shortcut
     app.shortcut('add_activity', openDialog);
     // Button from App Home
     app.action('btn_open_modal_activity', openDialog);

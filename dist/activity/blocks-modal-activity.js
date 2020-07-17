@@ -29,7 +29,8 @@ const blocksModalActivity = (prefill = {}) => {
                 "placeholder": {
                     "type": "plain_text",
                     "text": "Firstname Lastname"
-                }
+                },
+                "initial_value": prefill.name
             },
             "label": {
                 "type": "plain_text",
@@ -49,7 +50,8 @@ const blocksModalActivity = (prefill = {}) => {
                 "placeholder": {
                     "type": "plain_text",
                     "text": "you@domain.com"
-                }
+                },
+                "initial_value": prefill.email
             },
             "label": {
                 "type": "plain_text",
@@ -148,7 +150,8 @@ const blocksModalActivity = (prefill = {}) => {
                 "placeholder": {
                     "type": "plain_text",
                     "text": "My Great Gatsby Blog Post"
-                }
+                },
+                "initial_value": prefill.title
             },
             "label": {
                 "type": "plain_text",
@@ -168,7 +171,8 @@ const blocksModalActivity = (prefill = {}) => {
                 "placeholder": {
                     "type": "plain_text",
                     "text": "https://"
-                }
+                },
+                "initial_value": prefill.url
             },
             "label": {
                 "type": "plain_text",
@@ -210,7 +214,8 @@ const blocksModalActivity = (prefill = {}) => {
                 "placeholder": {
                     "type": "plain_text",
                     "text": "Describe this activity."
-                }
+                },
+                "initial_value": prefill.topic
             },
             "label": {
                 "type": "plain_text",
@@ -231,7 +236,7 @@ const blocksModalActivity = (prefill = {}) => {
                     "type": "plain_text",
                     "text": "# of people"
                 },
-                "initial_value": prefill.reach ? prefill.reach.toString() : undefined
+                "initial_value": prefill.reach !== undefined ? prefill.reach.toString() : undefined
             },
             "label": {
                 "type": "plain_text",
