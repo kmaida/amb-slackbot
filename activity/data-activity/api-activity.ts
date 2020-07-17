@@ -8,7 +8,7 @@ const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_ACTIVITY;
 const tableID = process.env.AT_TABLE_ID_ACTIVITY;
 const viewID = process.env.AT_TABLE_VIEW_ID_ACTIVITY;
-import { getQ } from './../../utils/utils';
+import { getQ, getATLink } from './../../utils/utils';
 // WordPress API
 import { wpApi } from './../../data/setup-wpapi';
 import { channelPublishSave } from './channel-publish-save';
@@ -58,14 +58,13 @@ const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivit
       reach: savedRecord.fields["Reach"],
       quarter: savedRecord.fields["Quarter"],
       slackID: savedRecord.fields["Slack ID"],
-      atLink: `https://airtable.com/${tableID}/${viewID}/${savedID}`
+      atLink: getATLink(tableID, viewID, savedID)
     };
     console.log('AIRTABLE: Saved new activity', savedObj);
     // Send Slack DM to submitter confirming successful save
     dmConfirmSave(app, savedObj);
     // Send Slack channel message to private admin-only channel
     adminChannelPublishSave(app, savedObj);
-    // @NOTE: If you want to update home view: need to have passed user's app home view ID
     return savedObj;
   });
 };

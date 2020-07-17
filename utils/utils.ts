@@ -64,4 +64,14 @@ const falseyToEmptyStr = (input: string): string => {
   return (!!input === false) ? '' : input;
 };
 
-export { objNotEmpty, clearNewline, ignoreMention, getQ, falseyToEmptyStr };
+/**
+ * Get Airtable link for a specific record
+ * @param {string} t table ID
+ * @param {string} v view ID
+ * @param {string} id record ID
+ */
+const getATLink = (t: string, v: string, id: string): string => {
+  return `https://airtable.com/${t}/${v}/${id}`;
+};
+
+export { objNotEmpty, clearNewline, ignoreMention, getQ, falseyToEmptyStr, getATLink };

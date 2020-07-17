@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.falseyToEmptyStr = exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = void 0;
+exports.getATLink = exports.falseyToEmptyStr = exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = void 0;
 /*------------------
        UTILS
 ------------------*/
@@ -74,4 +74,14 @@ const falseyToEmptyStr = (input) => {
     return (!!input === false) ? '' : input;
 };
 exports.falseyToEmptyStr = falseyToEmptyStr;
+/**
+ * Get Airtable link for a specific record
+ * @param {string} t table ID
+ * @param {string} v view ID
+ * @param {string} id record ID
+ */
+const getATLink = (t, v, id) => {
+    return `https://airtable.com/${t}/${v}/${id}`;
+};
+exports.getATLink = getATLink;
 //# sourceMappingURL=utils.js.map

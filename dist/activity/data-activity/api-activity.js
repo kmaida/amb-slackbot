@@ -66,14 +66,13 @@ const atAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function*
             reach: savedRecord.fields["Reach"],
             quarter: savedRecord.fields["Quarter"],
             slackID: savedRecord.fields["Slack ID"],
-            atLink: `https://airtable.com/${tableID}/${viewID}/${savedID}`
+            atLink: utils_1.getATLink(tableID, viewID, savedID)
         };
         console.log('AIRTABLE: Saved new activity', savedObj);
         // Send Slack DM to submitter confirming successful save
         dm_confirm_save_activity_1.dmConfirmSave(app, savedObj);
         // Send Slack channel message to private admin-only channel
         admin_channel_publish_save_activity_1.adminChannelPublishSave(app, savedObj);
-        // @NOTE: If you want to update home view: need to have passed user's app home view ID
         return savedObj;
     });
 });
