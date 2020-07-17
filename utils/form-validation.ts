@@ -59,12 +59,12 @@ const dateCompare = (dateInput: string, testFuture: boolean = false, futureStart
   const now: string = new Date().toISOString().split('T')[0];
   const todayISO: string = now + 'T23:59:59Z';
   const today: Date = new Date(todayISO);
-  // Get event date in ISO at 11:59:59
-  const eventDate: Date = new Date(dateInput + 'T23:59:59Z');
-  // Compare timestamps for UTC event date and UTC today to determine past/future
-  // (Today is valid for past and valid for future if !futureStartTomorrow)
-  const isFuture: boolean = !futureStartTomorrow ? eventDate.getTime() >= today.getTime() : eventDate.getTime() > today.getTime();
-  const isPast: boolean = eventDate.getTime() <= today.getTime();
+  // Get submitted date in ISO at 11:59:59
+  const sDate: Date = new Date(dateInput + 'T23:59:59Z');
+  // Compare timestamps for UTC submitted date and UTC today to determine past/future
+  // (Today is always valid for past, and valid for future if !futureStartTomorrow)
+  const isFuture: boolean = !futureStartTomorrow ? sDate.getTime() >= today.getTime() : sDate.getTime() > today.getTime();
+  const isPast: boolean = sDate.getTime() <= today.getTime();
   // Are we checking for a future date or a past date?
   if (testFuture) {
     return isFuture;

@@ -19,7 +19,7 @@ const errors_1 = require("../utils/errors");
 ------------------*/
 const submitModalActivity = (app) => {
     // Modal view submitted
-    app.view('add_airtable_data', ({ ack, body, view }) => __awaiter(void 0, void 0, void 0, function* () {
+    app.view('add_activity', ({ ack, body, view }) => __awaiter(void 0, void 0, void 0, function* () {
         const userID = body.user.id;
         const metadata = view.private_metadata ? JSON.parse(view.private_metadata) : {};
         console.log('Metadata received from modal form:', metadata);
@@ -29,9 +29,9 @@ const submitModalActivity = (app) => {
         const data = {
             name: payload.ba_name.aa_name.value,
             email: payload.ba_email.aa_email.value,
-            type: payload.ba_type.aa_type.selected_option,
+            type: payload.ba_type.aa_type.selected_option.value,
             title: payload.ba_title.aa_title.value,
-            date: payload.ba_date.aa_date.value,
+            date: payload.ba_date.aa_date.selected_date,
             url: payload.ba_url.aa_url.value,
             topic: payload.ba_topic.aa_topic.value,
             reach: payload.ba_reach.aa_reach.value * 1,
