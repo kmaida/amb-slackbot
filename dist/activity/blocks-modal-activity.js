@@ -17,7 +17,7 @@ const blocksModalActivity = (prefill = {}) => {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": `Please use the form below to record a completed Ambassador activity. Thank you for your contribution! :tada:`
+                "text": `Please use the form below to record a completed Ambassador activity. You're awesome — thank you for your contribution! :tada:`
             }
         },
         {
@@ -33,7 +33,11 @@ const blocksModalActivity = (prefill = {}) => {
             },
             "label": {
                 "type": "plain_text",
-                "text": "Your Name:"
+                "text": "Name:"
+            },
+            "hint": {
+                "type": "plain_text",
+                "text": "Your full name."
             }
         },
         {
@@ -49,7 +53,11 @@ const blocksModalActivity = (prefill = {}) => {
             },
             "label": {
                 "type": "plain_text",
-                "text": "Your Email:"
+                "text": "Email:"
+            },
+            "hint": {
+                "type": "plain_text",
+                "text": "Email address we should contact you at if there are any questions about this activity."
             }
         },
         {
@@ -128,8 +136,8 @@ const blocksModalActivity = (prefill = {}) => {
             },
             "hint": {
                 "type": "plain_text",
-                "text": "Select the activity category for your contribution. You can provide more details in the Topic field."
-            },
+                "text": "What kind of activity was this? (If other, please add details in the Topic field.)"
+            }
         },
         {
             "type": "input",
@@ -148,7 +156,7 @@ const blocksModalActivity = (prefill = {}) => {
             },
             "hint": {
                 "type": "plain_text",
-                "text": "Title of your activity; e.g., name of event, blog post, video, GitHub contribution, etc."
+                "text": "Title of your activity (e.g., name of event, blog post, video, GitHub contribution, etc.)."
             }
         },
         {
@@ -168,7 +176,7 @@ const blocksModalActivity = (prefill = {}) => {
             },
             "hint": {
                 "type": "plain_text",
-                "text": "Provide a URL to this activity (e.g., link to content, event page, PR, etc.)"
+                "text": "Provide a link supporting this activity (e.g., event URL, link to blog post or video, PR, etc.)."
             }
         },
         {
@@ -189,7 +197,7 @@ const blocksModalActivity = (prefill = {}) => {
             },
             "hint": {
                 "type": "plain_text",
-                "text": "Select the date this activity took place or was published / broadcasted. Dates must be in the past."
+                "text": "When was this activity completed / published? Dates must be in the past."
             }
         },
         {
@@ -201,12 +209,16 @@ const blocksModalActivity = (prefill = {}) => {
                 "multiline": true,
                 "placeholder": {
                     "type": "plain_text",
-                    "text": "Please describe the topic of this activity."
+                    "text": "Describe this activity."
                 }
             },
             "label": {
                 "type": "plain_text",
                 "text": "Topic:"
+            },
+            "hint": {
+                "type": "plain_text",
+                "text": "Please describe this activity and its topic as well as how it relates to Gatsby and/or the Gatsby community."
             }
         },
         {
