@@ -3,7 +3,7 @@ ACTIVITY INTERFACES
 ------------------*/
 
 /**
- * @interface IActivity Airtable activity data object
+ * @interface IActivity Activity data object
  */
 interface IActivity {
   id?: string;
@@ -18,6 +18,31 @@ interface IActivity {
   quarter?: string;
   slackID: string;
   atLink?: string;
+};
+
+/**
+ * @interface ISelectOption
+ */
+interface ISelectOption {
+  text: {
+    type: string;
+    text: string;
+  },
+  value: string;
+};
+
+/**
+ * @interface IActivityPrefill Activity data object prefilled values
+ */
+interface IActivityPrefill {
+  name?: string;
+  email?: string;
+  type?: string;
+  date?: string;
+  title?: string;
+  url?: string;
+  topic?: string;
+  reach?: number;
 };
 
 /**
@@ -44,4 +69,4 @@ interface IACFActivity {
 /**
  * Exports
  */
-export { IActivity, IWPActivity, IACFActivity };
+export { IActivity, ISelectOption, IActivityPrefill, IWPActivity, IACFActivity };

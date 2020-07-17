@@ -27,14 +27,14 @@ const submitModalActivity = (app) => {
         // Capture data from modal interactions
         // Modal blocks data format: payload.[block_id].[action_id].value
         const data = {
-            name: payload.b_name.a_name.value,
-            email: payload.b_email.a_email.value,
-            type: payload.b_type.a_type.selected_option,
-            title: payload.b_title.a_title.value,
-            date: payload.b_date.a_date.value,
-            url: payload.b_url.a_url.value,
-            topic: payload.b_topic.a_topic.value,
-            reach: payload.b_reach.a_reach.value * 1,
+            name: payload.ba_name.aa_name.value,
+            email: payload.ba_email.aa_email.value,
+            type: payload.ba_type.aa_type.selected_option,
+            title: payload.ba_title.aa_title.value,
+            date: payload.ba_date.aa_date.value,
+            url: payload.ba_url.aa_url.value,
+            topic: payload.ba_topic.aa_topic.value,
+            reach: payload.ba_reach.aa_reach.value * 1,
             slackID: userID
         };
         // Validate form fields and handle errors
@@ -44,18 +44,17 @@ const submitModalActivity = (app) => {
             errors: {}
         };
         if (!form_validation_1.emailIsh(data.email)) {
-            ackParams.errors.b_email = 'Please provide a valid email.';
+            ackParams.errors.ba_email = 'Please provide a valid email.';
         }
         if (!form_validation_1.validUrl(data.url)) {
-            ackParams.errors.b_url = 'Please provide a valid URL.';
+            ackParams.errors.ba_url = 'Please provide a valid URL.';
         }
         if (!form_validation_1.dateCompare(data.date)) {
-            ackParams.errors.b_date = 'The provided date is in the future. Please complete an activity before submitting it.';
+            ackParams.errors.ba_date = 'The provided date is in the future. Please complete an activity before submitting it.';
         }
         if (!form_validation_1.validNumber(data.reach)) {
-            ackParams.errors.b_reach = 'Reach must be an integer.';
+            ackParams.errors.ba_reach = 'Reach must be an integer.';
         }
-        // @TODO: validate date (today or in the past)
         if (utils_1.objNotEmpty(ackParams.errors)) {
             yield ack(ackParams);
             return;
