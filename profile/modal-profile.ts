@@ -3,7 +3,7 @@ import { IObjectAny } from '../utils/types';
 import { blocksModalProfile } from './blocks-modal-profile';
 import { getUserInfo } from '../data/data-slack';
 import { ISlackUserInfo } from '../data/data-slack.interface';
-import { IProfilePrefill, IProfile } from './profile.interface';
+import { IProfilePrefill, IProfile, IProfileMeta } from './profile.interface';
 import { getProfile } from './data-profile/api-profile';
 
 /*------------------
@@ -20,19 +20,24 @@ const modalProfile = (app: IObjectAny): void => {
     const slackID: string = body.user.id;
     const getDataProfile: IProfile = await getProfile(slackID);
     const userData: ISlackUserInfo = await getUserInfo(slackID, app);
-    let metadata: IObjectAny = {};
-    // Check if data exists in databases
+    const metadata: IProfileMeta = { image: undefined };
+
+    // If no existing profile is in data stores
     if (!getDataProfile) {
-      // If no data exists, use Slack user data to prefill
+      // use Slack user data to prefill
       prefill.name = userData.name;
       prefill.email = userData.email;
-    } else {
-      // If data exists
+    }
+    // If profile data exists
+    else {
+      // Set prefill to fetched data
       prefill = getDataProfile;
+      // Add Airtable and WordPress IDs to private_metadata
+      // so they will be accessible in view submission
       metadata.id = getDataProfile.id;
       metadata.wpid = getDataProfile.wpid;
     }
-    // Use current Slack profile image as image
+    // Always use current Slack user image as profile image
     const image = userData.image.replace('"', '');
     metadata.image = image;
     prefill.image = image;

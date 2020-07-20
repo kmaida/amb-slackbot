@@ -78,4 +78,13 @@ interface IATProfile {
   atLink?: string;
 }
 
-export { IProfile, IProfilePrefill, IWPProfile, IATProfile, IACFProfile };
+/**
+ * @interface IProfileMeta metadata for profile view submission
+ */
+interface IProfileMeta {
+  image: string;
+  id?: string;
+  wpid?: number;
+}
+
+export { IProfile, IProfilePrefill, IWPProfile, IATProfile, IACFProfile, IProfileMeta };

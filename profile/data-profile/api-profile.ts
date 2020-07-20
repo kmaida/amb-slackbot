@@ -51,32 +51,49 @@ const getProfile = async (slackID: string): Promise<IProfile> => {
 
 /**
  * Save profile data to multiple data sources and return accumulated saved data
+ * Works for both saving new and updating existing profiles
  * @param {IObjectAny} app Slack App
- * @param {IProfile} data Profile data from modal form
+ * @param {IProfile} data profile data from modal form
  * @return {Promise<IProfile>} successfully saved WP and AT data
  */
 const saveProfile = async (app: IObjectAny, data: IProfile): Promise<IProfile> => {
-  try {
-    const saveWP: IACFProfile = await wpAddProfile(data);
-    const saveAT: IATProfile = await atAddProfile(data);
-    const normalizedWP = {
-      wpid: saveWP.id,
-      image: saveWP.acf.profile_image,
-      website: saveWP.acf.profile_website,
-      twitter: saveWP.acf.profile_twitter,
-      github: saveWP.acf.profile_github
-    };
-    const savedProfile: IProfile = Object.assign(normalizedWP, saveAT);
-    // Send Slack DM to submitter confirming successful save
-    // dmConfirmSave(app, savedObj);
-    // Send Slack channel message to private admin-only channel
-    // adminChannelPublishSave(app, savedObj);
-    return savedProfile;
-  }
-  catch (err) {
-    logErr(err);
+  // If editing an existing profile:
+  if (data.id && data.wpid) {
+    return _atUpdateProfile(app, data);
+  } 
+  // If adding a new profile
+  else {
+    return _atAddProfile(app, data);
   }
 };
+
+/**
+ * Once Airtable profile save is successful, call this function in the success callback
+ * This updates WordPress and then aggregates both results together
+ * (Airtable API uses callbacks instead of promises, which is a huge pain in the a$$)
+ * @param {IObjectAny} app Slack app
+ * @param {IProfile} data profile data from form
+ * @param {IProfile} atSaved combined data from WP and AT to produce final successfully saved profile
+ */
+const _atProfileSaved = async (app: IObjectAny, data: IProfile, atSaved: IATProfile): Promise<IProfile> => {
+  // Update WordPress profile
+  const saveWP: IACFProfile = data.wpid ? await _wpUpdateProfile(data) : await _wpAddProfile(data);
+  // Combine normalized values from both AT callback and WP promise
+  const normalizedWP = {
+    wpid: saveWP.id,
+    image: saveWP.acf.profile_image,
+    website: saveWP.acf.profile_website,
+    twitter: saveWP.acf.profile_twitter,
+    github: saveWP.acf.profile_github
+  };
+  const savedProfile: IProfile = { ...normalizedWP, ...atSaved };
+  console.log('AT+WP: Successfully saved user profile', savedProfile);
+  // Send Slack DM to submitter confirming successful save
+  // dmConfirmSave(app, savedObj);
+  // Send Slack channel message to private admin-only channel
+  // adminChannelPublishSave(app, savedObj);
+  return savedProfile;
+}
 
 /*------------------
     AIRTABLE API
@@ -118,7 +135,7 @@ const atGetProfile = async (slackID: string): Promise<IATProfile> => {
       view: viewID
     }).all();
     const atProfile = getProfile && getProfile.length ? _formatATRecord(getProfile[0]) : undefined;
-    console.log('AIRTABLE: User Profile', atProfile);
+    console.log('AIRTABLE: Get User Profile', atProfile);
     return atProfile;
   }
   catch (err) {
@@ -128,10 +145,11 @@ const atGetProfile = async (slackID: string): Promise<IATProfile> => {
 
 /**
  * Save a new Airtable ambassador profile data record
+ * @param {IObjectAny} app Slack app
  * @param {IProfile} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
  */
-const atAddProfile = async (data: IProfile): Promise<IATProfile> => {
+const _atAddProfile = async (app: IObjectAny, data: IProfile): Promise<IATProfile> => {
   const atFields = {
     "Name": data.name,
     "Email": data.email,
@@ -146,14 +164,57 @@ const atAddProfile = async (data: IProfile): Promise<IATProfile> => {
     {
       "fields": atFields
     }
-  ], (err: string, records: IObjectAny) => {
+  ], (err: string, records: IObjectAny[]) => {
     if (err) {
       storeErr(err);
     }
     const savedRecord: IObjectAny = records[0];
     const savedObj: IATProfile = _formatATRecord(savedRecord);
-    console.log('AIRTABLE: Saved new profile', savedObj);
+    // console.log('AIRTABLE: Saved new profile', savedObj);
+    _atProfileSaved(app, data, savedObj);
     return savedObj;
+  });
+};
+
+/**
+ * Update an existing Airtable ambassador profile data record
+ * @param {IObjectAny} app Slack app
+ * @param {IProfile} data updates to save to Airtable
+ * @return {Promise<IATData>} promise resolving with saved object
+ */
+const _atUpdateProfile = async (app: IObjectAny, data: IProfile): Promise<IATProfile> => {
+  // Retrieve existing record
+  return base(table).find(data.id, function (err: string, origRecord: IObjectAny) {
+    if (err) {
+      storeErr(err);
+    }
+    if (origRecord) {
+      const atFields = {
+        "Name": data.name,
+        "Email": data.email,
+        "Location": data.location,
+        "Bio": data.bio,
+        "Airport Code": data.airport,
+        "Preferred Airline": data.airline,
+        "Frequent Flyer Account": data.ff,
+        "Slack ID": data.slackID
+      };
+      return base(table).update([
+        {
+          "id": data.id,
+          "fields": atFields
+        }
+      ], async (err: string, records: IObjectAny[]) => {
+        if (err) {
+          storeErr(err);
+        }
+        const updatedRecord: IObjectAny = records[0];
+        const updatedObj: IATProfile = _formatATRecord(updatedRecord);
+        // console.log('AIRTABLE: Updated existing profile', updatedObj);
+        _atProfileSaved(app, data, updatedObj);
+        return updatedObj;
+      });
+    }
   });
 };
 
@@ -194,7 +255,7 @@ const wpGetProfile = async (slackID: string): Promise<IACFProfile> => {
   try {
     const res = await axios.get(`${process.env.WP_URL}/wp-json/acf/v3/profiles?filter[meta_key]=slack_id&filter[meta_value]=${slackID}`);
     const wpProfile: IACFProfile = res.data && res.data.length ? res.data[0] : undefined;
-    console.log('WPAPI: User Profile', wpProfile);
+    console.log('WPAPI: Get User Profile', wpProfile);
     return wpProfile;
   }
   catch (err) {
@@ -208,7 +269,7 @@ const wpGetProfile = async (slackID: string): Promise<IACFProfile> => {
  * @param {IProfile} data profile data to add
  * @return {Promise<IACFProfile>}
  */
-const wpAddProfile = async (data: IProfile): Promise<IACFProfile> => {
+const _wpAddProfile = async (data: IProfile): Promise<IACFProfile> => {
   try {
     const wpFields: IWPProfile = {
       profile_name: data.name,
@@ -230,7 +291,7 @@ const wpAddProfile = async (data: IProfile): Promise<IACFProfile> => {
       id: addWpProfile.id,
       acf: addWpProfile.acf
     };
-    console.log('WPAPI: Saved new profile', acfProfile);
+    // console.log('WPAPI: Saved new profile', acfProfile);
     return acfProfile;
   }
   catch (err) {
@@ -238,4 +299,39 @@ const wpAddProfile = async (data: IProfile): Promise<IACFProfile> => {
   }
 };
 
-export { getProfile, saveProfile, atAddProfile, atGetProfile, wpGetProfiles, wpGetProfile, wpAddProfile };
+/**
+ * Update Profile from WordPress API
+ * Relies on ACF to REST API plugin to work
+ * @param {IProfile} data profile data to add
+ * @return {Promise<IACFProfile>}
+ */
+const _wpUpdateProfile = async (data: IProfile): Promise<IACFProfile> => {
+  try {
+    const wpFields: IWPProfile = {
+      profile_name: data.name,
+      profile_bio: data.bio,
+      profile_location: data.location,
+      profile_website: data.website,
+      profile_twitter: data.twitter,
+      profile_github: data.github,
+      profile_image: data.image,
+      slack_id: data.slackID
+    };
+    const updateWpProfile = await wpApi.profiles().id(data.wpid).update({
+      title: data.name,
+      fields: wpFields,
+      status: 'publish'
+    });
+    const acfProfile: IACFProfile = {
+      id: updateWpProfile.id,
+      acf: updateWpProfile.acf
+    };
+    // console.log('WPAPI: Updated existing profile', acfProfile);
+    return acfProfile;
+  }
+  catch (err) {
+    console.error(err);
+  }
+};
+
+export { getProfile, saveProfile, atGetProfile, wpGetProfiles, wpGetProfile };

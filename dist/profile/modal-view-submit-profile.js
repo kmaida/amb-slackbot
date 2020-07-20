@@ -22,7 +22,6 @@ const submitModalProfile = (app) => {
     app.view('profile', ({ ack, body, view }) => __awaiter(void 0, void 0, void 0, function* () {
         const slackID = body.user.id;
         const metadata = view.private_metadata ? JSON.parse(view.private_metadata) : {};
-        console.log('Metadata received from modal form:', metadata);
         const payload = view.state.values;
         // Capture data from modal interactions
         // Modal blocks data format: payload.[block_id].[action_id].value
@@ -45,7 +44,6 @@ const submitModalProfile = (app) => {
             data.id = metadata.id;
             data.wpid = metadata.wpid;
         }
-        console.log(data);
         // Validate form fields and handle errors
         // https://api.slack.com/surfaces/modals/using#displaying_errors#displaying_errors
         const ackParams = {

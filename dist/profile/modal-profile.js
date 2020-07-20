@@ -27,20 +27,23 @@ const modalProfile = (app) => {
         const slackID = body.user.id;
         const getDataProfile = yield api_profile_1.getProfile(slackID);
         const userData = yield data_slack_1.getUserInfo(slackID, app);
-        let metadata = {};
-        // Check if data exists in databases
+        const metadata = { image: undefined };
+        // If no existing profile is in data stores
         if (!getDataProfile) {
-            // If no data exists, use Slack user data to prefill
+            // use Slack user data to prefill
             prefill.name = userData.name;
             prefill.email = userData.email;
         }
+        // If profile data exists
         else {
-            // If data exists
+            // Set prefill to fetched data
             prefill = getDataProfile;
+            // Add Airtable and WordPress IDs to private_metadata
+            // so they will be accessible in view submission
             metadata.id = getDataProfile.id;
             metadata.wpid = getDataProfile.wpid;
         }
-        // Use current Slack profile image as image
+        // Always use current Slack user image as profile image
         const image = userData.image.replace('"', '');
         metadata.image = image;
         prefill.image = image;

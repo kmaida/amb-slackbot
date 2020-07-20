@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.wpAddProfile = exports.wpGetProfile = exports.wpGetProfiles = exports.atGetProfile = exports.atAddProfile = exports.saveProfile = exports.getProfile = void 0;
+exports.wpGetProfile = exports.wpGetProfiles = exports.atGetProfile = exports.saveProfile = exports.getProfile = void 0;
 const axios_1 = __importDefault(require("axios"));
 const errors_1 = require("../../utils/errors");
 // Airtable
@@ -62,33 +62,49 @@ const getProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getProfile = getProfile;
 /**
  * Save profile data to multiple data sources and return accumulated saved data
+ * Works for both saving new and updating existing profiles
  * @param {IObjectAny} app Slack App
- * @param {IProfile} data Profile data from modal form
+ * @param {IProfile} data profile data from modal form
  * @return {Promise<IProfile>} successfully saved WP and AT data
  */
 const saveProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const saveWP = yield wpAddProfile(data);
-        const saveAT = yield atAddProfile(data);
-        const normalizedWP = {
-            wpid: saveWP.id,
-            image: saveWP.acf.profile_image,
-            website: saveWP.acf.profile_website,
-            twitter: saveWP.acf.profile_twitter,
-            github: saveWP.acf.profile_github
-        };
-        const savedProfile = Object.assign(normalizedWP, saveAT);
-        // Send Slack DM to submitter confirming successful save
-        // dmConfirmSave(app, savedObj);
-        // Send Slack channel message to private admin-only channel
-        // adminChannelPublishSave(app, savedObj);
-        return savedProfile;
+    // If editing an existing profile:
+    if (data.id && data.wpid) {
+        return _atUpdateProfile(app, data);
     }
-    catch (err) {
-        errors_1.logErr(err);
+    // If adding a new profile
+    else {
+        return _atAddProfile(app, data);
     }
 });
 exports.saveProfile = saveProfile;
+/**
+ * Once Airtable profile save is successful, call this function in the success callback
+ * This updates WordPress and then aggregates both results together
+ * (Airtable API uses callbacks instead of promises, which is a huge pain in the a$$)
+ * @param {IObjectAny} app Slack app
+ * @param {IProfile} data profile data from form
+ * @param {IProfile} atSaved combined data from WP and AT to produce final successfully saved profile
+ */
+const _atProfileSaved = (app, data, atSaved) => __awaiter(void 0, void 0, void 0, function* () {
+    // Update WordPress profile
+    const saveWP = data.wpid ? yield _wpUpdateProfile(data) : yield _wpAddProfile(data);
+    // Combine normalized values from both AT callback and WP promise
+    const normalizedWP = {
+        wpid: saveWP.id,
+        image: saveWP.acf.profile_image,
+        website: saveWP.acf.profile_website,
+        twitter: saveWP.acf.profile_twitter,
+        github: saveWP.acf.profile_github
+    };
+    const savedProfile = Object.assign(Object.assign({}, normalizedWP), atSaved);
+    console.log('AT+WP: Successfully saved user profile', savedProfile);
+    // Send Slack DM to submitter confirming successful save
+    // dmConfirmSave(app, savedObj);
+    // Send Slack channel message to private admin-only channel
+    // adminChannelPublishSave(app, savedObj);
+    return savedProfile;
+});
 /*------------------
     AIRTABLE API
 ------------------*/
@@ -127,7 +143,7 @@ const atGetProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* ()
             view: viewID
         }).all();
         const atProfile = getProfile && getProfile.length ? _formatATRecord(getProfile[0]) : undefined;
-        console.log('AIRTABLE: User Profile', atProfile);
+        console.log('AIRTABLE: Get User Profile', atProfile);
         return atProfile;
     }
     catch (err) {
@@ -137,10 +153,11 @@ const atGetProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* ()
 exports.atGetProfile = atGetProfile;
 /**
  * Save a new Airtable ambassador profile data record
+ * @param {IObjectAny} app Slack app
  * @param {IProfile} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
  */
-const atAddProfile = (data) => __awaiter(void 0, void 0, void 0, function* () {
+const _atAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
     const atFields = {
         "Name": data.name,
         "Email": data.email,
@@ -161,11 +178,52 @@ const atAddProfile = (data) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const savedRecord = records[0];
         const savedObj = _formatATRecord(savedRecord);
-        console.log('AIRTABLE: Saved new profile', savedObj);
+        // console.log('AIRTABLE: Saved new profile', savedObj);
+        _atProfileSaved(app, data, savedObj);
         return savedObj;
     });
 });
-exports.atAddProfile = atAddProfile;
+/**
+ * Update an existing Airtable ambassador profile data record
+ * @param {IObjectAny} app Slack app
+ * @param {IProfile} data updates to save to Airtable
+ * @return {Promise<IATData>} promise resolving with saved object
+ */
+const _atUpdateProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
+    // Retrieve existing record
+    return base(table).find(data.id, function (err, origRecord) {
+        if (err) {
+            errors_1.storeErr(err);
+        }
+        if (origRecord) {
+            const atFields = {
+                "Name": data.name,
+                "Email": data.email,
+                "Location": data.location,
+                "Bio": data.bio,
+                "Airport Code": data.airport,
+                "Preferred Airline": data.airline,
+                "Frequent Flyer Account": data.ff,
+                "Slack ID": data.slackID
+            };
+            return base(table).update([
+                {
+                    "id": data.id,
+                    "fields": atFields
+                }
+            ], (err, records) => __awaiter(this, void 0, void 0, function* () {
+                if (err) {
+                    errors_1.storeErr(err);
+                }
+                const updatedRecord = records[0];
+                const updatedObj = _formatATRecord(updatedRecord);
+                // console.log('AIRTABLE: Updated existing profile', updatedObj);
+                _atProfileSaved(app, data, updatedObj);
+                return updatedObj;
+            }));
+        }
+    });
+});
 /*------------------
    WORDPRESS API
 ------------------*/
@@ -202,7 +260,7 @@ const wpGetProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const res = yield axios_1.default.get(`${process.env.WP_URL}/wp-json/acf/v3/profiles?filter[meta_key]=slack_id&filter[meta_value]=${slackID}`);
         const wpProfile = res.data && res.data.length ? res.data[0] : undefined;
-        console.log('WPAPI: User Profile', wpProfile);
+        console.log('WPAPI: Get User Profile', wpProfile);
         return wpProfile;
     }
     catch (err) {
@@ -216,7 +274,7 @@ exports.wpGetProfile = wpGetProfile;
  * @param {IProfile} data profile data to add
  * @return {Promise<IACFProfile>}
  */
-const wpAddProfile = (data) => __awaiter(void 0, void 0, void 0, function* () {
+const _wpAddProfile = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const wpFields = {
             profile_name: data.name,
@@ -238,12 +296,45 @@ const wpAddProfile = (data) => __awaiter(void 0, void 0, void 0, function* () {
             id: addWpProfile.id,
             acf: addWpProfile.acf
         };
-        console.log('WPAPI: Saved new profile', acfProfile);
+        // console.log('WPAPI: Saved new profile', acfProfile);
         return acfProfile;
     }
     catch (err) {
         console.error(err);
     }
 });
-exports.wpAddProfile = wpAddProfile;
+/**
+ * Update Profile from WordPress API
+ * Relies on ACF to REST API plugin to work
+ * @param {IProfile} data profile data to add
+ * @return {Promise<IACFProfile>}
+ */
+const _wpUpdateProfile = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const wpFields = {
+            profile_name: data.name,
+            profile_bio: data.bio,
+            profile_location: data.location,
+            profile_website: data.website,
+            profile_twitter: data.twitter,
+            profile_github: data.github,
+            profile_image: data.image,
+            slack_id: data.slackID
+        };
+        const updateWpProfile = yield setup_wpapi_1.wpApi.profiles().id(data.wpid).update({
+            title: data.name,
+            fields: wpFields,
+            status: 'publish'
+        });
+        const acfProfile = {
+            id: updateWpProfile.id,
+            acf: updateWpProfile.acf
+        };
+        // console.log('WPAPI: Updated existing profile', acfProfile);
+        return acfProfile;
+    }
+    catch (err) {
+        console.error(err);
+    }
+});
 //# sourceMappingURL=api-profile.js.map

@@ -2,7 +2,7 @@ import { IObjectAny } from '../utils/types';
 import { objNotEmpty } from '../utils/utils';
 import { validUrl, emailIsh, validAirport } from '../utils/form-validation';
 import { slackErr, logErr } from '../utils/errors';
-import { IProfile } from './profile.interface';
+import { IProfile, IProfileMeta } from './profile.interface';
 import { saveProfile } from './data-profile/api-profile';
 
 /*------------------
@@ -13,8 +13,7 @@ const submitModalProfile = (app: IObjectAny): void => {
   // Modal view submitted
   app.view('profile', async ({ ack, body, view }) => {
     const slackID: string = body.user.id;
-    const metadata: IObjectAny = view.private_metadata ? JSON.parse(view.private_metadata) : {};
-    console.log('Metadata received from modal form:', metadata);
+    const metadata: IProfileMeta = view.private_metadata ? JSON.parse(view.private_metadata) : {};
     const payload: IObjectAny = view.state.values;
     // Capture data from modal interactions
     // Modal blocks data format: payload.[block_id].[action_id].value
@@ -37,7 +36,6 @@ const submitModalProfile = (app: IObjectAny): void => {
       data.id = metadata.id;
       data.wpid = metadata.wpid;
     }
-    console.log(data);
     // Validate form fields and handle errors
     // https://api.slack.com/surfaces/modals/using#displaying_errors#displaying_errors
     const ackParams: any = {
