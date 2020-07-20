@@ -67,7 +67,9 @@ jobs_1.scheduleATSyncs(app);
 ------------------*/
 // REMOVE AFTER TESTING
 const api_profile_1 = require("./profile/data-profile/api-profile");
-api_profile_1.wpGetProfiles();
+// wpGetProfiles();
+api_profile_1.wpGetProfile('U01238R77J6');
+api_profile_1.atGetProfile('U01238R77J6');
 // wpAddProfile(app, {
 //   name: 'Kim Maida',
 //   email: 'kim@gatsbyjs.com',
@@ -76,17 +78,17 @@ api_profile_1.wpGetProfiles();
 //   twitter: 'KimMaida',
 //   slackID: 'U01238R77J6'
 // });
-api_profile_1.atAddProfile(app, {
-    name: 'Kim',
-    email: 'kim@gatsbyjs.com',
-    bio: 'Hi there my bio',
-    location: 'Michigan',
-    airport: 'DTW',
-    airline: 'Delta',
-    ff: '123',
-    passID: '12345',
-    slackID: 'U01238R77J6'
-});
+// atAddProfile(app, {
+//   name: 'Kim',
+//   email: 'kim@gatsbyjs.com',
+//   bio: 'Hi there my bio',
+//   location: 'Michigan',
+//   airport: 'DTW',
+//   airline: 'Delta',
+//   ff: '123',
+//   passID: '12345',
+//   slackID: 'U01238R77J6'
+// });
 /*------------------
     ACTIVITY IX
 ------------------*/

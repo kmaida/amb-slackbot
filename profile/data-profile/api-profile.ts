@@ -1,7 +1,6 @@
 import { IObjectAny } from '../../utils/types';
 import { IProfile, IATProfile, IWPProfile, IACFProfile } from './../profile.interface';
-import { storeErr } from '../../utils/errors';
-import { falseyToEmptyStr } from '../../utils/utils';
+import { storeErr, logErr } from '../../utils/errors';
 // Airtable
 const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_PROFILES;
@@ -10,10 +9,55 @@ const viewID = process.env.AT_TABLE_VIEW_ID_PROFILES;
 import { getATLink } from './../../utils/utils';
 // WordPress API
 import { wpApi } from './../../data/setup-wpapi';
+import axios from 'axios';
 
 /*------------------
     AIRTABLE API
 ------------------*/
+
+/**
+ * Format Airtable profile record data into Slack app readable data
+ * @param {IObjectAny} record Airtable profile record
+ * @return {IATProfile}
+ */
+const _formatATRecord = (record: IObjectAny): IATProfile => {
+  const id = record.getId();
+  const recordObj = {
+    id: id,
+    name: record.fields["Name"],
+    email: record.fields["Email"],
+    location: record.fields["Location"],
+    bio: record.fields["Bio"],
+    airport: record.fields["Airport Code"],
+    airline: record.fields["Preferred Airline"],
+    ff: record.fields["Frequent Flyer Account"],
+    passID: record.fields["Global Entry"],
+    slackID: record.fields["Slack ID"],
+    atLink: getATLink(tableID, viewID, id)
+  };
+  // Return known record data to prefill form
+  return recordObj;
+}
+
+/**
+ * Get user's AT profile data by Slack ID
+ * @param {string} slackID Slack ID of user to retrieve profile for
+ * @return {Promise<IATProfile>}
+ */
+const atGetProfile = async (slackID: string): Promise<IATProfile> => {
+  try {
+    const getProfile = await base(table).select({
+      filterByFormula: `{Slack ID} = "${slackID}"`,
+      view: viewID
+    }).all();
+    const atProfile = getProfile && getProfile.length ? _formatATRecord(getProfile[0]) : undefined;
+    console.log('AIRTABLE: User Profile', atProfile);
+    return atProfile;
+  }
+  catch (err) {
+    logErr(err);
+  }
+};
 
 /**
  * Save a new Airtable ambassador profile data record
@@ -42,20 +86,7 @@ const atAddProfile = async (app: IObjectAny, data: IProfile): Promise<IATProfile
       storeErr(err);
     }
     const savedRecord: IObjectAny = records[0];
-    const savedID: string = savedRecord.getId();
-    const savedObj: IATProfile = {
-      id: savedID,
-      name: savedRecord.fields["Name"],
-      email: savedRecord.fields["Email"],
-      location: savedRecord.fields["Location"],
-      bio: savedRecord.fields["Bio"],
-      airport: savedRecord.fields["Airport Code"],
-      airline: savedRecord.fields["Preferred Airline"],
-      ff: savedRecord.fields["Frequent Flyer Account"],
-      passID: savedRecord.fields["Global Entry"],
-      slackID: savedRecord.fields["Slack ID"],
-      atLink: getATLink(tableID, viewID, savedID)
-    };
+    const savedObj: IATProfile = _formatATRecord(savedRecord);
     console.log('AIRTABLE: Saved new profile', savedObj);
     // Send Slack DM to submitter confirming successful save
     // dmConfirmSave(app, savedObj);
@@ -90,6 +121,23 @@ const wpGetProfiles = async (): Promise<IACFProfile[]> => {
   }
   catch (err) {
     console.error(err);
+  }
+};
+
+/**
+ * Get a specific user's profile from WordPress
+ * @param {string} slackID Slack ID of user to get profile for
+ * @return {Promise<IATProfile>}
+ */
+const wpGetProfile = async (slackID: string): Promise<IACFProfile> => {
+  try {
+    const res = await axios.get(`${process.env.WP_URL}/wp-json/acf/v3/profiles?filter[meta_key]=slack_id&filter[meta_value]=${slackID}`);
+    const wpProfile: IACFProfile = res.data && res.data.length ? res.data[0] : undefined;
+    console.log('WPAPI: User Profile', wpProfile);
+    return wpProfile;
+  }
+  catch (err) {
+    logErr(err);
   }
 };
 
@@ -130,4 +178,4 @@ const wpAddProfile = async (app: IObjectAny, data: IProfile): Promise<IACFProfil
   }
 };
 
-export { atAddProfile, wpGetProfiles, wpAddProfile };
+export { atAddProfile, atGetProfile, wpGetProfiles, wpGetProfile, wpAddProfile };

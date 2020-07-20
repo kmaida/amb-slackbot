@@ -8,8 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.wpAddProfile = exports.wpGetProfiles = exports.atAddProfile = void 0;
+exports.wpAddProfile = exports.wpGetProfile = exports.wpGetProfiles = exports.atGetProfile = exports.atAddProfile = void 0;
 const errors_1 = require("../../utils/errors");
 // Airtable
 const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
@@ -19,9 +22,53 @@ const viewID = process.env.AT_TABLE_VIEW_ID_PROFILES;
 const utils_1 = require("./../../utils/utils");
 // WordPress API
 const setup_wpapi_1 = require("./../../data/setup-wpapi");
+const axios_1 = __importDefault(require("axios"));
 /*------------------
     AIRTABLE API
 ------------------*/
+/**
+ * Format Airtable profile record data into Slack app readable data
+ * @param {IObjectAny} record Airtable profile record
+ * @return {IATProfile}
+ */
+const _formatATRecord = (record) => {
+    const id = record.getId();
+    const recordObj = {
+        id: id,
+        name: record.fields["Name"],
+        email: record.fields["Email"],
+        location: record.fields["Location"],
+        bio: record.fields["Bio"],
+        airport: record.fields["Airport Code"],
+        airline: record.fields["Preferred Airline"],
+        ff: record.fields["Frequent Flyer Account"],
+        passID: record.fields["Global Entry"],
+        slackID: record.fields["Slack ID"],
+        atLink: utils_1.getATLink(tableID, viewID, id)
+    };
+    // Return known record data to prefill form
+    return recordObj;
+};
+/**
+ * Get user's AT profile data by Slack ID
+ * @param {string} slackID Slack ID of user to retrieve profile for
+ * @return {Promise<IATProfile>}
+ */
+const atGetProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const getProfile = yield base(table).select({
+            filterByFormula: `{Slack ID} = "${slackID}"`,
+            view: viewID
+        }).all();
+        const atProfile = getProfile && getProfile.length ? _formatATRecord(getProfile[0]) : undefined;
+        console.log('AIRTABLE: User Profile', atProfile);
+        return atProfile;
+    }
+    catch (err) {
+        errors_1.logErr(err);
+    }
+});
+exports.atGetProfile = atGetProfile;
 /**
  * Save a new Airtable ambassador profile data record
  * @param {IObjectAny} app Slack app
@@ -49,20 +96,7 @@ const atAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* 
             errors_1.storeErr(err);
         }
         const savedRecord = records[0];
-        const savedID = savedRecord.getId();
-        const savedObj = {
-            id: savedID,
-            name: savedRecord.fields["Name"],
-            email: savedRecord.fields["Email"],
-            location: savedRecord.fields["Location"],
-            bio: savedRecord.fields["Bio"],
-            airport: savedRecord.fields["Airport Code"],
-            airline: savedRecord.fields["Preferred Airline"],
-            ff: savedRecord.fields["Frequent Flyer Account"],
-            passID: savedRecord.fields["Global Entry"],
-            slackID: savedRecord.fields["Slack ID"],
-            atLink: utils_1.getATLink(tableID, viewID, savedID)
-        };
+        const savedObj = _formatATRecord(savedRecord);
         console.log('AIRTABLE: Saved new profile', savedObj);
         // Send Slack DM to submitter confirming successful save
         // dmConfirmSave(app, savedObj);
@@ -99,6 +133,23 @@ const wpGetProfiles = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.wpGetProfiles = wpGetProfiles;
+/**
+ * Get a specific user's profile from WordPress
+ * @param {string} slackID Slack ID of user to get profile for
+ * @return {Promise<IATProfile>}
+ */
+const wpGetProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const res = yield axios_1.default.get(`${process.env.WP_URL}/wp-json/acf/v3/profiles?filter[meta_key]=slack_id&filter[meta_value]=${slackID}`);
+        const wpProfile = res.data && res.data.length ? res.data[0] : undefined;
+        console.log('WPAPI: User Profile', wpProfile);
+        return wpProfile;
+    }
+    catch (err) {
+        errors_1.logErr(err);
+    }
+});
+exports.wpGetProfile = wpGetProfile;
 /**
  * Add Profile from WordPress API
  * Relies on ACF to REST API plugin to work
