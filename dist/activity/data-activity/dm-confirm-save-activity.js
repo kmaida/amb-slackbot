@@ -15,7 +15,7 @@ const errors_1 = require("../../utils/errors");
   DM CONFIRM SAVE
 ------------------*/
 const dmConfirmSave = (app, atData) => __awaiter(void 0, void 0, void 0, function* () {
-    const userID = atData.slackID;
+    const userID = atData.slack_id;
     try {
         const sendMsg = yield app.client.chat.postMessage({
             token: process.env.SLACK_BOT_TOKEN,

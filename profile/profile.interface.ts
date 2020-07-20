@@ -19,8 +19,8 @@ interface IProfile {
   airport?: string;
   airline?: string;
   ff?: string;
-  slackID?: string;
-  atLink?: string;
+  slack_id?: string;
+  at_link?: string;
 };
 
 /**
@@ -74,12 +74,12 @@ interface IATProfile {
   airport?: string;
   airline?: string;
   ff?: string;
-  slackID: string;
-  atLink?: string;
+  slack_id: string;
+  at_link?: string;
 }
 
 /**
- * @interface IProfileMeta metadata for profile view submission
+ * @interface IProfileMeta metadata for profile view submissionat
  */
 interface IProfileMeta {
   image: string;

@@ -70,8 +70,8 @@ const falseyToEmptyStr = (input: string): string => {
  * @param {string} v view ID
  * @param {string} id record ID
  */
-const getATLink = (t: string, v: string, id: string): string => {
+const getat_link = (t: string, v: string, id: string): string => {
   return `https://airtable.com/${t}/${v}/${id}`;
 };
 
-export { objNotEmpty, clearNewline, ignoreMention, getQ, falseyToEmptyStr, getATLink };
+export { objNotEmpty, clearNewline, ignoreMention, getQ, falseyToEmptyStr, getat_link };

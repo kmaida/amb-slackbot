@@ -8,7 +8,7 @@ const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_ACTIVITY;
 const tableID = process.env.AT_TABLE_ID_ACTIVITY;
 const viewID = process.env.AT_TABLE_VIEW_ID_ACTIVITY;
-import { getQ, getATLink } from './../../utils/utils';
+import { getQ, getat_link } from './../../utils/utils';
 // WordPress API
 import { wpApi } from './../../data/setup-wpapi';
 import { channelPublishSave } from './channel-publish-save';
@@ -34,7 +34,7 @@ const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivit
     "Topic": data.topic,
     "Reach": data.reach,
     "Quarter": getQ(data.date),
-    "Slack ID": data.slackID
+    "Slack ID": data.slack_id
   };
   return base(table).create([
     {
@@ -57,8 +57,8 @@ const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivit
       topic: savedRecord.fields["Topic"],
       reach: savedRecord.fields["Reach"],
       quarter: savedRecord.fields["Quarter"],
-      slackID: savedRecord.fields["Slack ID"],
-      atLink: getATLink(tableID, viewID, savedID)
+      slack_id: savedRecord.fields["Slack ID"],
+      at_link: getat_link(tableID, viewID, savedID)
     };
     console.log('AIRTABLE: Saved new activity', savedObj);
     // Send Slack DM to submitter confirming successful save
@@ -114,7 +114,7 @@ const wpAddActivity = async (app: IObjectAny, data: IActivity): Promise<IACFActi
       activity_date: data.date,
       activity_url: data.url,
       activity_topic: data.topic,
-      slack_id: data.slackID
+      slack_id: data.slack_id
     };
     const addWpActivity = await wpApi.activities().create({
       title: data.title,

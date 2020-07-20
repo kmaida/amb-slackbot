@@ -48,7 +48,8 @@ const getProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
                 github: wpProfile.acf.profile_github,
                 airport: atProfile.airport,
                 airline: atProfile.airline,
-                ff: atProfile.ff
+                ff: atProfile.ff,
+                slack_id: atProfile.slack_id
             };
             console.log('AT+WP: Full User Profile', profile);
             return profile;
@@ -124,9 +125,8 @@ const _formatATRecord = (record) => {
         airport: record.fields["Airport Code"],
         airline: record.fields["Preferred Airline"],
         ff: record.fields["Frequent Flyer Account"],
-        passID: record.fields["Global Entry"],
-        slackID: record.fields["Slack ID"],
-        atLink: utils_1.getATLink(tableID, viewID, id)
+        slack_id: record.fields["Slack ID"],
+        at_link: utils_1.getat_link(tableID, viewID, id)
     };
     // Return known record data to prefill form
     return recordObj;
@@ -166,7 +166,7 @@ const _atAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function*
         "Airport Code": data.airport,
         "Preferred Airline": data.airline,
         "Frequent Flyer Account": data.ff,
-        "Slack ID": data.slackID
+        "Slack ID": data.slack_id
     };
     return base(table).create([
         {
@@ -204,7 +204,7 @@ const _atUpdateProfile = (app, data) => __awaiter(void 0, void 0, void 0, functi
                 "Airport Code": data.airport,
                 "Preferred Airline": data.airline,
                 "Frequent Flyer Account": data.ff,
-                "Slack ID": data.slackID
+                "Slack ID": data.slack_id
             };
             return base(table).update([
                 {
@@ -284,7 +284,7 @@ const _wpAddProfile = (data) => __awaiter(void 0, void 0, void 0, function* () {
             profile_twitter: data.twitter,
             profile_github: data.github,
             profile_image: data.image,
-            slack_id: data.slackID
+            slack_id: data.slack_id
         };
         const addWpProfile = yield setup_wpapi_1.wpApi.profiles().create({
             title: data.name,
@@ -319,7 +319,7 @@ const _wpUpdateProfile = (data) => __awaiter(void 0, void 0, void 0, function* (
             profile_twitter: data.twitter,
             profile_github: data.github,
             profile_image: data.image,
-            slack_id: data.slackID
+            slack_id: data.slack_id
         };
         const updateWpProfile = yield setup_wpapi_1.wpApi.profiles().id(data.wpid).update({
             title: data.name,

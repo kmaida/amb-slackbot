@@ -7,7 +7,7 @@ import { IActivity } from '../activity.interface';
 ------------------*/
 
 const dmConfirmSave = async (app: IObjectAny, atData: IActivity): Promise<any> => {
-  const userID: string = atData.slackID;
+  const userID: string = atData.slack_id;
   try {
     const sendMsg = await app.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,

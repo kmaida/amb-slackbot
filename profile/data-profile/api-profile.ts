@@ -7,7 +7,7 @@ const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_PROFILES;
 const tableID = process.env.AT_TABLE_ID_PROFILES;
 const viewID = process.env.AT_TABLE_VIEW_ID_PROFILES;
-import { getATLink } from './../../utils/utils';
+import { getat_link } from './../../utils/utils';
 // WordPress API
 import { wpApi } from './../../data/setup-wpapi';
 
@@ -37,7 +37,8 @@ const getProfile = async (slackID: string): Promise<IProfile> => {
         github: wpProfile.acf.profile_github,
         airport: atProfile.airport,
         airline: atProfile.airline,
-        ff: atProfile.ff
+        ff: atProfile.ff,
+        slack_id: atProfile.slack_id
       }
       console.log('AT+WP: Full User Profile', profile);
       return profile;
@@ -115,9 +116,8 @@ const _formatATRecord = (record: IObjectAny): IATProfile => {
     airport: record.fields["Airport Code"],
     airline: record.fields["Preferred Airline"],
     ff: record.fields["Frequent Flyer Account"],
-    passID: record.fields["Global Entry"],
-    slackID: record.fields["Slack ID"],
-    atLink: getATLink(tableID, viewID, id)
+    slack_id: record.fields["Slack ID"],
+    at_link: getat_link(tableID, viewID, id)
   };
   // Return known record data to prefill form
   return recordObj;
@@ -158,7 +158,7 @@ const _atAddProfile = async (app: IObjectAny, data: IProfile): Promise<IATProfil
     "Airport Code": data.airport,
     "Preferred Airline": data.airline,
     "Frequent Flyer Account": data.ff,
-    "Slack ID": data.slackID
+    "Slack ID": data.slack_id
   };
   return base(table).create([
     {
@@ -197,7 +197,7 @@ const _atUpdateProfile = async (app: IObjectAny, data: IProfile): Promise<IATPro
         "Airport Code": data.airport,
         "Preferred Airline": data.airline,
         "Frequent Flyer Account": data.ff,
-        "Slack ID": data.slackID
+        "Slack ID": data.slack_id
       };
       return base(table).update([
         {
@@ -279,7 +279,7 @@ const _wpAddProfile = async (data: IProfile): Promise<IACFProfile> => {
       profile_twitter: data.twitter,
       profile_github: data.github,
       profile_image: data.image,
-      slack_id: data.slackID
+      slack_id: data.slack_id
     };
     const addWpProfile = await wpApi.profiles().create({
       title: data.name,
@@ -315,7 +315,7 @@ const _wpUpdateProfile = async (data: IProfile): Promise<IACFProfile> => {
       profile_twitter: data.twitter,
       profile_github: data.github,
       profile_image: data.image,
-      slack_id: data.slackID
+      slack_id: data.slack_id
     };
     const updateWpProfile = await wpApi.profiles().id(data.wpid).update({
       title: data.name,

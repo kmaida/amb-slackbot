@@ -16,8 +16,8 @@ interface IActivity {
   topic: string;
   reach: number;
   quarter?: string;
-  slackID: string;
-  atLink?: string;
+  slack_id: string;
+  at_link?: string;
 };
 
 /**

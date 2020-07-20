@@ -42,7 +42,7 @@ const atAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function*
         "Topic": data.topic,
         "Reach": data.reach,
         "Quarter": utils_1.getQ(data.date),
-        "Slack ID": data.slackID
+        "Slack ID": data.slack_id
     };
     return base(table).create([
         {
@@ -65,8 +65,8 @@ const atAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function*
             topic: savedRecord.fields["Topic"],
             reach: savedRecord.fields["Reach"],
             quarter: savedRecord.fields["Quarter"],
-            slackID: savedRecord.fields["Slack ID"],
-            atLink: utils_1.getATLink(tableID, viewID, savedID)
+            slack_id: savedRecord.fields["Slack ID"],
+            at_link: utils_1.getat_link(tableID, viewID, savedID)
         };
         console.log('AIRTABLE: Saved new activity', savedObj);
         // Send Slack DM to submitter confirming successful save
@@ -121,7 +121,7 @@ const wpAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function*
             activity_date: data.date,
             activity_url: data.url,
             activity_topic: data.topic,
-            slack_id: data.slackID
+            slack_id: data.slack_id
         };
         const addWpActivity = yield setup_wpapi_1.wpApi.activities().create({
             title: data.title,

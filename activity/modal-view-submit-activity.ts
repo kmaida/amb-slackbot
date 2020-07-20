@@ -27,7 +27,7 @@ const submitModalActivity = (app: IObjectAny): void => {
       url: payload.ba_url.aa_url.value,
       topic: payload.ba_topic.aa_topic.value,
       reach: payload.ba_reach.aa_reach.value * 1,
-      slackID: userID
+      slack_id: userID
     };
     const isPublic: boolean = !!payload.ba_public.aa_public.selected_options;
     // Validate form fields and handle errors

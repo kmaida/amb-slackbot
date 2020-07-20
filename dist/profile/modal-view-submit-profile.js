@@ -37,7 +37,7 @@ const submitModalProfile = (app) => {
             airport: payload.bp_airport.ap_airport.value,
             airline: payload.bp_airline.ap_airline.value,
             ff: payload.bp_ff.ap_ff.value,
-            slackID: slackID
+            slack_id: slackID
         };
         // Add Airtable and WP IDs to profile data if editing existing profile
         if (metadata.id && metadata.wpid) {

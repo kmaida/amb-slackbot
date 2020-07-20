@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getATLink = exports.falseyToEmptyStr = exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = void 0;
+exports.getat_link = exports.falseyToEmptyStr = exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = void 0;
 /*------------------
        UTILS
 ------------------*/
@@ -80,8 +80,8 @@ exports.falseyToEmptyStr = falseyToEmptyStr;
  * @param {string} v view ID
  * @param {string} id record ID
  */
-const getATLink = (t, v, id) => {
+const getat_link = (t, v, id) => {
     return `https://airtable.com/${t}/${v}/${id}`;
 };
-exports.getATLink = getATLink;
+exports.getat_link = getat_link;
 //# sourceMappingURL=utils.js.map
