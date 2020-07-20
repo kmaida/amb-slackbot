@@ -19,7 +19,7 @@ const wpApi = new WPAPI({
 /**
  * WordPress API setup
  * Connect to wpapi
- * Register activities route
+ * Register custom post type routes
  * Auto-discovery
  * @return {Promise<void>}
  */
@@ -28,13 +28,18 @@ const wpApiSetup = async (): Promise<void> => {
    * Register custom routes in REST API
    * @param {string} slug custom post type / desired endpoint in API
    */
-  const registerRoute = (slug: string) => {
+  const registerRoute = (slug: string): void => {
     const namespace = 'wp/v2';
     const route = `/${slug}/(?P<id>)`;
     wpApi[slug] = wpApi.registerRoute(namespace, route);
   }
-  // Register custom post type "activities"
+
+  /**
+   * Register custom post types in REST API
+   */
+  registerRoute('profiles');
   registerRoute('activities');
+
   // Auto-discovery
   try {
     const discovery = await WPAPI.discover(process.env.WP_URL);

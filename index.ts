@@ -6,14 +6,13 @@ import { mdbSetup } from './data/setup-mongodb';
 import { initAdminSettings } from './app-home/admin/api-admin';
 // WordPress REST API
 import { wpApiSetup } from './data/setup-wpapi';
-import { wpGetActivities, wpAddActivity, atAddActivity } from './activity/data-activity/api-activity';  // @TODO: remove after testing
 // App functionality
 import { modalActivity } from './activity/modal-activity';
 import { submitModalActivity } from './activity/modal-view-submit-activity';
 import { appHomeOpened } from './app-home/event-app-home-opened';
 import { appMention } from './app-mention/event-app-mention';
 import { botDM } from './message-im/event-message-im';
-import { scheduleATSyncs } from "./utils/jobs";
+import { scheduleATSyncs } from './utils/jobs';
 
 /*------------------
   CREATE BOLT APP
@@ -36,37 +35,34 @@ wpApiSetup();
 // Schedule Airtable sync job
 scheduleATSyncs(app);
 
-/**
- * REMOVE ALL BELOW AFTER TESTING
- */
-// Get Activities that have been saved to WordPress
-wpGetActivities();
-// Test creation of activity from API
-// wpAddActivity({
-//   activity_name: 'Test 2',
-//   activity_type: 'Speaking',
-//   activity_title: 'Test API',
-//   activity_url: 'http://wp-api.org/node-wpapi/using-the-client/#creating-posts',
-//   activity_date: '2020-06-28',
-//   activity_topic: 'Creating an activity from REST API',
-//   slack_id: 'U01238R77J6'
-// });
-
-// Test creation of activity in Airtable
-// atAddActivity(app, {
+/*------------------
+    PROFILE IX
+------------------*/
+// REMOVE AFTER TESTING
+import { wpGetProfiles, wpAddProfile, atAddProfile } from './profile/data-profile/api-profile';
+wpGetProfiles();
+// wpAddProfile(app, {
 //   name: 'Kim Maida',
 //   email: 'kim@gatsbyjs.com',
-//   type: 'Podcast',
-//   title: 'The Pod People',
-//   date: '2020-06-30',
-//   url: 'https://google.com',
-//   topic: 'Testing AT insertion',
-//   reach: 500,
+//   bio: 'Head of DevRel & Community at Gatsby',
+//   location: 'Michigan',
+//   twitter: 'KimMaida',
 //   slackID: 'U01238R77J6'
 // });
+atAddProfile(app, {
+  name: 'Kim',
+  email: 'kim@gatsbyjs.com',
+  bio: 'Hi there my bio',
+  location: 'Michigan',
+  airport: 'DTW',
+  airline: 'Delta',
+  ff: '123',
+  passID: '12345',
+  slackID: 'U01238R77J6'
+});
 
 /*------------------
-  SET UP MODAL IX
+    ACTIVITY IX
 ------------------*/
 modalActivity(app);
 submitModalActivity(app);

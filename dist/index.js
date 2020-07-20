@@ -36,7 +36,6 @@ const setup_mongodb_1 = require("./data/setup-mongodb");
 const api_admin_1 = require("./app-home/admin/api-admin");
 // WordPress REST API
 const setup_wpapi_1 = require("./data/setup-wpapi");
-const api_activity_1 = require("./activity/data-activity/api-activity"); // @TODO: remove after testing
 // App functionality
 const modal_activity_1 = require("./activity/modal-activity");
 const modal_view_submit_activity_1 = require("./activity/modal-view-submit-activity");
@@ -63,35 +62,33 @@ api_admin_1.initAdminSettings();
 setup_wpapi_1.wpApiSetup();
 // Schedule Airtable sync job
 jobs_1.scheduleATSyncs(app);
-/**
- * REMOVE ALL BELOW AFTER TESTING
- */
-// Get Activities that have been saved to WordPress
-api_activity_1.wpGetActivities();
-// Test creation of activity from API
-// wpAddActivity({
-//   activity_name: 'Test 2',
-//   activity_type: 'Speaking',
-//   activity_title: 'Test API',
-//   activity_url: 'http://wp-api.org/node-wpapi/using-the-client/#creating-posts',
-//   activity_date: '2020-06-28',
-//   activity_topic: 'Creating an activity from REST API',
-//   slack_id: 'U01238R77J6'
-// });
-// Test creation of activity in Airtable
-// atAddActivity(app, {
+/*------------------
+    PROFILE IX
+------------------*/
+// REMOVE AFTER TESTING
+const api_profile_1 = require("./profile/data-profile/api-profile");
+api_profile_1.wpGetProfiles();
+// wpAddProfile(app, {
 //   name: 'Kim Maida',
 //   email: 'kim@gatsbyjs.com',
-//   type: 'Podcast',
-//   title: 'The Pod People',
-//   date: '2020-06-30',
-//   url: 'https://google.com',
-//   topic: 'Testing AT insertion',
-//   reach: 500,
+//   bio: 'Head of DevRel & Community at Gatsby',
+//   location: 'Michigan',
+//   twitter: 'KimMaida',
 //   slackID: 'U01238R77J6'
 // });
+api_profile_1.atAddProfile(app, {
+    name: 'Kim',
+    email: 'kim@gatsbyjs.com',
+    bio: 'Hi there my bio',
+    location: 'Michigan',
+    airport: 'DTW',
+    airline: 'Delta',
+    ff: '123',
+    passID: '12345',
+    slackID: 'U01238R77J6'
+});
 /*------------------
-  SET UP MODAL IX
+    ACTIVITY IX
 ------------------*/
 modal_activity_1.modalActivity(app);
 modal_view_submit_activity_1.submitModalActivity(app);

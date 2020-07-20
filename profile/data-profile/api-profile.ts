@@ -18,7 +18,7 @@ import { wpApi } from './../../data/setup-wpapi';
 /**
  * Save a new Airtable ambassador profile data record
  * @param {IObjectAny} app Slack app
- * @param {IActivity} data to save to Airtable
+ * @param {IProfile} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
  */
 const atAddProfile = async (app: IObjectAny, data: IProfile): Promise<IATProfile> => {
@@ -26,10 +26,11 @@ const atAddProfile = async (app: IObjectAny, data: IProfile): Promise<IATProfile
     "Name": data.name,
     "Email": data.email,
     "Location": data.location,
-    "Airport Code": falseyToEmptyStr(data.airport),
-    "Preferred Airline": falseyToEmptyStr(data.airline),
-    "Frequent Flyer Account": falseyToEmptyStr(data.ff),
-    "Global Entry": falseyToEmptyStr(data.passID),
+    "Bio": data.bio,
+    "Airport Code": data.airport,
+    "Preferred Airline": data.airline,
+    "Frequent Flyer Account": data.ff,
+    "Global Entry": data.passID,
     "Slack ID": data.slackID
   };
   return base(table).create([
@@ -47,6 +48,7 @@ const atAddProfile = async (app: IObjectAny, data: IProfile): Promise<IATProfile
       name: savedRecord.fields["Name"],
       email: savedRecord.fields["Email"],
       location: savedRecord.fields["Location"],
+      bio: savedRecord.fields["Bio"],
       airport: savedRecord.fields["Airport Code"],
       airline: savedRecord.fields["Preferred Airline"],
       ff: savedRecord.fields["Frequent Flyer Account"],
@@ -104,9 +106,9 @@ const wpAddProfile = async (app: IObjectAny, data: IProfile): Promise<IACFProfil
       profile_name: data.name,
       profile_bio: data.bio,
       profile_location: data.location,
-      profile_website: falseyToEmptyStr(data.website),
-      profile_twitter: falseyToEmptyStr(data.twitter),
-      profile_github: falseyToEmptyStr(data.github),
+      profile_website: data.website,
+      profile_twitter: data.twitter,
+      profile_github: data.github,
       profile_image: data.image,
       slack_id: data.slackID
     };
@@ -121,8 +123,6 @@ const wpAddProfile = async (app: IObjectAny, data: IProfile): Promise<IACFProfil
       acf: addWpProfile.acf
     };
     console.log('WPAPI: Saved new profile', acfProfile);
-    // Publish activity to public Slack channel
-    // channelPublishSave(app, acfActivity.acf);
     return acfProfile;
   }
   catch (err) {

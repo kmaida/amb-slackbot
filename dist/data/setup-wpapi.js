@@ -32,7 +32,7 @@ exports.wpApi = wpApi;
 /**
  * WordPress API setup
  * Connect to wpapi
- * Register activities route
+ * Register custom post type routes
  * Auto-discovery
  * @return {Promise<void>}
  */
@@ -46,7 +46,10 @@ const wpApiSetup = () => __awaiter(void 0, void 0, void 0, function* () {
         const route = `/${slug}/(?P<id>)`;
         wpApi[slug] = wpApi.registerRoute(namespace, route);
     };
-    // Register custom post type "activities"
+    /**
+     * Register custom post types in REST API
+     */
+    registerRoute('profiles');
     registerRoute('activities');
     // Auto-discovery
     try {

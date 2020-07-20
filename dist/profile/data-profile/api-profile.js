@@ -11,13 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.wpAddProfile = exports.wpGetProfiles = exports.atAddProfile = void 0;
 const errors_1 = require("../../utils/errors");
-const utils_1 = require("../../utils/utils");
 // Airtable
 const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_PROFILES;
 const tableID = process.env.AT_TABLE_ID_PROFILES;
 const viewID = process.env.AT_TABLE_VIEW_ID_PROFILES;
-const utils_2 = require("./../../utils/utils");
+const utils_1 = require("./../../utils/utils");
 // WordPress API
 const setup_wpapi_1 = require("./../../data/setup-wpapi");
 /*------------------
@@ -26,7 +25,7 @@ const setup_wpapi_1 = require("./../../data/setup-wpapi");
 /**
  * Save a new Airtable ambassador profile data record
  * @param {IObjectAny} app Slack app
- * @param {IActivity} data to save to Airtable
+ * @param {IProfile} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
  */
 const atAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -34,10 +33,11 @@ const atAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* 
         "Name": data.name,
         "Email": data.email,
         "Location": data.location,
-        "Airport Code": utils_1.falseyToEmptyStr(data.airport),
-        "Preferred Airline": utils_1.falseyToEmptyStr(data.airline),
-        "Frequent Flyer Account": utils_1.falseyToEmptyStr(data.ff),
-        "Global Entry": utils_1.falseyToEmptyStr(data.passID),
+        "Bio": data.bio,
+        "Airport Code": data.airport,
+        "Preferred Airline": data.airline,
+        "Frequent Flyer Account": data.ff,
+        "Global Entry": data.passID,
         "Slack ID": data.slackID
     };
     return base(table).create([
@@ -55,12 +55,13 @@ const atAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* 
             name: savedRecord.fields["Name"],
             email: savedRecord.fields["Email"],
             location: savedRecord.fields["Location"],
+            bio: savedRecord.fields["Bio"],
             airport: savedRecord.fields["Airport Code"],
             airline: savedRecord.fields["Preferred Airline"],
             ff: savedRecord.fields["Frequent Flyer Account"],
             passID: savedRecord.fields["Global Entry"],
             slackID: savedRecord.fields["Slack ID"],
-            atLink: utils_2.getATLink(tableID, viewID, savedID)
+            atLink: utils_1.getATLink(tableID, viewID, savedID)
         };
         console.log('AIRTABLE: Saved new profile', savedObj);
         // Send Slack DM to submitter confirming successful save
@@ -111,9 +112,9 @@ const wpAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* 
             profile_name: data.name,
             profile_bio: data.bio,
             profile_location: data.location,
-            profile_website: utils_1.falseyToEmptyStr(data.website),
-            profile_twitter: utils_1.falseyToEmptyStr(data.twitter),
-            profile_github: utils_1.falseyToEmptyStr(data.github),
+            profile_website: data.website,
+            profile_twitter: data.twitter,
+            profile_github: data.github,
             profile_image: data.image,
             slack_id: data.slackID
         };
@@ -128,8 +129,6 @@ const wpAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* 
             acf: addWpProfile.acf
         };
         console.log('WPAPI: Saved new profile', acfProfile);
-        // Publish activity to public Slack channel
-        // channelPublishSave(app, acfActivity.acf);
         return acfProfile;
     }
     catch (err) {
