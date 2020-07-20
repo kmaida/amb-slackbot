@@ -39,10 +39,11 @@ scheduleATSyncs(app);
     PROFILE IX
 ------------------*/
 // REMOVE AFTER TESTING
-import { wpGetProfiles, wpAddProfile, wpGetProfile, atAddProfile, atGetProfile } from './profile/data-profile/api-profile';
+import { wpGetProfiles, wpAddProfile, wpGetProfile, atAddProfile, atGetProfile, getProfile } from './profile/data-profile/api-profile';
 // wpGetProfiles();
-wpGetProfile('U01238R77J6');
-atGetProfile('U01238R77J6');
+getProfile('U01238R77J6');
+// wpGetProfile('U01238R77J6');
+// atGetProfile('U01238R77J6');
 // wpAddProfile(app, {
 //   name: 'Kim Maida',
 //   email: 'kim@gatsbyjs.com',

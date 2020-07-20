@@ -1,6 +1,7 @@
+import axios from 'axios';
 import { IObjectAny } from '../../utils/types';
 import { IProfile, IATProfile, IWPProfile, IACFProfile } from './../profile.interface';
-import { storeErr, logErr } from '../../utils/errors';
+import { storeErr, logErr, slackErr } from '../../utils/errors';
 // Airtable
 const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_PROFILES;
@@ -9,7 +10,43 @@ const viewID = process.env.AT_TABLE_VIEW_ID_PROFILES;
 import { getATLink } from './../../utils/utils';
 // WordPress API
 import { wpApi } from './../../data/setup-wpapi';
-import axios from 'axios';
+
+/*------------------
+     API UTILS
+------------------*/
+
+/**
+ * Get full user profile (combined from both data sources)
+ * @param {string} slackID Slack ID of user to fetch their combined data profile
+ * @return {IProfile}
+ */
+const getProfile = async (slackID: string): Promise<IProfile> => {
+  try {
+    const atProfile = await atGetProfile(slackID);
+    const wpProfile = await wpGetProfile(slackID);
+    if (atProfile && wpProfile.acf) {
+      const profile: IProfile = {
+        name: wpProfile.acf.profile_name,
+        email: atProfile.email,
+        bio: wpProfile.acf.profile_bio,
+        location: atProfile.location,
+        website: wpProfile.acf.profile_website,
+        twitter: wpProfile.acf.profile_twitter,
+        github: wpProfile.acf.profile_github,
+        airport: atProfile.airport,
+        airline: atProfile.airline,
+        ff: atProfile.ff,
+        passID: atProfile.passID
+      }
+      console.log('AT+WP: Full User Profile', profile);
+      return profile;
+    }
+    return undefined;
+  }
+  catch (err) {
+    logErr(err);
+  }
+};
 
 /*------------------
     AIRTABLE API
@@ -178,4 +215,4 @@ const wpAddProfile = async (app: IObjectAny, data: IProfile): Promise<IACFProfil
   }
 };
 
-export { atAddProfile, atGetProfile, wpGetProfiles, wpGetProfile, wpAddProfile };
+export { getProfile, atAddProfile, atGetProfile, wpGetProfiles, wpGetProfile, wpAddProfile };

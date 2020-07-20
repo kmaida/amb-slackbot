@@ -12,7 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.wpAddProfile = exports.wpGetProfile = exports.wpGetProfiles = exports.atGetProfile = exports.atAddProfile = void 0;
+exports.wpAddProfile = exports.wpGetProfile = exports.wpGetProfiles = exports.atGetProfile = exports.atAddProfile = exports.getProfile = void 0;
+const axios_1 = __importDefault(require("axios"));
 const errors_1 = require("../../utils/errors");
 // Airtable
 const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
@@ -22,7 +23,42 @@ const viewID = process.env.AT_TABLE_VIEW_ID_PROFILES;
 const utils_1 = require("./../../utils/utils");
 // WordPress API
 const setup_wpapi_1 = require("./../../data/setup-wpapi");
-const axios_1 = __importDefault(require("axios"));
+/*------------------
+     API UTILS
+------------------*/
+/**
+ * Get full user profile (combined from both data sources)
+ * @param {string} slackID Slack ID of user to fetch their combined data profile
+ * @return {IProfile}
+ */
+const getProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const atProfile = yield atGetProfile(slackID);
+        const wpProfile = yield wpGetProfile(slackID);
+        if (atProfile && wpProfile.acf) {
+            const profile = {
+                name: wpProfile.acf.profile_name,
+                email: atProfile.email,
+                bio: wpProfile.acf.profile_bio,
+                location: atProfile.location,
+                website: wpProfile.acf.profile_website,
+                twitter: wpProfile.acf.profile_twitter,
+                github: wpProfile.acf.profile_github,
+                airport: atProfile.airport,
+                airline: atProfile.airline,
+                ff: atProfile.ff,
+                passID: atProfile.passID
+            };
+            console.log('AT+WP: Full User Profile', profile);
+            return profile;
+        }
+        return undefined;
+    }
+    catch (err) {
+        errors_1.logErr(err);
+    }
+});
+exports.getProfile = getProfile;
 /*------------------
     AIRTABLE API
 ------------------*/

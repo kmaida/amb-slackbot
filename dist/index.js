@@ -68,8 +68,9 @@ jobs_1.scheduleATSyncs(app);
 // REMOVE AFTER TESTING
 const api_profile_1 = require("./profile/data-profile/api-profile");
 // wpGetProfiles();
-api_profile_1.wpGetProfile('U01238R77J6');
-api_profile_1.atGetProfile('U01238R77J6');
+api_profile_1.getProfile('U01238R77J6');
+// wpGetProfile('U01238R77J6');
+// atGetProfile('U01238R77J6');
 // wpAddProfile(app, {
 //   name: 'Kim Maida',
 //   email: 'kim@gatsbyjs.com',
