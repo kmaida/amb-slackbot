@@ -24,7 +24,7 @@ const modalProfile = (app) => {
     const openDialog = ({ ack, body, context }) => __awaiter(void 0, void 0, void 0, function* () {
         yield ack();
         let prefill = {};
-        const slackID = body.user.id;
+        const slackID = body.user_id || body.user.id;
         const getDataProfile = yield api_profile_1.getProfile(slackID);
         const userData = yield data_slack_1.getUserInfo(slackID, app);
         const metadata = { image: undefined };

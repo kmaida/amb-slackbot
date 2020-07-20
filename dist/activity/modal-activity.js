@@ -24,7 +24,7 @@ const modalActivity = (app) => {
         yield ack();
         let userData;
         const prefill = {};
-        const slackID = body.user.id;
+        const slackID = body.user_id || body.user.id;
         /**
          * PASSING DATA FROM INTERACTION TO VIEW SUBMISSION:
          * Hidden metadata can be sent in the modal view as private_metadata to modal-view-submit.ts.

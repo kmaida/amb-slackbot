@@ -17,7 +17,7 @@ const modalProfile = (app: IObjectAny): void => {
   const openDialog = async ({ ack, body, context }) => {
     await ack();
     let prefill: IProfilePrefill = {};
-    const slackID: string = body.user.id;
+    const slackID: string = body.user_id || body.user.id;
     const getDataProfile: IProfile = await getProfile(slackID);
     const userData: ISlackUserInfo = await getUserInfo(slackID, app);
     const metadata: IProfileMeta = { image: undefined };
