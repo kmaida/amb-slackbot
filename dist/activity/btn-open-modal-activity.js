@@ -11,7 +11,7 @@ const btnOpenModalActivity = (metadata) => {
         "type": "button",
         "text": {
             "type": "plain_text",
-            "text": "Open Modal"
+            "text": "Add Activity"
         },
         "action_id": "btn_open_modal_activity",
         // Example: metadata can be sent in triggers (e.g., as button value and then is available in modal.ts in body.actions)

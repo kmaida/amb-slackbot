@@ -15,7 +15,7 @@ const form_validation_1 = require("../utils/form-validation");
 const api_activity_1 = require("./data-activity/api-activity");
 const errors_1 = require("../utils/errors");
 /*------------------
-  MODAL VIEW SUBMIT
+ACTIVITY SUBMIT VIEW
 ------------------*/
 const submitModalActivity = (app) => {
     // Modal view submitted

@@ -6,7 +6,7 @@ import { slackErr } from '../utils/errors';
 import { IActivity } from './activity.interface';
 
 /*------------------
-  MODAL VIEW SUBMIT
+ACTIVITY SUBMIT VIEW
 ------------------*/
 
 const submitModalActivity = (app: IObjectAny): void => {

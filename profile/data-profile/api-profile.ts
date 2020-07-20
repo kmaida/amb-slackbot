@@ -26,6 +26,8 @@ const getProfile = async (slackID: string): Promise<IProfile> => {
     const wpProfile = await wpGetProfile(slackID);
     if (atProfile && wpProfile.acf) {
       const profile: IProfile = {
+        id: atProfile.id,
+        wpid: wpProfile.id,
         name: wpProfile.acf.profile_name,
         email: atProfile.email,
         bio: wpProfile.acf.profile_bio,
@@ -35,13 +37,41 @@ const getProfile = async (slackID: string): Promise<IProfile> => {
         github: wpProfile.acf.profile_github,
         airport: atProfile.airport,
         airline: atProfile.airline,
-        ff: atProfile.ff,
-        passID: atProfile.passID
+        ff: atProfile.ff
       }
       console.log('AT+WP: Full User Profile', profile);
       return profile;
     }
     return undefined;
+  }
+  catch (err) {
+    logErr(err);
+  }
+};
+
+/**
+ * Save profile data to multiple data sources and return accumulated saved data
+ * @param {IObjectAny} app Slack App
+ * @param {IProfile} data Profile data from modal form
+ * @return {Promise<IProfile>} successfully saved WP and AT data
+ */
+const saveProfile = async (app: IObjectAny, data: IProfile): Promise<IProfile> => {
+  try {
+    const saveWP: IACFProfile = await wpAddProfile(data);
+    const saveAT: IATProfile = await atAddProfile(data);
+    const normalizedWP = {
+      wpid: saveWP.id,
+      image: saveWP.acf.profile_image,
+      website: saveWP.acf.profile_website,
+      twitter: saveWP.acf.profile_twitter,
+      github: saveWP.acf.profile_github
+    };
+    const savedProfile: IProfile = Object.assign(normalizedWP, saveAT);
+    // Send Slack DM to submitter confirming successful save
+    // dmConfirmSave(app, savedObj);
+    // Send Slack channel message to private admin-only channel
+    // adminChannelPublishSave(app, savedObj);
+    return savedProfile;
   }
   catch (err) {
     logErr(err);
@@ -98,11 +128,10 @@ const atGetProfile = async (slackID: string): Promise<IATProfile> => {
 
 /**
  * Save a new Airtable ambassador profile data record
- * @param {IObjectAny} app Slack app
  * @param {IProfile} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
  */
-const atAddProfile = async (app: IObjectAny, data: IProfile): Promise<IATProfile> => {
+const atAddProfile = async (data: IProfile): Promise<IATProfile> => {
   const atFields = {
     "Name": data.name,
     "Email": data.email,
@@ -111,7 +140,6 @@ const atAddProfile = async (app: IObjectAny, data: IProfile): Promise<IATProfile
     "Airport Code": data.airport,
     "Preferred Airline": data.airline,
     "Frequent Flyer Account": data.ff,
-    "Global Entry": data.passID,
     "Slack ID": data.slackID
   };
   return base(table).create([
@@ -125,10 +153,6 @@ const atAddProfile = async (app: IObjectAny, data: IProfile): Promise<IATProfile
     const savedRecord: IObjectAny = records[0];
     const savedObj: IATProfile = _formatATRecord(savedRecord);
     console.log('AIRTABLE: Saved new profile', savedObj);
-    // Send Slack DM to submitter confirming successful save
-    // dmConfirmSave(app, savedObj);
-    // Send Slack channel message to private admin-only channel
-    // adminChannelPublishSave(app, savedObj);
     return savedObj;
   });
 };
@@ -181,11 +205,10 @@ const wpGetProfile = async (slackID: string): Promise<IACFProfile> => {
 /**
  * Add Profile from WordPress API
  * Relies on ACF to REST API plugin to work
- * @param {IObjectAny} app Slack app
  * @param {IProfile} data profile data to add
  * @return {Promise<IACFProfile>}
  */
-const wpAddProfile = async (app: IObjectAny, data: IProfile): Promise<IACFProfile> => {
+const wpAddProfile = async (data: IProfile): Promise<IACFProfile> => {
   try {
     const wpFields: IWPProfile = {
       profile_name: data.name,
@@ -215,4 +238,4 @@ const wpAddProfile = async (app: IObjectAny, data: IProfile): Promise<IACFProfil
   }
 };
 
-export { getProfile, atAddProfile, atGetProfile, wpGetProfiles, wpGetProfile, wpAddProfile };
+export { getProfile, saveProfile, atAddProfile, atGetProfile, wpGetProfiles, wpGetProfile, wpAddProfile };

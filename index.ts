@@ -13,6 +13,8 @@ import { appHomeOpened } from './app-home/event-app-home-opened';
 import { appMention } from './app-mention/event-app-mention';
 import { botDM } from './message-im/event-message-im';
 import { scheduleATSyncs } from './utils/jobs';
+import { modalProfile } from "./profile/modal-profile";
+import { submitModalProfile } from "./profile/modal-view-submit-profile";
 
 /*------------------
   CREATE BOLT APP
@@ -38,31 +40,8 @@ scheduleATSyncs(app);
 /*------------------
     PROFILE IX
 ------------------*/
-// REMOVE AFTER TESTING
-import { wpGetProfiles, wpAddProfile, wpGetProfile, atAddProfile, atGetProfile, getProfile } from './profile/data-profile/api-profile';
-// wpGetProfiles();
-getProfile('U01238R77J6');
-// wpGetProfile('U01238R77J6');
-// atGetProfile('U01238R77J6');
-// wpAddProfile(app, {
-//   name: 'Kim Maida',
-//   email: 'kim@gatsbyjs.com',
-//   bio: 'Head of DevRel & Community at Gatsby',
-//   location: 'Michigan',
-//   twitter: 'KimMaida',
-//   slackID: 'U01238R77J6'
-// });
-// atAddProfile(app, {
-//   name: 'Kim',
-//   email: 'kim@gatsbyjs.com',
-//   bio: 'Hi there my bio',
-//   location: 'Michigan',
-//   airport: 'DTW',
-//   airline: 'Delta',
-//   ff: '123',
-//   passID: '12345',
-//   slackID: 'U01238R77J6'
-// });
+modalProfile(app);
+submitModalProfile(app);
 
 /*------------------
     ACTIVITY IX

@@ -3,7 +3,7 @@
   FORM VALIDATION
 ------------------*/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dateCompare = exports.emailIsh = exports.validNumber = exports.validUrl = void 0;
+exports.validAirport = exports.dateCompare = exports.emailIsh = exports.validNumber = exports.validUrl = void 0;
 /**
  * Ensure input is string and has no trailing whitespace
  * @param {any} input form input (could be any type, but most likely already a string)
@@ -15,13 +15,16 @@ const _cleanStr = (input) => {
 /**
  * Is the string input a valid URL?
  * @param {string} input
+ * @param {string} domain (optional) domain to check for in link
  * @return {boolean}
  */
-const validUrl = (input) => {
+const validUrl = (input, domain) => {
     const regexStr = /((?:[A-Za-z]{3,9})(?::\/\/|@)(?:(?:[A-Za-z0-9\-.]+[.:])|(?:www\.|[-;:&=+$,\w]+@))(?:[A-Za-z0-9.-]+)(?:[/\-+=&;%@.\w_~()]*)(?:[.!/\\\w-?%#~&=+()]*))/g;
     const regex = new RegExp(regexStr);
     const cleanStr = _cleanStr(input);
-    return !!cleanStr.match(regex);
+    const matchRegex = !!cleanStr.match(regex);
+    const includesDomain = domain ? cleanStr.includes(domain) : true;
+    return matchRegex && includesDomain;
 };
 exports.validUrl = validUrl;
 /**
@@ -36,6 +39,18 @@ const validNumber = (input) => {
     return !!cleanStr.match(regex);
 };
 exports.validNumber = validNumber;
+/**
+ * Does this look like an airport code? (3 letters)
+ * @param {string} input form input
+ * @return {boolean}
+ */
+const validAirport = (input) => {
+    const regexStr = /^[A-Za-z]{3}$/g;
+    const regex = new RegExp(regexStr);
+    const cleanStr = _cleanStr(input);
+    return !!cleanStr.match(regex);
+};
+exports.validAirport = validAirport;
 /**
  * Is the string formatted sort of like an email address?
  * @param {string} input https://stackoverflow.com/a/38137215

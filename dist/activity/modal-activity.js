@@ -76,9 +76,9 @@ const modalActivity = (app) => {
     /**
      * Interactions that trigger the activity modal
      */
-    // Slash command: /add-activity
-    app.command('/add-activity', openDialog);
-    // Global shortcut
+    // Slash command: /activity
+    app.command('/activity', openDialog);
+    // Global shortcut callback: add_activity
     app.shortcut('add_activity', openDialog);
     // Button from App Home
     app.action('btn_open_modal_activity', openDialog);

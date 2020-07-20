@@ -7,6 +7,7 @@ PROFILE TYPE INTERFACES
  */
 interface IProfile {
   id?: string;
+  wpid?: number;
   name: string;
   email: string;
   image?: string;
@@ -18,8 +19,25 @@ interface IProfile {
   airport?: string;
   airline?: string;
   ff?: string;
-  passID?: string;
   slackID?: string;
+  atLink?: string;
+};
+
+/**
+ * @interface IProfilePrefill Profile data object prefilled values
+ */
+interface IProfilePrefill {
+  name?: string;
+  email?: string;
+  image?: string;
+  bio?: string;
+  website?: string;
+  twitter?: string;
+  github?: string;
+  location?: string;
+  airport?: string;
+  airline?: string;
+  ff?: string;
 };
 
 /**
@@ -56,9 +74,8 @@ interface IATProfile {
   airport?: string;
   airline?: string;
   ff?: string;
-  passID?: string;
   slackID: string;
   atLink?: string;
 }
 
-export { IProfile, IWPProfile, IATProfile, IACFProfile };
+export { IProfile, IProfilePrefill, IWPProfile, IATProfile, IACFProfile };

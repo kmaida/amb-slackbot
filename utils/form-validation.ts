@@ -14,13 +14,16 @@ const _cleanStr = (input: any): string => {
 /**
  * Is the string input a valid URL?
  * @param {string} input
+ * @param {string} domain (optional) domain to check for in link
  * @return {boolean}
  */
-const validUrl = (input: string): boolean => {
+const validUrl = (input: string, domain?: string): boolean => {
   const regexStr = /((?:[A-Za-z]{3,9})(?::\/\/|@)(?:(?:[A-Za-z0-9\-.]+[.:])|(?:www\.|[-;:&=+$,\w]+@))(?:[A-Za-z0-9.-]+)(?:[/\-+=&;%@.\w_~()]*)(?:[.!/\\\w-?%#~&=+()]*))/g;
   const regex = new RegExp(regexStr);
   const cleanStr = _cleanStr(input);
-  return !!cleanStr.match(regex);
+  const matchRegex = !!cleanStr.match(regex);
+  const includesDomain = domain ? cleanStr.includes(domain) : true;
+  return matchRegex && includesDomain;
 };
 
 /**
@@ -30,6 +33,18 @@ const validUrl = (input: string): boolean => {
  */
 const validNumber = (input: number): boolean => {
   const regexStr = /^[0-9]*$/g;
+  const regex = new RegExp(regexStr);
+  const cleanStr = _cleanStr(input);
+  return !!cleanStr.match(regex);
+};
+
+/**
+ * Does this look like an airport code? (3 letters)
+ * @param {string} input form input
+ * @return {boolean}
+ */
+const validAirport = (input: string): boolean => {
+  const regexStr = /^[A-Za-z]{3}$/g;
   const regex = new RegExp(regexStr);
   const cleanStr = _cleanStr(input);
   return !!cleanStr.match(regex);
@@ -73,4 +88,4 @@ const dateCompare = (dateInput: string, testFuture: boolean = false, futureStart
   }
 };
 
-export { validUrl, validNumber, emailIsh, dateCompare };
+export { validUrl, validNumber, emailIsh, dateCompare, validAirport };

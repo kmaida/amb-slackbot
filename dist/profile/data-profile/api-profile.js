@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.wpAddProfile = exports.wpGetProfile = exports.wpGetProfiles = exports.atGetProfile = exports.atAddProfile = exports.getProfile = void 0;
+exports.wpAddProfile = exports.wpGetProfile = exports.wpGetProfiles = exports.atGetProfile = exports.atAddProfile = exports.saveProfile = exports.getProfile = void 0;
 const axios_1 = __importDefault(require("axios"));
 const errors_1 = require("../../utils/errors");
 // Airtable
@@ -37,6 +37,8 @@ const getProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
         const wpProfile = yield wpGetProfile(slackID);
         if (atProfile && wpProfile.acf) {
             const profile = {
+                id: atProfile.id,
+                wpid: wpProfile.id,
                 name: wpProfile.acf.profile_name,
                 email: atProfile.email,
                 bio: wpProfile.acf.profile_bio,
@@ -46,8 +48,7 @@ const getProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
                 github: wpProfile.acf.profile_github,
                 airport: atProfile.airport,
                 airline: atProfile.airline,
-                ff: atProfile.ff,
-                passID: atProfile.passID
+                ff: atProfile.ff
             };
             console.log('AT+WP: Full User Profile', profile);
             return profile;
@@ -59,6 +60,35 @@ const getProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getProfile = getProfile;
+/**
+ * Save profile data to multiple data sources and return accumulated saved data
+ * @param {IObjectAny} app Slack App
+ * @param {IProfile} data Profile data from modal form
+ * @return {Promise<IProfile>} successfully saved WP and AT data
+ */
+const saveProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const saveWP = yield wpAddProfile(data);
+        const saveAT = yield atAddProfile(data);
+        const normalizedWP = {
+            wpid: saveWP.id,
+            image: saveWP.acf.profile_image,
+            website: saveWP.acf.profile_website,
+            twitter: saveWP.acf.profile_twitter,
+            github: saveWP.acf.profile_github
+        };
+        const savedProfile = Object.assign(normalizedWP, saveAT);
+        // Send Slack DM to submitter confirming successful save
+        // dmConfirmSave(app, savedObj);
+        // Send Slack channel message to private admin-only channel
+        // adminChannelPublishSave(app, savedObj);
+        return savedProfile;
+    }
+    catch (err) {
+        errors_1.logErr(err);
+    }
+});
+exports.saveProfile = saveProfile;
 /*------------------
     AIRTABLE API
 ------------------*/
@@ -107,11 +137,10 @@ const atGetProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* ()
 exports.atGetProfile = atGetProfile;
 /**
  * Save a new Airtable ambassador profile data record
- * @param {IObjectAny} app Slack app
  * @param {IProfile} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
  */
-const atAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
+const atAddProfile = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const atFields = {
         "Name": data.name,
         "Email": data.email,
@@ -120,7 +149,6 @@ const atAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* 
         "Airport Code": data.airport,
         "Preferred Airline": data.airline,
         "Frequent Flyer Account": data.ff,
-        "Global Entry": data.passID,
         "Slack ID": data.slackID
     };
     return base(table).create([
@@ -134,10 +162,6 @@ const atAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* 
         const savedRecord = records[0];
         const savedObj = _formatATRecord(savedRecord);
         console.log('AIRTABLE: Saved new profile', savedObj);
-        // Send Slack DM to submitter confirming successful save
-        // dmConfirmSave(app, savedObj);
-        // Send Slack channel message to private admin-only channel
-        // adminChannelPublishSave(app, savedObj);
         return savedObj;
     });
 });
@@ -189,11 +213,10 @@ exports.wpGetProfile = wpGetProfile;
 /**
  * Add Profile from WordPress API
  * Relies on ACF to REST API plugin to work
- * @param {IObjectAny} app Slack app
  * @param {IProfile} data profile data to add
  * @return {Promise<IACFProfile>}
  */
-const wpAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
+const wpAddProfile = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const wpFields = {
             profile_name: data.name,
