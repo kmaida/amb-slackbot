@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getat_link = exports.falseyToEmptyStr = exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = void 0;
+exports.getAtLink = exports.falseyToEmptyStr = exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = void 0;
 /*------------------
        UTILS
 ------------------*/
@@ -64,7 +64,7 @@ const getQ = (isoDate) => {
 };
 exports.getQ = getQ;
 /**
- * Takes an undefined or null value and outputs an empty string
+ * Takes falsey value and outputs an empty string
  * Useful for prefilling initial form values that don't exist
  * (Avoids printing "undefined" as a value in fields)
  * @param {string} input A string or falsey value
@@ -80,8 +80,8 @@ exports.falseyToEmptyStr = falseyToEmptyStr;
  * @param {string} v view ID
  * @param {string} id record ID
  */
-const getat_link = (t, v, id) => {
+const getAtLink = (t, v, id) => {
     return `https://airtable.com/${t}/${v}/${id}`;
 };
-exports.getat_link = getat_link;
+exports.getAtLink = getAtLink;
 //# sourceMappingURL=utils.js.map

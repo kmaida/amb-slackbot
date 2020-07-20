@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dmConfirmSave = void 0;
+exports.dmConfirmSaveActivity = void 0;
 const errors_1 = require("../../utils/errors");
 /*------------------
-  DM CONFIRM SAVE
+DM CONFIRM ACTIVITY SAVE
 ------------------*/
-const dmConfirmSave = (app, atData) => __awaiter(void 0, void 0, void 0, function* () {
+const dmConfirmSaveActivity = (app, atData) => __awaiter(void 0, void 0, void 0, function* () {
     const userID = atData.slack_id;
     try {
         const sendMsg = yield app.client.chat.postMessage({
@@ -28,5 +28,5 @@ const dmConfirmSave = (app, atData) => __awaiter(void 0, void 0, void 0, functio
         errors_1.slackErr(app, userID, err);
     }
 });
-exports.dmConfirmSave = dmConfirmSave;
+exports.dmConfirmSaveActivity = dmConfirmSaveActivity;
 //# sourceMappingURL=dm-confirm-save-activity.js.map

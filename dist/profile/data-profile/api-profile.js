@@ -23,6 +23,8 @@ const viewID = process.env.AT_TABLE_VIEW_ID_PROFILES;
 const utils_1 = require("./../../utils/utils");
 // WordPress API
 const setup_wpapi_1 = require("./../../data/setup-wpapi");
+const admin_channel_publish_save_profile_1 = require("./admin-channel-publish-save-profile");
+const dm_confirm_save_profile_1 = require("./dm-confirm-save-profile");
 /*------------------
      API UTILS
 ------------------*/
@@ -101,9 +103,9 @@ const _atProfileSaved = (app, data, atSaved) => __awaiter(void 0, void 0, void 0
     const savedProfile = Object.assign(Object.assign({}, normalizedWP), atSaved);
     console.log('AT+WP: Successfully saved user profile', savedProfile);
     // Send Slack DM to submitter confirming successful save
-    // dmConfirmSave(app, savedObj);
+    dm_confirm_save_profile_1.dmConfirmSaveProfile(app, savedProfile);
     // Send Slack channel message to private admin-only channel
-    // adminChannelPublishSave(app, savedObj);
+    admin_channel_publish_save_profile_1.adminChannelProfileSave(app, savedProfile);
     return savedProfile;
 });
 /*------------------
@@ -126,7 +128,7 @@ const _formatATRecord = (record) => {
         airline: record.fields["Preferred Airline"],
         ff: record.fields["Frequent Flyer Account"],
         slack_id: record.fields["Slack ID"],
-        at_link: utils_1.getat_link(tableID, viewID, id)
+        at_link: utils_1.getAtLink(tableID, viewID, id)
     };
     // Return known record data to prefill form
     return recordObj;

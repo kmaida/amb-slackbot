@@ -54,7 +54,7 @@ const getQ = (isoDate: string): string => {
 };
 
 /**
- * Takes an undefined or null value and outputs an empty string
+ * Takes falsey value and outputs an empty string
  * Useful for prefilling initial form values that don't exist
  * (Avoids printing "undefined" as a value in fields)
  * @param {string} input A string or falsey value
@@ -70,8 +70,8 @@ const falseyToEmptyStr = (input: string): string => {
  * @param {string} v view ID
  * @param {string} id record ID
  */
-const getat_link = (t: string, v: string, id: string): string => {
+const getAtLink = (t: string, v: string, id: string): string => {
   return `https://airtable.com/${t}/${v}/${id}`;
 };
 
-export { objNotEmpty, clearNewline, ignoreMention, getQ, falseyToEmptyStr, getat_link };
+export { objNotEmpty, clearNewline, ignoreMention, getQ, falseyToEmptyStr, getAtLink };

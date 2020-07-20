@@ -1,14 +1,14 @@
 import { IObjectAny } from '../../utils/types';
 import { IActivity, IWPActivity, IACFActivity } from './../activity.interface';
 import { storeErr } from '../../utils/errors';
-import { dmConfirmSave } from './dm-confirm-save-activity';
-import { adminChannelPublishSave } from './admin-channel-publish-save-activity';
+import { dmConfirmSaveActivity } from './dm-confirm-save-activity';
+import { adminChannelActivitySave } from './admin-channel-publish-save-activity';
 // Airtable
 const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_ACTIVITY;
 const tableID = process.env.AT_TABLE_ID_ACTIVITY;
 const viewID = process.env.AT_TABLE_VIEW_ID_ACTIVITY;
-import { getQ, getat_link } from './../../utils/utils';
+import { getQ, getAtLink } from './../../utils/utils';
 // WordPress API
 import { wpApi } from './../../data/setup-wpapi';
 import { channelPublishSave } from './channel-publish-save';
@@ -58,13 +58,13 @@ const atAddActivity = async (app: IObjectAny, data: IActivity): Promise<IActivit
       reach: savedRecord.fields["Reach"],
       quarter: savedRecord.fields["Quarter"],
       slack_id: savedRecord.fields["Slack ID"],
-      at_link: getat_link(tableID, viewID, savedID)
+      at_link: getAtLink(tableID, viewID, savedID)
     };
     console.log('AIRTABLE: Saved new activity', savedObj);
     // Send Slack DM to submitter confirming successful save
-    dmConfirmSave(app, savedObj);
+    dmConfirmSaveActivity(app, savedObj);
     // Send Slack channel message to private admin-only channel
-    adminChannelPublishSave(app, savedObj);
+    adminChannelActivitySave(app, savedObj);
     return savedObj;
   });
 };

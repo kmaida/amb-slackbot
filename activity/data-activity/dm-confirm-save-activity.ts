@@ -3,10 +3,10 @@ import { IObjectAny } from '../../utils/types';
 import { IActivity } from '../activity.interface';
 
 /*------------------
-  DM CONFIRM SAVE
+DM CONFIRM ACTIVITY SAVE
 ------------------*/
 
-const dmConfirmSave = async (app: IObjectAny, atData: IActivity): Promise<any> => {
+const dmConfirmSaveActivity = async (app: IObjectAny, atData: IActivity): Promise<any> => {
   const userID: string = atData.slack_id;
   try {
     const sendMsg = await app.client.chat.postMessage({
@@ -21,4 +21,4 @@ const dmConfirmSave = async (app: IObjectAny, atData: IActivity): Promise<any> =
   }
 };
 
-export { dmConfirmSave };
+export { dmConfirmSaveActivity };

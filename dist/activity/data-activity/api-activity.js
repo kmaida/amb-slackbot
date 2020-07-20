@@ -66,13 +66,13 @@ const atAddActivity = (app, data) => __awaiter(void 0, void 0, void 0, function*
             reach: savedRecord.fields["Reach"],
             quarter: savedRecord.fields["Quarter"],
             slack_id: savedRecord.fields["Slack ID"],
-            at_link: utils_1.getat_link(tableID, viewID, savedID)
+            at_link: utils_1.getAtLink(tableID, viewID, savedID)
         };
         console.log('AIRTABLE: Saved new activity', savedObj);
         // Send Slack DM to submitter confirming successful save
-        dm_confirm_save_activity_1.dmConfirmSave(app, savedObj);
+        dm_confirm_save_activity_1.dmConfirmSaveActivity(app, savedObj);
         // Send Slack channel message to private admin-only channel
-        admin_channel_publish_save_activity_1.adminChannelPublishSave(app, savedObj);
+        admin_channel_publish_save_activity_1.adminChannelActivitySave(app, savedObj);
         return savedObj;
     });
 });

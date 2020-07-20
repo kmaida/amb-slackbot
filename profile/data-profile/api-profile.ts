@@ -7,9 +7,11 @@ const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_PROFILES;
 const tableID = process.env.AT_TABLE_ID_PROFILES;
 const viewID = process.env.AT_TABLE_VIEW_ID_PROFILES;
-import { getat_link } from './../../utils/utils';
+import { getAtLink } from './../../utils/utils';
 // WordPress API
 import { wpApi } from './../../data/setup-wpapi';
+import { adminChannelProfileSave } from './admin-channel-publish-save-profile';
+import { dmConfirmSaveProfile } from './dm-confirm-save-profile';
 
 /*------------------
      API UTILS
@@ -90,9 +92,9 @@ const _atProfileSaved = async (app: IObjectAny, data: IProfile, atSaved: IATProf
   const savedProfile: IProfile = { ...normalizedWP, ...atSaved };
   console.log('AT+WP: Successfully saved user profile', savedProfile);
   // Send Slack DM to submitter confirming successful save
-  // dmConfirmSave(app, savedObj);
+  dmConfirmSaveProfile(app, savedProfile);
   // Send Slack channel message to private admin-only channel
-  // adminChannelPublishSave(app, savedObj);
+  adminChannelProfileSave(app, savedProfile);
   return savedProfile;
 }
 
@@ -117,7 +119,7 @@ const _formatATRecord = (record: IObjectAny): IATProfile => {
     airline: record.fields["Preferred Airline"],
     ff: record.fields["Frequent Flyer Account"],
     slack_id: record.fields["Slack ID"],
-    at_link: getat_link(tableID, viewID, id)
+    at_link: getAtLink(tableID, viewID, id)
   };
   // Return known record data to prefill form
   return recordObj;
