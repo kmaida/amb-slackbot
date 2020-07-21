@@ -33,6 +33,7 @@ const getProfile = async (slackID: string): Promise<IProfile> => {
         name: wpProfile.acf.profile_name,
         email: atProfile.email,
         bio: wpProfile.acf.profile_bio,
+        expertise: wpProfile.acf.profile_expertise,
         location: atProfile.location,
         website: wpProfile.acf.profile_website,
         twitter: wpProfile.acf.profile_twitter,
@@ -276,6 +277,7 @@ const _wpAddProfile = async (data: IProfile): Promise<IACFProfile> => {
     const wpFields: IWPProfile = {
       profile_name: data.name,
       profile_bio: data.bio,
+      profile_expertise: data.expertise,
       profile_location: data.location,
       profile_website: data.website,
       profile_twitter: data.twitter,
@@ -312,6 +314,7 @@ const _wpUpdateProfile = async (data: IProfile): Promise<IACFProfile> => {
     const wpFields: IWPProfile = {
       profile_name: data.name,
       profile_bio: data.bio,
+      profile_expertise: data.expertise,
       profile_location: data.location,
       profile_website: data.website,
       profile_twitter: data.twitter,

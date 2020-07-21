@@ -12,6 +12,7 @@ interface IProfile {
   email: string;
   image?: string;
   bio: string;
+  expertise?: string;
   website?: string;
   twitter?: string;
   github?: string;
@@ -31,6 +32,7 @@ interface IProfilePrefill {
   email?: string;
   image?: string;
   bio?: string;
+  expertise?: string;
   website?: string;
   twitter?: string;
   github?: string;
@@ -46,6 +48,7 @@ interface IProfilePrefill {
 interface IWPProfile {
   profile_name: string;
   profile_bio: string;
+  profile_expertise: string;
   profile_location: string;
   profile_website: string;
   profile_twitter: string;

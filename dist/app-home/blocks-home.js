@@ -13,6 +13,7 @@ exports.blocksHome = void 0;
 const btn_open_modal_activity_1 = require("../activity/btn-open-modal-activity");
 const blocks_home_admin_1 = require("./admin/blocks-home-admin");
 const api_admin_1 = require("./admin/api-admin");
+const btn_open_modal_profile_1 = require("../profile/btn-open-modal-profile");
 /*------------------
  BLOCKS: HOME VIEW
 ------------------*/
@@ -44,7 +45,8 @@ const blocksHome = (userID, metadata) => __awaiter(void 0, void 0, void 0, funct
         {
             "type": "actions",
             "elements": [
-                btn_open_modal_activity_1.btnOpenModalActivity(metadata)
+                btn_open_modal_activity_1.btnOpenModalActivity(metadata),
+                btn_open_modal_profile_1.btnOpenModalProfile()
             ]
         }
     ];

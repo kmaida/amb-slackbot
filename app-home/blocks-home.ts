@@ -3,6 +3,7 @@ import { IObjectAny } from '../utils/types';
 import { blocksHomeAdmin } from './admin/blocks-home-admin';
 import { getAdminSettings } from './admin/api-admin';
 import { IAdminDocument } from './app-home.interface';
+import { btnOpenModalProfile } from '../profile/btn-open-modal-profile';
 
 /*------------------
  BLOCKS: HOME VIEW
@@ -36,7 +37,8 @@ const blocksHome = async (userID: string, metadata: any): Promise<IObjectAny[]> 
     {
       "type": "actions",
       "elements": [
-        btnOpenModalActivity(metadata)
+        btnOpenModalActivity(metadata),
+        btnOpenModalProfile()
       ]
     }
   ];

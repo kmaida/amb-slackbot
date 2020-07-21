@@ -23,6 +23,7 @@ const submitModalProfile = (app: IObjectAny): void => {
       image: metadata.image,
       location: payload.bp_location.ap_location.value,
       bio: payload.bp_bio.ap_bio.value,
+      expertise: payload.bp_expertise.ap_expertise.value,
       website: payload.bp_website.ap_website.value,
       twitter: payload.bp_twitter.ap_twitter.value,
       github: payload.bp_github.ap_github.value,

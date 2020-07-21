@@ -107,7 +107,7 @@ const blocksModalProfile = (prefill = {}) => {
                 "multiline": true,
                 "placeholder": {
                     "type": "plain_text",
-                    "text": `${prefill.name} works with [...] and enjoys [...].`
+                    "text": `${prefill.name} enjoys [...].`
                 },
                 "initial_value": prefill.bio
             },
@@ -118,6 +118,28 @@ const blocksModalProfile = (prefill = {}) => {
             "hint": {
                 "type": "plain_text",
                 "text": "Please enter your bio, preferably using third person."
+            }
+        },
+        {
+            "type": "input",
+            "block_id": "bp_expertise",
+            "element": {
+                "type": "plain_text_input",
+                "action_id": "ap_expertise",
+                "multiline": true,
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": `${prefill.name} works at [...] and specializes in [...].`
+                },
+                "initial_value": prefill.expertise
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Expertise:"
+            },
+            "hint": {
+                "type": "plain_text",
+                "text": "Share your areas of expertise and professional experience, preferably using third person."
             }
         },
         {
