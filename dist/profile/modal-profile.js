@@ -25,29 +25,34 @@ const modalProfile = (app) => {
     const openDialog = ({ ack, body, context }) => __awaiter(void 0, void 0, void 0, function* () {
         yield ack();
         let prefill = {};
-        const slackID = body.user_id || body.user.id;
         let dataProfile;
         let userData;
+        const slackID = body.user_id || body.user.id;
         const metadata = { image: undefined };
         try {
             // Get profile data from AT+WP and Slack user data in parallel
             // Must fetch within 2.7 seconds to prevent trigger ID 3 second timeout
-            const allProfileData = yield utils_1.apiTimeout(utils_1.parallelReqs([api_profile_1.getProfile(slackID), data_slack_1.getUserInfo(slackID, app)]), 2700);
+            const allProfileData = yield utils_1.apiTimeout(utils_1.parallelReqs([api_profile_1.getProfile(slackID), data_slack_1.getUserInfo(slackID, app)]), 100);
             dataProfile = allProfileData[0];
             userData = allProfileData[1];
+            // Always use current Slack user image as profile image
+            const image = userData.image.replace('"', '');
+            metadata.image = image;
+            prefill.image = image;
         }
         catch (err) {
             // API calls did not execute in time or one of the promises errored
             console.log(err);
+            // There won't be any prefill information available but further execution won't be blocked
         }
-        // If no existing profile is in data stores
-        if (!dataProfile) {
+        // If no existing profile is in data stores but userData is available
+        if (!dataProfile && userData) {
             // use Slack user data to prefill
             prefill.name = userData.name;
             prefill.email = userData.email;
         }
         // If profile data exists
-        else {
+        else if (dataProfile && userData) {
             // Set prefill to fetched data
             prefill = dataProfile;
             // Add Airtable and WordPress IDs to private_metadata
@@ -55,10 +60,6 @@ const modalProfile = (app) => {
             metadata.id = dataProfile.id;
             metadata.wpid = dataProfile.wpid;
         }
-        // Always use current Slack user image as profile image
-        const image = userData.image.replace('"', '');
-        metadata.image = image;
-        prefill.image = image;
         // Set up profile modal view
         try {
             const profileView = yield app.client.views.open({

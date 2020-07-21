@@ -53,7 +53,7 @@ interface IWPProfile {
   profile_website: string;
   profile_twitter: string;
   profile_github: string;
-  profile_image: string;
+  profile_image?: string;
   slack_id: string;
 };
 

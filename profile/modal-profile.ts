@@ -18,9 +18,9 @@ const modalProfile = (app: IObjectAny): void => {
   const openDialog = async ({ ack, body, context }) => {
     await ack();
     let prefill: IProfilePrefill = {};
-    const slackID: string = body.user_id || body.user.id;
     let dataProfile: IProfile;
     let userData: ISlackUserInfo;
+    const slackID: string = body.user_id || body.user.id;
     const metadata: IProfileMeta = { image: undefined };
 
     try {
@@ -28,23 +28,28 @@ const modalProfile = (app: IObjectAny): void => {
       // Must fetch within 2.7 seconds to prevent trigger ID 3 second timeout
       const allProfileData = await apiTimeout(
         parallelReqs([getProfile(slackID), getUserInfo(slackID, app)]),
-      2700);
+      100);
       dataProfile = allProfileData[0];
       userData = allProfileData[1];
+      // Always use current Slack user image as profile image
+      const image = userData.image.replace('"', '');
+      metadata.image = image;
+      prefill.image = image;
     }
     catch (err) {
       // API calls did not execute in time or one of the promises errored
       console.log(err);
+      // There won't be any prefill information available but further execution won't be blocked
     }
 
-    // If no existing profile is in data stores
-    if (!dataProfile) {
+    // If no existing profile is in data stores but userData is available
+    if (!dataProfile && userData) {
       // use Slack user data to prefill
       prefill.name = userData.name;
       prefill.email = userData.email;
     }
     // If profile data exists
-    else {
+    else if (dataProfile && userData) {
       // Set prefill to fetched data
       prefill = dataProfile;
       // Add Airtable and WordPress IDs to private_metadata
@@ -52,10 +57,6 @@ const modalProfile = (app: IObjectAny): void => {
       metadata.id = dataProfile.id;
       metadata.wpid = dataProfile.wpid;
     }
-    // Always use current Slack user image as profile image
-    const image = userData.image.replace('"', '');
-    metadata.image = image;
-    prefill.image = image;
 
     // Set up profile modal view
     try {

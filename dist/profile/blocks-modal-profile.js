@@ -5,7 +5,45 @@ exports.blocksModalProfile = void 0;
  BLOCKS: MODAL PROFILE
 ------------------*/
 const blocksModalProfile = (prefill = {}) => {
-    return [
+    const placeholderName = prefill.name ? prefill.name : '[Name]';
+    /**
+     * Generate image block if there is a prefilled image available
+     * @param {string} image prefill.image
+     * @return {IObjectAny[]}
+     */
+    const image = (image) => {
+        if (image) {
+            return [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Image:*"
+                    }
+                },
+                {
+                    "type": "image",
+                    "block_id": "bp_image",
+                    "image_url": image,
+                    "alt_text": "Your Slack profile image"
+                },
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "*Your Ambassador profile image is obtained from your Slack user.* This is the image that will be saved to your public profile at this time. If you'd like to change your public profile image, update your Slack profile image before filling out this form."
+                        }
+                    ]
+                }
+            ];
+        }
+        else {
+            return [];
+        }
+    };
+    // Blocks for name and email
+    const nameEmail = [
         {
             "type": "section",
             "text": {
@@ -33,29 +71,9 @@ const blocksModalProfile = (prefill = {}) => {
                 "type": "plain_text",
                 "text": "Your full name as you would like it displayed publicly to the community and internally for booking, events, etc."
             }
-        },
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": "*Image:*"
-            }
-        },
-        {
-            "type": "image",
-            "block_id": "bp_image",
-            "image_url": prefill.image,
-            "alt_text": "Your Slack profile image"
-        },
-        {
-            "type": "context",
-            "elements": [
-                {
-                    "type": "mrkdwn",
-                    "text": "*Your Ambassador profile image is obtained from your Slack user.* This is the image that will be saved to your public profile at this time. If you'd like to change your public profile image, update your Slack profile image before filling out this form."
-                }
-            ]
-        },
+        }
+    ];
+    const formEnd = [
         {
             "type": "input",
             "block_id": "bp_email",
@@ -107,7 +125,7 @@ const blocksModalProfile = (prefill = {}) => {
                 "multiline": true,
                 "placeholder": {
                     "type": "plain_text",
-                    "text": `${prefill.name} enjoys [...].`
+                    "text": `${placeholderName} enjoys [...].`
                 },
                 "initial_value": prefill.bio
             },
@@ -129,7 +147,7 @@ const blocksModalProfile = (prefill = {}) => {
                 "multiline": true,
                 "placeholder": {
                     "type": "plain_text",
-                    "text": `${prefill.name} works at [...] and specializes in [...].`
+                    "text": `${placeholderName} works at [...] and specializes in [...].`
                 },
                 "initial_value": prefill.expertise
             },
@@ -286,6 +304,7 @@ const blocksModalProfile = (prefill = {}) => {
             "optional": true
         }
     ];
+    return nameEmail.concat(image(prefill.image)).concat(formEnd);
 };
 exports.blocksModalProfile = blocksModalProfile;
 //# sourceMappingURL=blocks-modal-profile.js.map
