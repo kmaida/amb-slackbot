@@ -28,9 +28,9 @@ const submitModalProfile = (app) => {
         const data = {
             name: payload.bp_name.ap_name.value,
             email: payload.bp_email.ap_email.value,
-            image: payload.bp_image.ap_image.value,
             location: payload.bp_location.ap_location.value,
             bio: payload.bp_bio.ap_bio.value,
+            image: metadata.image,
             expertise: payload.bp_expertise.ap_expertise.value,
             website: payload.bp_website.ap_website.value,
             twitter: payload.bp_twitter.ap_twitter.value,
@@ -53,9 +53,6 @@ const submitModalProfile = (app) => {
         };
         if (!form_validation_1.emailIsh(data.email)) {
             ackParams.errors.bp_email = 'Please provide a valid email.';
-        }
-        if (!form_validation_1.validUrl(data.image)) {
-            ackParams.errors.bp_image = 'Please provide a valid URL.';
         }
         if (data.website && !form_validation_1.validUrl(data.website)) {
             ackParams.errors.bp_website = 'Please provide a valid URL.';
