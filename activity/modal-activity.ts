@@ -1,9 +1,9 @@
 import { slackErr, logErr } from '../utils/errors';
 import { IObjectAny } from '../utils/types';
 import { blocksModalActivity } from './blocks-modal-activity';
-import { getUserInfo } from '../data/data-slack';
-import { ISlackUserInfo } from '../data/data-slack.interface';
 import { IActivityPrefill } from './activity.interface';
+import { atGetProfile } from '../profile/data-profile/api-profile';
+import { IATProfile } from '../profile/profile.interface';
 
 /*------------------
  MODAL DIALOG FORM
@@ -15,7 +15,6 @@ import { IActivityPrefill } from './activity.interface';
 const modalActivity = (app: IObjectAny): void => {
   const openDialog = async ({ ack, body, context }) => {
     await ack();
-    let userData: ISlackUserInfo;
     const prefill: IActivityPrefill = {};
     const slackID = body.user_id || body.user.id;
     /**
@@ -31,9 +30,9 @@ const modalActivity = (app: IObjectAny): void => {
     const btnMetadata = JSON.stringify(body.actions ? body.actions[0].value : {});
     // @TODO: get activity prefill from btnMetadata here and set, if available
 
-    // Get user data from Slack
+    // Get user data from user's saved profile
     try {
-      userData = await getUserInfo(slackID, app);
+      const userData: IATProfile = await atGetProfile(slackID);
       if (!prefill.name && !prefill.email) {
         prefill.name = userData.name;
         prefill.email = userData.email;

@@ -38,7 +38,8 @@ const modalProfile = (app) => {
         try {
             // Get profile data from AT+WP and Slack user data in parallel
             // Must fetch within 2.7 seconds to prevent trigger ID 3 second timeout
-            const allProfileData = yield utils_1.apiTimeout(utils_1.parallelReqs([api_profile_1.getProfile(slackID), data_slack_1.getUserInfo(slackID, app)]), 2500);
+            const fetchProfileData = Promise.all([api_profile_1.getProfile(slackID), data_slack_1.getUserInfo(slackID, app)]);
+            const allProfileData = yield utils_1.apiTimeout(fetchProfileData, 2700);
             dataProfile = allProfileData[0];
             userData = allProfileData[1];
         }

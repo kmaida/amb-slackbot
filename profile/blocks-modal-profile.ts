@@ -16,26 +16,10 @@ const blocksModalProfile = (prefill: IProfilePrefill = {}) => {
     if (image) {
       return [
         {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "*Image:*"
-          }
-        },
-        {
           "type": "image",
           "block_id": "bp_image",
           "image_url": image,
           "alt_text": "Your Slack profile image"
-        },
-        {
-          "type": "context",
-          "elements": [
-            {
-              "type": "mrkdwn",
-              "text": "*Your Ambassador profile image is obtained from your Slack user.* This is the image that will be saved to your public profile at this time. If you'd like to change your public profile image, update your Slack profile image before filling out this form."
-            }
-          ]
         }
       ];
     } else {
@@ -71,9 +55,26 @@ const blocksModalProfile = (prefill: IProfilePrefill = {}) => {
         "type": "plain_text",
         "text": "Your full name as you would like it displayed publicly to the community and internally for booking, events, etc."
       }
-    }];
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Image:*"
+      }
+    }
+  ];
 
   const formEnd: any[] = [
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "*Your Ambassador profile picture is obtained from your Slack user image.* If you'd like to change your public profile image, update your Slack profile picture _before_ filling out this form."
+        }
+      ]
+    },
     {
       "type": "input",
       "block_id": "bp_email",

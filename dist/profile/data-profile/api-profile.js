@@ -35,14 +35,17 @@ const dm_confirm_save_profile_1 = require("./dm-confirm-save-profile");
  */
 const getProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const atProfile = yield atGetProfile(slackID);
-        const wpProfile = yield wpGetProfile(slackID);
+        // Fetch Airtable and WordPress profile data in parallel
+        const allProfiles = yield Promise.all([atGetProfile(slackID), wpGetProfile(slackID)]);
+        const atProfile = allProfiles[0];
+        const wpProfile = allProfiles[1];
         if (atProfile && wpProfile.acf) {
             const profile = {
                 id: atProfile.id,
                 wpid: wpProfile.id,
                 name: wpProfile.acf.profile_name,
                 email: atProfile.email,
+                image: wpProfile.acf.profile_image,
                 bio: wpProfile.acf.profile_bio,
                 expertise: wpProfile.acf.profile_expertise,
                 location: atProfile.location,

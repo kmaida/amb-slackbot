@@ -5,7 +5,7 @@ import { getUserInfo } from '../data/data-slack';
 import { ISlackUserInfo } from '../data/data-slack.interface';
 import { IProfilePrefill, IProfile, IProfileMeta } from './profile.interface';
 import { getProfile } from './data-profile/api-profile';
-import { parallelReqs, apiTimeout } from '../utils/utils';
+import { apiTimeout } from '../utils/utils';
 
 /*------------------
 PROFILE MODAL FORM
@@ -32,9 +32,8 @@ const modalProfile = (app: IObjectAny): void => {
     try {
       // Get profile data from AT+WP and Slack user data in parallel
       // Must fetch within 2.7 seconds to prevent trigger ID 3 second timeout
-      const allProfileData = await apiTimeout(
-        parallelReqs([getProfile(slackID), getUserInfo(slackID, app)]),
-      2500);
+      const fetchProfileData = Promise.all([getProfile(slackID), getUserInfo(slackID, app)]);
+      const allProfileData = await apiTimeout(fetchProfileData, 2700);
       dataProfile = allProfileData[0];
       userData = allProfileData[1];
     }

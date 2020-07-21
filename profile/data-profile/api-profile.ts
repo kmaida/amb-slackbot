@@ -24,14 +24,17 @@ import { dmConfirmSaveProfile } from './dm-confirm-save-profile';
  */
 const getProfile = async (slackID: string): Promise<IProfile> => {
   try {
-    const atProfile = await atGetProfile(slackID);
-    const wpProfile = await wpGetProfile(slackID);
+    // Fetch Airtable and WordPress profile data in parallel
+    const allProfiles = await Promise.all([atGetProfile(slackID), wpGetProfile(slackID)]);
+    const atProfile = allProfiles[0];
+    const wpProfile = allProfiles[1];
     if (atProfile && wpProfile.acf) {
       const profile: IProfile = {
         id: atProfile.id,
         wpid: wpProfile.id,
         name: wpProfile.acf.profile_name,
         email: atProfile.email,
+        image: wpProfile.acf.profile_image,
         bio: wpProfile.acf.profile_bio,
         expertise: wpProfile.acf.profile_expertise,
         location: atProfile.location,

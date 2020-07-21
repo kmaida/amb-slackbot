@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parallelReqs = exports.apiTimeout = exports.getAtLink = exports.falseyToEmptyStr = exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = void 0;
+exports.apiTimeout = exports.getAtLink = exports.falseyToEmptyStr = exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = void 0;
 /*------------------
        UTILS
 ------------------*/
@@ -98,14 +98,4 @@ const apiTimeout = (apiReq, ms) => {
     });
 };
 exports.apiTimeout = apiTimeout;
-/**
- * Execute async/await in parallel
- * @param {Promise<any>[]} apiReqs array of API requests
- * @return {Promise<any>} array of results from all promises
- */
-const parallelReqs = (apiReqs) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield Promise.all(apiReqs);
-    return result;
-});
-exports.parallelReqs = parallelReqs;
 //# sourceMappingURL=utils.js.map

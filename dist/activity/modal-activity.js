@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.modalActivity = void 0;
 const errors_1 = require("../utils/errors");
 const blocks_modal_activity_1 = require("./blocks-modal-activity");
-const data_slack_1 = require("../data/data-slack");
+const api_profile_1 = require("../profile/data-profile/api-profile");
 /*------------------
  MODAL DIALOG FORM
     Command
@@ -22,7 +22,6 @@ const data_slack_1 = require("../data/data-slack");
 const modalActivity = (app) => {
     const openDialog = ({ ack, body, context }) => __awaiter(void 0, void 0, void 0, function* () {
         yield ack();
-        let userData;
         const prefill = {};
         const slackID = body.user_id || body.user.id;
         /**
@@ -37,9 +36,9 @@ const modalActivity = (app) => {
         // If button value metadata is available, set it as metadata (e.g., useful for getting home view data or prefill data passed in as a button value from an "Edit" button, etc.)
         const btnMetadata = JSON.stringify(body.actions ? body.actions[0].value : {});
         // @TODO: get activity prefill from btnMetadata here and set, if available
-        // Get user data from Slack
+        // Get user data from user's saved profile
         try {
-            userData = yield data_slack_1.getUserInfo(slackID, app);
+            const userData = yield api_profile_1.atGetProfile(slackID);
             if (!prefill.name && !prefill.email) {
                 prefill.name = userData.name;
                 prefill.email = userData.email;
