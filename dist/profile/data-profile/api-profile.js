@@ -35,8 +35,9 @@ const dm_confirm_save_profile_1 = require("./dm-confirm-save-profile");
  */
 const getProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const atProfile = yield atGetProfile(slackID);
-        const wpProfile = yield wpGetProfile(slackID);
+        const allProfiles = utils_1.parallelReqs([atGetProfile(slackID), wpGetProfile(slackID)]);
+        const atProfile = allProfiles[0];
+        const wpProfile = allProfiles[1];
         if (atProfile && wpProfile.acf) {
             const profile = {
                 id: atProfile.id,
