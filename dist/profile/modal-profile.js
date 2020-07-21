@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.modalProfile = void 0;
 const errors_1 = require("../utils/errors");
 const blocks_modal_profile_1 = require("./blocks-modal-profile");
-const data_slack_1 = require("../data/data-slack");
 const api_profile_1 = require("./data-profile/api-profile");
 const utils_1 = require("../utils/utils");
 /*------------------
@@ -26,39 +25,22 @@ const modalProfile = (app) => {
         yield ack();
         let prefill = {};
         let dataProfile;
-        let userData;
         const slackID = body.user_id || body.user.id;
-        const metadata = { image: undefined };
-        const _setImage = (img) => {
-            // Always use current Slack user image as profile image
-            const image = img.replace('"', '');
-            metadata.image = image;
-            prefill.image = image;
-        };
+        const metadata = {};
         try {
-            // Get profile data from AT+WP and Slack user data in parallel
-            // Must fetch within 2.7 seconds to prevent trigger ID 3 second timeout
-            const allProfileData = yield utils_1.apiTimeout(utils_1.parallelReqs([api_profile_1.getProfile(slackID), data_slack_1.getUserInfo(slackID, app)]), 2500);
-            dataProfile = allProfileData[0];
-            userData = allProfileData[1];
+            // Get profile data from AT+WP
+            // Must fetch within 2.5 seconds to prevent trigger ID 3 second timeout
+            dataProfile = yield utils_1.apiTimeout(api_profile_1.getProfile(slackID), 2500);
         }
         catch (err) {
-            // API calls did not execute in time or one of the promises errored
+            // API call did not execute in time or errored
             console.log(err);
             // There won't be any prefill information available but further execution won't be blocked
         }
-        // If no existing profile is in data stores but userData is available
-        if (!dataProfile && userData) {
-            // use Slack user data to prefill
-            prefill.name = userData.name;
-            prefill.email = userData.email;
-            _setImage(userData.image);
-        }
         // If profile data exists
-        if (dataProfile && userData) {
+        if (dataProfile) {
             // Set prefill to fetched data
             prefill = dataProfile;
-            _setImage(userData.image);
             // Add Airtable and WordPress IDs to private_metadata
             // so they will be accessible in view submission
             metadata.id = dataProfile.id;

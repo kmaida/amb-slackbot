@@ -7,43 +7,7 @@ import { IObjectAny } from '../utils/types';
 
 const blocksModalProfile = (prefill: IProfilePrefill = {}) => {
   const placeholderName = prefill.name ? prefill.name : '[Name]';
-  /**
-   * Generate image block if there is a prefilled image available
-   * @param {string} image prefill.image
-   * @return {IObjectAny[]}
-   */
-  const imageBlock = (image: string): any[] => {
-    if (image) {
-      return [
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "*Image:*"
-          }
-        },
-        {
-          "type": "image",
-          "block_id": "bp_image",
-          "image_url": image,
-          "alt_text": "Your Slack profile image"
-        },
-        {
-          "type": "context",
-          "elements": [
-            {
-              "type": "mrkdwn",
-              "text": "*Your Ambassador profile image is obtained from your Slack user.* This is the image that will be saved to your public profile at this time. If you'd like to change your public profile image, update your Slack profile image before filling out this form."
-            }
-          ]
-        }
-      ];
-    } else {
-      return [];
-    }
-  };
-  // Blocks for name and email
-  const nameEmail = [
+  return [
     {
       "type": "section",
       "text": {
@@ -71,9 +35,28 @@ const blocksModalProfile = (prefill: IProfilePrefill = {}) => {
         "type": "plain_text",
         "text": "Your full name as you would like it displayed publicly to the community and internally for booking, events, etc."
       }
-    }];
-
-  const formEnd: any[] = [
+    },
+    {
+      "type": "input",
+      "block_id": "bp_image",
+      "element": {
+        "type": "plain_text_input",
+        "action_id": "ap_image",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "https://[...jpg]"
+        },
+        "initial_value": prefill.image
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Image URL:"
+      },
+      "hint": {
+        "type": "plain_text",
+        "text": "Please provide a link to your desired profile image."
+      }
+    },
     {
       "type": "input",
       "block_id": "bp_email",
@@ -304,8 +287,6 @@ const blocksModalProfile = (prefill: IProfilePrefill = {}) => {
       "optional": true
     }
   ];
-
-  return nameEmail.concat(imageBlock(prefill.image)).concat(formEnd);
 }
 
 export { blocksModalProfile };

@@ -20,7 +20,7 @@ const submitModalProfile = (app: IObjectAny): void => {
     const data: IProfile = {
       name: payload.bp_name.ap_name.value,
       email: payload.bp_email.ap_email.value,
-      image: metadata.image,
+      image: payload.bp_image.ap_image.value,
       location: payload.bp_location.ap_location.value,
       bio: payload.bp_bio.ap_bio.value,
       expertise: payload.bp_expertise.ap_expertise.value,
@@ -45,6 +45,9 @@ const submitModalProfile = (app: IObjectAny): void => {
     };
     if (!emailIsh(data.email)) {
       ackParams.errors.bp_email = 'Please provide a valid email.';
+    }
+    if (!validUrl(data.image)) {
+      ackParams.errors.bp_image = 'Please provide a valid URL.';
     }
     if (data.website && !validUrl(data.website)) {
       ackParams.errors.bp_website = 'Please provide a valid URL.';

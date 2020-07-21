@@ -32,6 +32,7 @@ const getProfile = async (slackID: string): Promise<IProfile> => {
         wpid: wpProfile.id,
         name: wpProfile.acf.profile_name,
         email: atProfile.email,
+        image: wpProfile.acf.profile_image,
         bio: wpProfile.acf.profile_bio,
         expertise: wpProfile.acf.profile_expertise,
         location: atProfile.location,

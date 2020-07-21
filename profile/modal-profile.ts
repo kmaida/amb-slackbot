@@ -1,11 +1,10 @@
-import { slackErr, logErr } from '../utils/errors';
+import { slackErr } from '../utils/errors';
 import { IObjectAny } from '../utils/types';
 import { blocksModalProfile } from './blocks-modal-profile';
-import { getUserInfo } from '../data/data-slack';
 import { ISlackUserInfo } from '../data/data-slack.interface';
 import { IProfilePrefill, IProfile, IProfileMeta } from './profile.interface';
 import { getProfile } from './data-profile/api-profile';
-import { parallelReqs, apiTimeout } from '../utils/utils';
+import { apiTimeout } from '../utils/utils';
 
 /*------------------
 PROFILE MODAL FORM
@@ -19,43 +18,23 @@ const modalProfile = (app: IObjectAny): void => {
     await ack();
     let prefill: IProfilePrefill = {};
     let dataProfile: IProfile;
-    let userData: ISlackUserInfo;
     const slackID: string = body.user_id || body.user.id;
-    const metadata: IProfileMeta = { image: undefined };
-    const _setImage = (img: string) => {
-      // Always use current Slack user image as profile image
-      const image = img.replace('"', '');
-      metadata.image = image;
-      prefill.image = image;
-    };
+    const metadata: IProfileMeta = {};
 
     try {
-      // Get profile data from AT+WP and Slack user data in parallel
-      // Must fetch within 2.7 seconds to prevent trigger ID 3 second timeout
-      const allProfileData = await apiTimeout(
-        parallelReqs([getProfile(slackID), getUserInfo(slackID, app)]),
-      2500);
-      dataProfile = allProfileData[0];
-      userData = allProfileData[1];
+      // Get profile data from AT+WP
+      // Must fetch within 2.5 seconds to prevent trigger ID 3 second timeout
+      dataProfile = await apiTimeout(getProfile(slackID), 2500);
     }
     catch (err) {
-      // API calls did not execute in time or one of the promises errored
+      // API call did not execute in time or errored
       console.log(err);
       // There won't be any prefill information available but further execution won't be blocked
     }
-
-    // If no existing profile is in data stores but userData is available
-    if (!dataProfile && userData) {
-      // use Slack user data to prefill
-      prefill.name = userData.name;
-      prefill.email = userData.email;
-      _setImage(userData.image);
-    }
     // If profile data exists
-    if (dataProfile && userData) {
+    if (dataProfile) {
       // Set prefill to fetched data
       prefill = dataProfile;
-      _setImage(userData.image);
       // Add Airtable and WordPress IDs to private_metadata
       // so they will be accessible in view submission
       metadata.id = dataProfile.id;
