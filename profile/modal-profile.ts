@@ -22,7 +22,6 @@ const modalProfile = (app: IObjectAny): void => {
     let userData: ISlackUserInfo;
     const slackID: string = body.user_id || body.user.id;
     const metadata: IProfileMeta = { image: undefined };
-    const profileDataPromise = Promise.all([getProfile(slackID), getUserInfo(slackID, app)]);
     /**
      * If image is available, set it in metadata and prefill
      * @param {string} img profile image URL
@@ -38,7 +37,9 @@ const modalProfile = (app: IObjectAny): void => {
     try {
       // Get profile data in parallel
       // Must fetch within 2.7 seconds to prevent trigger ID 3 second timeout
-      const allProfileData = await apiTimeout(profileDataPromise, 2700);
+      const allProfileData = await apiTimeout(
+        Promise.all([getProfile(slackID), getUserInfo(slackID, app)]
+      ), 2700);
       dataProfile = allProfileData[0];
       userData = allProfileData[1];
     }
