@@ -12,7 +12,7 @@ const blocksModalProfile = (prefill: IProfilePrefill = {}) => {
    * @param {string} image prefill.image
    * @return {IObjectAny[]}
    */
-  const image = (image: string): any[] => {
+  const imageBlock = (image: string): any[] => {
     if (image) {
       return [
         {
@@ -305,7 +305,7 @@ const blocksModalProfile = (prefill: IProfilePrefill = {}) => {
     }
   ];
 
-  return nameEmail.concat(image(prefill.image)).concat(formEnd);
+  return nameEmail.concat(imageBlock(prefill.image)).concat(formEnd);
 }
 
 export { blocksModalProfile };

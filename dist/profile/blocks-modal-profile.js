@@ -11,7 +11,7 @@ const blocksModalProfile = (prefill = {}) => {
      * @param {string} image prefill.image
      * @return {IObjectAny[]}
      */
-    const image = (image) => {
+    const imageBlock = (image) => {
         if (image) {
             return [
                 {
@@ -190,7 +190,7 @@ const blocksModalProfile = (prefill = {}) => {
                 "action_id": "ap_twitter",
                 "placeholder": {
                     "type": "plain_text",
-                    "text": "https://twitter.com/[YourUsername]"
+                    "text": "https://twitter.com/[TwitterUsername]"
                 },
                 "initial_value": prefill.twitter
             },
@@ -212,7 +212,7 @@ const blocksModalProfile = (prefill = {}) => {
                 "action_id": "ap_github",
                 "placeholder": {
                     "type": "plain_text",
-                    "text": "https://github.com/[YourUsername]"
+                    "text": "https://github.com/[GitHubUsername]"
                 },
                 "initial_value": prefill.github
             },
@@ -304,7 +304,7 @@ const blocksModalProfile = (prefill = {}) => {
             "optional": true
         }
     ];
-    return nameEmail.concat(image(prefill.image)).concat(formEnd);
+    return nameEmail.concat(imageBlock(prefill.image)).concat(formEnd);
 };
 exports.blocksModalProfile = blocksModalProfile;
 //# sourceMappingURL=blocks-modal-profile.js.map
