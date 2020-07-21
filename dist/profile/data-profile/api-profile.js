@@ -96,6 +96,7 @@ const _atProfileSaved = (app, data, atSaved) => __awaiter(void 0, void 0, void 0
     // Combine normalized values from both AT callback and WP promise
     const normalizedWP = {
         wpid: saveWP.id,
+        expertise: saveWP.acf.profile_expertise,
         image: saveWP.acf.profile_image,
         website: saveWP.acf.profile_website,
         twitter: saveWP.acf.profile_twitter,
