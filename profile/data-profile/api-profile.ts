@@ -28,6 +28,7 @@ const getProfile = async (slackID: string): Promise<IProfile> => {
     const allProfiles = await Promise.all([atGetProfile(slackID), wpGetProfile(slackID)]);
     const atProfile = allProfiles[0];
     const wpProfile = allProfiles[1];
+    // Compose profile from both data sources
     if (atProfile && wpProfile.acf) {
       const profile: IProfile = {
         id: atProfile.id,

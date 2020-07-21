@@ -29,24 +29,29 @@ const modalProfile = (app) => {
         let userData;
         const slackID = body.user_id || body.user.id;
         const metadata = { image: undefined };
+        const profileDataPromise = Promise.all([api_profile_1.getProfile(slackID), data_slack_1.getUserInfo(slackID, app)]);
+        /**
+         * If image is available, set it in metadata and prefill
+         * @param {string} img profile image URL
+         */
         const _setImage = (img) => {
             // Always use current Slack user image as profile image
             const image = img.replace('"', '');
             metadata.image = image;
             prefill.image = image;
         };
+        // Get profile data from AT+WP and Slack user API
         try {
-            // Get profile data from AT+WP and Slack user data in parallel
+            // Get profile data in parallel
             // Must fetch within 2.7 seconds to prevent trigger ID 3 second timeout
-            const fetchProfileData = Promise.all([api_profile_1.getProfile(slackID), data_slack_1.getUserInfo(slackID, app)]);
-            const allProfileData = yield utils_1.apiTimeout(fetchProfileData, 2700);
+            const allProfileData = yield utils_1.apiTimeout(profileDataPromise, 2700);
             dataProfile = allProfileData[0];
             userData = allProfileData[1];
         }
         catch (err) {
             // API calls did not execute in time or one of the promises errored
-            console.log(err);
             // There won't be any prefill information available but further execution won't be blocked
+            errors_1.logErr(err);
         }
         // If no existing profile is in data stores but userData is available
         if (!dataProfile && userData) {

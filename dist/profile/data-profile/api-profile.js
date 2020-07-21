@@ -39,6 +39,7 @@ const getProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
         const allProfiles = yield Promise.all([atGetProfile(slackID), wpGetProfile(slackID)]);
         const atProfile = allProfiles[0];
         const wpProfile = allProfiles[1];
+        // Compose profile from both data sources
         if (atProfile && wpProfile.acf) {
             const profile = {
                 id: atProfile.id,
