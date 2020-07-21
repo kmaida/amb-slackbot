@@ -10,16 +10,20 @@ import { IProfile } from '../profile.interface';
  * @param {boolean} isPublic (optional) is this a public message?
  */
 const profileSlackMsg = (data: IProfile, isPublic?: boolean): string => {
-  const required = `*Name:* ${data.name}\n*Location:* ${data.location}\n*Bio:* ${data.bio}\n`;
-  const email = `\n*Email*: ${data.email}`;
+  // Public
+  const required = `*Name:* ${data.name}\n*Location:* ${data.location}\n*Bio:* ${data.bio}\n*Expertise:* ${data.expertise}`;
   const website = data.website ? `\n*Website:* ${data.website}` : '';
   const twitter = data.twitter ? `\n*Twitter:* ${data.twitter}` : '';
   const github = data.github ? `\n*GitHub:* ${data.github}` : '';
-  const airport = data.airport ? `\n*Airport Code:* ${data.airport}` : '';
-  const airline = data.airline ? `\n*Preferred Airline:* ${data.airline}` : '';
-  const ff = data.ff ? `\n*Frequent Flyer:* ${data.ff}` : '';
+  // Private
+  const email = `\n_*Email*: ${data.email}_`;
+  const airport = data.airport ? `\n_*Airport Code:* ${data.airport}_` : '';
+  const airline = data.airline ? `\n_*Preferred Airline:* ${data.airline}_` : '';
+  const ff = data.ff ? `\n_*Frequent Flyer:* ${data.ff}_` : '';
+  // Compose
   const publicMsg = required + website + twitter + github;
   const privateMsg = publicMsg + email + airport + airline + ff;
+  // Return appropriate public or private message
   return isPublic ? publicMsg : privateMsg;
 };
 

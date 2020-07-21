@@ -74,4 +74,37 @@ const getAtLink = (t: string, v: string, id: string): string => {
   return `https://airtable.com/${t}/${v}/${id}`;
 };
 
-export { objNotEmpty, clearNewline, ignoreMention, getQ, falseyToEmptyStr, getAtLink };
+/**
+ * Promise that rejects if API does not respond within a specified amount of time
+ * @param {Promise<any>} apiReq API request promise
+ * @param {number} ms number of milliseconds to wait before declaring a timeout
+ */
+const apiTimeout = (apiReq: Promise<any>, ms: number): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(function() {
+      reject(new Error(`API Timeout Error: API did not respond in ${ms/1000} seconds.`));
+    }, ms);
+    apiReq.then(res => resolve(res), err => reject(err));
+  });
+};
+
+/**
+ * Execute async/await in parallel
+ * @param {Promise<any>[]} apiReqs array of API requests
+ * @return {Promise<any>} array of results from all promises
+ */
+const parallelReqs = async (apiReqs: Promise<any>[]): Promise<any> => {
+  const result = await Promise.all(apiReqs);
+  return result;
+}
+
+export { 
+  objNotEmpty,
+  clearNewline,
+  ignoreMention,
+  getQ,
+  falseyToEmptyStr,
+  getAtLink,
+  apiTimeout,
+  parallelReqs
+};

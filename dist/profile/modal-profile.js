@@ -14,6 +14,7 @@ const errors_1 = require("../utils/errors");
 const blocks_modal_profile_1 = require("./blocks-modal-profile");
 const data_slack_1 = require("../data/data-slack");
 const api_profile_1 = require("./data-profile/api-profile");
+const utils_1 = require("../utils/utils");
 /*------------------
 PROFILE MODAL FORM
     Command
@@ -25,11 +26,22 @@ const modalProfile = (app) => {
         yield ack();
         let prefill = {};
         const slackID = body.user_id || body.user.id;
-        const getDataProfile = yield api_profile_1.getProfile(slackID);
-        const userData = yield data_slack_1.getUserInfo(slackID, app);
+        let dataProfile;
+        let userData;
         const metadata = { image: undefined };
+        try {
+            // Get profile data from AT+WP and Slack user data in parallel
+            // Must fetch within 2.7 seconds to prevent trigger ID 3 second timeout
+            const allProfileData = yield utils_1.apiTimeout(utils_1.parallelReqs([api_profile_1.getProfile(slackID), data_slack_1.getUserInfo(slackID, app)]), 2700);
+            dataProfile = allProfileData[0];
+            userData = allProfileData[1];
+        }
+        catch (err) {
+            // API calls did not execute in time or one of the promises errored
+            console.log(err);
+        }
         // If no existing profile is in data stores
-        if (!getDataProfile) {
+        if (!dataProfile) {
             // use Slack user data to prefill
             prefill.name = userData.name;
             prefill.email = userData.email;
@@ -37,11 +49,11 @@ const modalProfile = (app) => {
         // If profile data exists
         else {
             // Set prefill to fetched data
-            prefill = getDataProfile;
+            prefill = dataProfile;
             // Add Airtable and WordPress IDs to private_metadata
             // so they will be accessible in view submission
-            metadata.id = getDataProfile.id;
-            metadata.wpid = getDataProfile.wpid;
+            metadata.id = dataProfile.id;
+            metadata.wpid = dataProfile.wpid;
         }
         // Always use current Slack user image as profile image
         const image = userData.image.replace('"', '');

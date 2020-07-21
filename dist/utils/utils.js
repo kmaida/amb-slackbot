@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAtLink = exports.falseyToEmptyStr = exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = void 0;
+exports.parallelReqs = exports.apiTimeout = exports.getAtLink = exports.falseyToEmptyStr = exports.getQ = exports.ignoreMention = exports.clearNewline = exports.objNotEmpty = void 0;
 /*------------------
        UTILS
 ------------------*/
@@ -84,4 +84,28 @@ const getAtLink = (t, v, id) => {
     return `https://airtable.com/${t}/${v}/${id}`;
 };
 exports.getAtLink = getAtLink;
+/**
+ * Promise that rejects if API does not respond within a specified amount of time
+ * @param {Promise<any>} apiReq API request promise
+ * @param {number} ms number of milliseconds to wait before declaring a timeout
+ */
+const apiTimeout = (apiReq, ms) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(function () {
+            reject(new Error(`API Timeout Error: API did not respond in ${ms / 1000} seconds.`));
+        }, ms);
+        apiReq.then(res => resolve(res), err => reject(err));
+    });
+};
+exports.apiTimeout = apiTimeout;
+/**
+ * Execute async/await in parallel
+ * @param {Promise<any>[]} apiReqs array of API requests
+ * @return {Promise<any>} array of results from all promises
+ */
+const parallelReqs = (apiReqs) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield Promise.all(apiReqs);
+    return result;
+});
+exports.parallelReqs = parallelReqs;
 //# sourceMappingURL=utils.js.map
