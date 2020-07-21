@@ -36,7 +36,7 @@ const modalActivity = (app) => {
         // If button value metadata is available, set it as metadata (e.g., useful for getting home view data or prefill data passed in as a button value from an "Edit" button, etc.)
         const btnMetadata = JSON.stringify(body.actions ? body.actions[0].value : {});
         // @TODO: get activity prefill from btnMetadata here and set, if available
-        // Get user data from profile (if exists)
+        // Get user data from user's saved profile
         try {
             const userData = yield api_profile_1.atGetProfile(slackID);
             if (!prefill.name && !prefill.email) {

@@ -88,16 +88,6 @@ const apiTimeout = (apiReq: Promise<any>, ms: number): Promise<any> => {
   });
 };
 
-/**
- * Execute async/await in parallel
- * @param {Promise<any>[]} apiReqs array of API requests
- * @return {Promise<any>} array of results from all promises
- */
-const parallelReqs = async (apiReqs: Promise<any>[]): Promise<any> => {
-  const result = await Promise.all(apiReqs);
-  return result;
-}
-
 export { 
   objNotEmpty,
   clearNewline,
@@ -105,6 +95,5 @@ export {
   getQ,
   falseyToEmptyStr,
   getAtLink,
-  apiTimeout,
-  parallelReqs
+  apiTimeout
 };

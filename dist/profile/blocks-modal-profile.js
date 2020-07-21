@@ -6,7 +6,28 @@ exports.blocksModalProfile = void 0;
 ------------------*/
 const blocksModalProfile = (prefill = {}) => {
     const placeholderName = prefill.name ? prefill.name : '[Name]';
-    return [
+    /**
+     * Generate image block if there is a prefilled image available
+     * @param {string} image prefill.image
+     * @return {IObjectAny[]}
+     */
+    const imageBlock = (image) => {
+        if (image) {
+            return [
+                {
+                    "type": "image",
+                    "block_id": "bp_image",
+                    "image_url": image,
+                    "alt_text": "Your Slack profile image"
+                }
+            ];
+        }
+        else {
+            return [];
+        }
+    };
+    // Blocks for name and email
+    const nameEmail = [
         {
             "type": "section",
             "text": {
@@ -36,25 +57,22 @@ const blocksModalProfile = (prefill = {}) => {
             }
         },
         {
-            "type": "input",
-            "block_id": "bp_image",
-            "element": {
-                "type": "plain_text_input",
-                "action_id": "ap_image",
-                "placeholder": {
-                    "type": "plain_text",
-                    "text": "https://[...jpg]"
-                },
-                "initial_value": prefill.image
-            },
-            "label": {
-                "type": "plain_text",
-                "text": "Image URL:"
-            },
-            "hint": {
-                "type": "plain_text",
-                "text": "Please provide a link to your desired profile image."
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "*Image:*"
             }
+        }
+    ];
+    const formEnd = [
+        {
+            "type": "context",
+            "elements": [
+                {
+                    "type": "mrkdwn",
+                    "text": "*Your Ambassador profile picture is obtained from your Slack user image.* If you'd like to change your public profile image, update your Slack profile picture _before_ filling out this form."
+                }
+            ]
         },
         {
             "type": "input",
@@ -286,6 +304,7 @@ const blocksModalProfile = (prefill = {}) => {
             "optional": true
         }
     ];
+    return nameEmail.concat(imageBlock(prefill.image)).concat(formEnd);
 };
 exports.blocksModalProfile = blocksModalProfile;
 //# sourceMappingURL=blocks-modal-profile.js.map

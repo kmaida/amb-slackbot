@@ -30,7 +30,7 @@ const modalActivity = (app: IObjectAny): void => {
     const btnMetadata = JSON.stringify(body.actions ? body.actions[0].value : {});
     // @TODO: get activity prefill from btnMetadata here and set, if available
 
-    // Get user data from profile (if exists)
+    // Get user data from user's saved profile
     try {
       const userData: IATProfile = await atGetProfile(slackID);
       if (!prefill.name && !prefill.email) {

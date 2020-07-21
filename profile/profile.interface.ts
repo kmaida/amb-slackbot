@@ -85,6 +85,7 @@ interface IATProfile {
  * @interface IProfileMeta metadata for profile view submissionat
  */
 interface IProfileMeta {
+  image: string;
   id?: string;
   wpid?: number;
 }

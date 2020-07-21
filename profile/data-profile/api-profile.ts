@@ -7,7 +7,7 @@ const base = require('airtable').base(process.env.AIRTABLE_BASE_ID);
 const table = process.env.AT_TABLE_PROFILES;
 const tableID = process.env.AT_TABLE_ID_PROFILES;
 const viewID = process.env.AT_TABLE_VIEW_ID_PROFILES;
-import { getAtLink, parallelReqs } from './../../utils/utils';
+import { getAtLink } from './../../utils/utils';
 // WordPress API
 import { wpApi } from './../../data/setup-wpapi';
 import { adminChannelProfileSave } from './admin-channel-publish-save-profile';
@@ -24,7 +24,8 @@ import { dmConfirmSaveProfile } from './dm-confirm-save-profile';
  */
 const getProfile = async (slackID: string): Promise<IProfile> => {
   try {
-    const allProfiles = parallelReqs([atGetProfile(slackID), wpGetProfile(slackID)]);
+    // Fetch Airtable and WordPress profile data in parallel
+    const allProfiles = await Promise.all([atGetProfile(slackID), wpGetProfile(slackID)]);
     const atProfile = allProfiles[0];
     const wpProfile = allProfiles[1];
     if (atProfile && wpProfile.acf) {
