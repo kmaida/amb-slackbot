@@ -24,7 +24,7 @@ const submitModalProfile = (app) => {
         const metadata = view.private_metadata ? JSON.parse(view.private_metadata) : {};
         const payload = view.state.values;
         // Capture data from modal interactions
-        // Modal blocks data format: payload.[block_id].[action_id].value
+        // Modal blocks data format: payload.[block_id].[action_id].[value]
         const data = {
             name: payload.bp_name.ap_name.value,
             email: payload.bp_email.ap_email.value,

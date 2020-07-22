@@ -1,7 +1,7 @@
 import { IObjectAny } from '../utils/types';
 import { objNotEmpty } from '../utils/utils';
 import { validUrl, emailIsh, validAirport } from '../utils/form-validation';
-import { slackErr, logErr } from '../utils/errors';
+import { slackErr } from '../utils/errors';
 import { IProfile, IProfileMeta } from './profile.interface';
 import { saveProfile } from './data-profile/api-profile';
 
@@ -16,7 +16,7 @@ const submitModalProfile = (app: IObjectAny): void => {
     const metadata: IProfileMeta = view.private_metadata ? JSON.parse(view.private_metadata) : {};
     const payload: IObjectAny = view.state.values;
     // Capture data from modal interactions
-    // Modal blocks data format: payload.[block_id].[action_id].value
+    // Modal blocks data format: payload.[block_id].[action_id].[value]
     const data: IProfile = {
       name: payload.bp_name.ap_name.value,
       email: payload.bp_email.ap_email.value,

@@ -26,12 +26,13 @@ const setup_wpapi_1 = require("./../../data/setup-wpapi");
 const admin_channel_publish_save_profile_1 = require("./admin-channel-publish-save-profile");
 const dm_confirm_save_profile_1 = require("./dm-confirm-save-profile");
 /*------------------
-     API UTILS
+API COMBINED METHODS
 ------------------*/
 /**
- * Get full user profile (combined from both data sources)
+ * Get full user profile by Slack ID (combined from both AT+WP data sources)
  * @param {string} slackID Slack ID of user to fetch their combined data profile
  * @return {IProfile}
+ * @exports getProfile
  */
 const getProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -74,30 +75,36 @@ exports.getProfile = getProfile;
  * @param {IObjectAny} app Slack App
  * @param {IProfile} data profile data from modal form
  * @return {Promise<IProfile>} successfully saved WP and AT data
+ * @exports saveProfile
  */
 const saveProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
-    // If editing an existing profile:
+    // If editing an existing profile,
+    // check for Airtable and WordPress IDs in data
     if (data.id && data.wpid) {
+        // Update in Airtable (WP updates in success callback)
         return _atUpdateProfile(app, data);
     }
     // If adding a new profile
     else {
+        // Add in Airtable (WP adds in success callback)
         return _atAddProfile(app, data);
     }
 });
 exports.saveProfile = saveProfile;
 /**
  * Once Airtable profile save is successful, call this function in the success callback
- * This updates WordPress and then aggregates both results together
+ * This updates WordPress, aggregates both results together, and returns complete profile
  * (Airtable API uses callbacks instead of promises, which is a huge pain in the a$$)
  * @param {IObjectAny} app Slack app
  * @param {IProfile} data profile data from form
  * @param {IProfile} atSaved combined data from WP and AT to produce final successfully saved profile
+ * @return {IProfile}
+ * @private
  */
-const _atProfileSaved = (app, data, atSaved) => __awaiter(void 0, void 0, void 0, function* () {
-    // Update WordPress profile
+const _atProfileCompleteSaveWP = (app, data, atSaved) => __awaiter(void 0, void 0, void 0, function* () {
+    // Update or add WordPress profile (depending on if existing ID available)
     const saveWP = data.wpid ? yield _wpUpdateProfile(data) : yield _wpAddProfile(data);
-    // Combine normalized values from both AT callback and WP promise
+    // Normalize WP values and combine data from both AT callback and WP promise
     const normalizedWP = {
         wpid: saveWP.id,
         expertise: saveWP.acf.profile_expertise,
@@ -118,9 +125,10 @@ const _atProfileSaved = (app, data, atSaved) => __awaiter(void 0, void 0, void 0
     AIRTABLE API
 ------------------*/
 /**
- * Format Airtable profile record data into Slack app readable data
+ * Normalize Airtable profile record data into Slack app readable data
  * @param {IObjectAny} record Airtable profile record
  * @return {IATProfile}
+ * @private
  */
 const _formatATRecord = (record) => {
     const id = record.getId();
@@ -141,8 +149,10 @@ const _formatATRecord = (record) => {
 };
 /**
  * Get user's AT profile data by Slack ID
+ * E.g., used to fetch data for internal form prefills such as activity, booking
  * @param {string} slackID Slack ID of user to retrieve profile for
  * @return {Promise<IATProfile>}
+ * @exports atGetProfile
  */
 const atGetProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -164,6 +174,7 @@ exports.atGetProfile = atGetProfile;
  * @param {IObjectAny} app Slack app
  * @param {IProfile} data to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
+ * @private
  */
 const _atAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
     const atFields = {
@@ -187,15 +198,17 @@ const _atAddProfile = (app, data) => __awaiter(void 0, void 0, void 0, function*
         const savedRecord = records[0];
         const savedObj = _formatATRecord(savedRecord);
         // console.log('AIRTABLE: Saved new profile', savedObj);
-        _atProfileSaved(app, data, savedObj);
+        _atProfileCompleteSaveWP(app, data, savedObj);
         return savedObj;
     });
 });
 /**
  * Update an existing Airtable ambassador profile data record
+ * WordPress is updated in success callback
  * @param {IObjectAny} app Slack app
  * @param {IProfile} data updates to save to Airtable
  * @return {Promise<IATData>} promise resolving with saved object
+ * @private
  */
 const _atUpdateProfile = (app, data) => __awaiter(void 0, void 0, void 0, function* () {
     // Retrieve existing record
@@ -226,7 +239,7 @@ const _atUpdateProfile = (app, data) => __awaiter(void 0, void 0, void 0, functi
                 const updatedRecord = records[0];
                 const updatedObj = _formatATRecord(updatedRecord);
                 // console.log('AIRTABLE: Updated existing profile', updatedObj);
-                _atProfileSaved(app, data, updatedObj);
+                _atProfileCompleteSaveWP(app, data, updatedObj);
                 return updatedObj;
             }));
         }
@@ -236,8 +249,9 @@ const _atUpdateProfile = (app, data) => __awaiter(void 0, void 0, void 0, functi
    WORDPRESS API
 ------------------*/
 /**
- * Get profiles from ACF API (custom post type consisting of only ACF fields)
+ * Get all public profiles from ACF API (custom post type consisting of only ACF fields)
  * @return {IACFProfile[]} array of profile objects from WP
+ * @exports wpGetProfiles
  */
 const wpGetProfiles = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -260,9 +274,10 @@ const wpGetProfiles = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.wpGetProfiles = wpGetProfiles;
 /**
- * Get a specific user's profile from WordPress
+ * Get a specific user's public profile from WordPress by Slack ID
  * @param {string} slackID Slack ID of user to get profile for
  * @return {Promise<IATProfile>}
+ * @exports wpGetProfile
  */
 const wpGetProfile = (slackID) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -281,6 +296,7 @@ exports.wpGetProfile = wpGetProfile;
  * Relies on ACF to REST API plugin to work
  * @param {IProfile} data profile data to add
  * @return {Promise<IACFProfile>}
+ * @private
  */
 const _wpAddProfile = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -317,6 +333,7 @@ const _wpAddProfile = (data) => __awaiter(void 0, void 0, void 0, function* () {
  * Relies on ACF to REST API plugin to work
  * @param {IProfile} data profile data to add
  * @return {Promise<IACFProfile>}
+ * @private
  */
 const _wpUpdateProfile = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
