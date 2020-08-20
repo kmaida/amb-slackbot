@@ -1,6 +1,6 @@
-# gatsbam-slackbot
+# amb-slackbot
 
-Slackbot for Gatsby community ambassadors to manage their activities, reimbursement, swag requests, etc.
+Slackbot for community ambassadors to manage their activities, reimbursement, swag requests, etc.
 
 ## Technology
 
